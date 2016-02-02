@@ -1,0 +1,151 @@
+<div ng-controller="SearchController">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="selectBrand" class="col-xs-1">Марка:</label>
+            <div class="col-xs-3">
+                <select name="selectBrand" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Sony</option>
+                    <option value="option-2">Samsung</option>
+                    <option value="option-2">Apple</option>
+                    <option value="option-2">Lenovo</option>
+                    <option value="option-2">Huawei</option>
+                </select>
+            </div>
+            <label for="inputModel" class="col-xs-offset-1 col-xs-1">Модел:</label>
+            <div class="col-xs-3">
+                <select name="selectBrand" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Xperia Z1</option>
+                    <option value="option-2">Xperia Neo</option>
+                    <option value="option-2">Xperia T</option>
+                    <option value="option-2">Xperia Z3</option>
+                    <option value="option-2">Xperia Z5</option>
+                </select>
+            </div>
+            <div class="col-xs-3">
+                <button type="submit" class="btn submit-button"><span class="glyphicon glyphicon-search"></span> Search</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <label>Марка</label>
+                        </th>
+                        <th>
+                            <label>Модел</label>
+                        </th>
+                        <th>
+                            <label>Тип</label>
+                        </th>
+                        <th>
+                            <label>Град</label>
+                        </th>
+                        <th>
+                            <label>Брой</label>
+                        </th>
+                        <th>
+                            <label>Брой</label>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-row">
+                        <td>1</td>
+                        <td>Sony</td>
+                        <td>Xperia Z</td>
+                        <td>UltraSlim</td>
+                        <td>Попово</td>
+                        <td>3</td>
+                        <td>12.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                    <tr class="item-row">
+                        <td>2</td>
+                        <td>Samsung</td>
+                        <td>Galaxy S6 Edge</td>
+                        <td>Кейс</td>
+                        <td>Русе</td>
+                        <td>1</td>
+                        <td>19.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                    <tr class="item-row">
+                        <td>3</td>
+                        <td>LG</td>
+                        <td>G3</td>
+                        <td>Гръбче</td>
+                        <td>Кауфланд 1</td>
+                        <td>4</td>
+                        <td>8.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                    <tr class="item-row">
+                        <td>4</td>
+                        <td>Sony</td>
+                        <td>Xperia Z1</td>
+                        <td>Кейс</td>
+                        <td>Русе</td>
+                        <td>2</td>
+                        <td>14.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                    <tr class="item-row">
+                        <td>5</td>
+                        <td>Apple</td>
+                        <td>Iphone 6s</td>
+                        <td>UltraSlim</td>
+                        <td>Попово</td>
+                        <td>3</td>
+                        <td>28.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                    <tr class="item-row">
+                        <td>6</td>
+                        <td>Huawei</td>
+                        <td>P8 Lite</td>
+                        <td>UltraSlim</td>
+                        <td>Попово</td>
+                        <td>1</td>
+                        <td>12.00</td>
+                        <td><a href="" ng-click="toggleModal()"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div ng-controller="SaleController">
+        <sale-modal title="Продажба" visible="showModal">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputId" class="col-xs-6">ID на посредник:</label>
+                    <div class="col-xs-6">
+                        <input class="form-control" name="inputId" placeholder="ID">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputId" class="col-xs-6">Отстъпка в %:</label>
+                    <div class="col-xs-3">
+                        <input class="form-control" name="inputDiscount" placeholder="%">
+                    </div>
+                    <div class="col-xs-offset-3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-3 col-xs-offset-6">
+                        <button type="submit" class="btn modal-submit-button" ng-click="showModal()">Отмени</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="submit" class="btn modal-submit-button" ng-click="submitSale()">Потвърди</button>
+                    </div>
+                </div>
+            </form>
+        </sale-modal>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  <style type="text/css">
+  
+</style>
+  </head>
+  <body ng-app="kalafcheFrontendApp">
+ 	<!-- Open the output in a new blank tab (Click the arrow next to "Show Output" button) and resize the browser window to understand how the Bootstrap responsive grid system works. -->
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-1">
+            </div>
+            <div class="col-xs-10 main-container">
+            	<div class="row header" style="padding: 0px;">
+                    
+                    <div class="col-xs-6" style="padding: 0px;">
+                        <img src="../images/logo_small.png" class="header-img"/>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="user-info">
+                            <span class="glyphicon glyphicon-user"></span><span> Zahari Nikolov</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row main-container">
+                    <div class="col-xs-2" style="padding: 0px;">
+                        <div class="sidebar">  
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="search">Търсене</button>               
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newBrand">Въведи нова марка</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newModel">Въведи нов модел</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newType">Въведи нов тип</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newStock">Въведи наличност</button>
+                            <button type="button" class="btn btn-block sidebar-btn">Справки</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-10" style="padding: 0px;">
+
+                        <div class="content">
+                            <div ui-view></div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12" style="padding: 0px;">
+                        <div class="footer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-1">
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="js/angular-ui-router.min.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/StockController.js"></script>
+        <script src="scripts/controllers/SearchController.js"></script>
+        <script src="scripts/controllers/SaleController.js"></script>
+        <script src="scripts/directives/SaleModalDirective.js"></script>
+        <script src="scripts/services/sale.srvc.js"></script>
+
+</body>
+</html>

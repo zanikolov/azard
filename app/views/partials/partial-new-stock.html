@@ -1,0 +1,87 @@
+<div ng-controller="StockController">
+    <div class="row new-stock-table-header">
+        <div class="col-xs-2">
+            <label>Марка</label>
+        </div>
+        <div class="col-xs-2">
+            <label>Модел</label>
+        </div>
+        <div class="col-xs-2">
+            <label>Тип</label>
+        </div>
+        <div class="col-xs-2">
+            <label>Цвят</label>
+        </div>
+        <div class="col-xs-2">
+            <label>Цена</label>
+        </div>
+        <div class="col-xs-1">
+            <label>Брой</label>
+        </div>
+        <div class="col-xs-1">
+        </div>
+    </div>
+    <div class="row">
+        <div ng-repeat="item in itemsForStock track by $index">
+            <div class="col-xs-2 item-attribute">
+                <select name="selectBrand" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Sony</option>
+                    <option value="option-2">Samsung</option>
+                    <option value="option-2">Apple</option>
+                    <option value="option-2">Lenovo</option>
+                    <option value="option-2">Huawei</option>
+                </select>
+            </div>
+            <div class="col-xs-2 item-attribute">
+                <select name="selectModel" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Xperia Z1</option>
+                    <option value="option-2">Xperia Neo</option>
+                    <option value="option-2">Xperia T</option>
+                    <option value="option-2">Xperia Z3</option>
+                    <option value="option-2">Xperia Z5</option>
+                </select>
+            </div>
+            <div class="col-xs-2 item-attribute">
+                <select name="selectType" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Гръб</option>
+                    <option value="option-2">UltraSLim</option>
+                    <option value="option-2">Кейс</option>
+                    <option value="option-2">Калъф</option>
+                    <option value="option-2">Зарядно</option>
+                </select>
+            </div>
+            <div class="col-xs-2 item-attribute">
+                <select name="selectColor" class="form-control" style="width: 100%">
+                    <option disabled selected></option>
+                    <option value="option-2">Черен</option>
+                    <option value="option-2">Бял</option>
+                    <option value="option-2">Син</option>
+                    <option value="option-2">Червен</option>
+                    <option value="option-2">Сив</option>
+                </select>
+            </div>
+            <div class="col-xs-2 item-attribute">
+                <input class="form-control" name="inputPrice" required="true" ng-minlength="1">
+            </div>
+            <div class="col-xs-1 item-attribute">
+                <input class="form-control" name="inputQuantity" required="true" ng-minlength="1">
+            </div>
+             <div class="col-xs-1 item-attribute">
+                <a href="" ng-click="deleteItemForStock($index)" style="text-decoration:none;">
+                    <span class="glyphicon glyphicon-minus-sign delete-item-icon"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row add-new-row">
+        <div class="col-xs-12">
+            <a href="" ng-click="addItemForStock()" style="text-decoration:none;">
+                <span class="glyphicon glyphicon-plus-sign add-item-icon"></span>
+            </a>
+            <label> Нов ред</label>
+        </div>
+    </div>
+</div>
