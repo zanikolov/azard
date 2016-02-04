@@ -1,0 +1,15 @@
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+.bowerrc
+.editorconfig
+.gitattributes
+.jshintrc
+.project
+.travis.yml
+.yo-rc.json
+.gitignore
+.settings
+
