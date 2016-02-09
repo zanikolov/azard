@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kalafcheFrontendApp')
   .directive('saleModal', function () {
     return {

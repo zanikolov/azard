@@ -1,0 +1,16 @@
+<div ng-controller="DeviceTypeController">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputType" class="col-xs-3">Тип устройство:</label>
+            <div class="col-xs-9">
+                <input class="form-control" ng-model="deviceType.name" name="inputType" required="true" ng-minlength="1" placeholder="Тип устройство">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" ng-click="submitDeviceType()" class="btn submit-button">Въведи</button>
+            </div>
+        </div>
+    </form>
+</div>

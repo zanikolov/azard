@@ -1,13 +1,19 @@
+'use strict';
+
 angular.module('kalafcheFrontendApp')
     .controller('BrandController', function($scope, BrandService) {
-        $scope.brandName = '';
+        $scope.brand = {};
 
         $scope.submitBrand = function() {
-            var name = $scope.brandName;
-            var brand = {
-                "name": name
-            };
+            BrandService.submitBrand($scope.brand);
+            resetBrandState();
+        };
 
-            BrandService.submitBrand(brand);
+        function resetBrandState() {
+            $scope.brand = {};
+        }
+
+        $scope.getAllDeviceBrands = function() {
+            BrandService.getAllDeviceBrands();
         };
     });

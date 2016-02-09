@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kalafcheFrontendApp')
     .controller('SaleController', function($scope) {
         $scope.submitSale = function() {

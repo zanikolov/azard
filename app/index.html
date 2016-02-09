@@ -16,6 +16,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/spinner.css">
     <!-- endbuild -->
   <style type="text/css">
   
@@ -43,11 +44,12 @@
                 <div class="row main-container">
                     <div class="col-xs-2" style="padding: 0px;">
                         <div class="sidebar">  
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="search">Търсене</button>               
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newBrand">Въведи нова марка</button>
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newModel">Въведи нов модел</button>
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newType">Въведи нов тип</button>
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newStock">Въведи наличност</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="inStock">Наличност</button>               
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="deviceType">Тип устройства</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="brand">Mарки</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="model">Модели</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="itemType">Тип артикули</button>
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="newStock">Нова стока</button>
                             <button type="button" class="btn btn-block sidebar-btn">Справки</button>
                         </div>
                     </div>
@@ -55,7 +57,12 @@
 
                         <div class="content">
                             <div ui-view></div>
-                            
+                            <!-- <div class="spinner">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div> -->
                         </div>
 
                     </div>
@@ -99,14 +106,20 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    <script src="js/angular-ui-router.min.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/about.js"></script>
-    <script src="scripts/controllers/StockController.js"></script>
+    <script src="scripts/controllers/NewStockController.js"></script>
     <script src="scripts/controllers/SearchController.js"></script>
     <script src="scripts/controllers/SaleController.js"></script>
     <script src="scripts/controllers/BrandController.js"></script>
+    <script src="scripts/controllers/ModelController.js"></script>
+    <script src="scripts/controllers/DeviceTypeController.js"></script>
+    <script src="scripts/controllers/ItemTypeController.js"></script>
     <script src="scripts/services/BrandService.js"></script>
+    <script src="scripts/services/ModelService.js"></script>
+    <script src="scripts/services/DeviceTypeService.js"></script>
+    <script src="scripts/services/ItemTypeService.js"></script>
+    <script src="scripts/services/NewStockService.js"></script>
     <script src="scripts/directives/SaleModalDirective.js"></script>
 
 </body>

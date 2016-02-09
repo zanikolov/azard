@@ -1,4 +1,4 @@
-<div ng-controller="StockController">
+<div ng-controller="NewStockController">
     <div class="row new-stock-table-header">
         <div class="col-xs-2">
             <label>Марка</label>
@@ -24,33 +24,18 @@
     <div class="row">
         <div ng-repeat="item in itemsForStock track by $index">
             <div class="col-xs-2 item-attribute">
-                <select name="selectBrand" class="form-control" style="width: 100%">
-                    <option disabled selected></option>
-                    <option value="option-2">Sony</option>
-                    <option value="option-2">Samsung</option>
-                    <option value="option-2">Apple</option>
-                    <option value="option-2">Lenovo</option>
-                    <option value="option-2">Huawei</option>
+                <select name="selectBrand" ng-model="item.deviceBrandId" ng-options="brand.id as brand.name for brand in brands" class="form-control" style="width: 100%">
+                    <option value="" selected/>
                 </select>
             </div>
             <div class="col-xs-2 item-attribute">
-                <select name="selectModel" class="form-control" style="width: 100%">
-                    <option disabled selected></option>
-                    <option value="option-2">Xperia Z1</option>
-                    <option value="option-2">Xperia Neo</option>
-                    <option value="option-2">Xperia T</option>
-                    <option value="option-2">Xperia Z3</option>
-                    <option value="option-2">Xperia Z5</option>
+                <select name="selectModel" ng-model="item.deviceModelId" ng-options="model.id as model.name for model in models | filter: {deviceBrandId : item.deviceBrandId}" class="form-control" style="width: 100%">
+                    <option value="" selected/>
                 </select>
             </div>
             <div class="col-xs-2 item-attribute">
-                <select name="selectType" class="form-control" style="width: 100%">
-                    <option disabled selected></option>
-                    <option value="option-2">Гръб</option>
-                    <option value="option-2">UltraSLim</option>
-                    <option value="option-2">Кейс</option>
-                    <option value="option-2">Калъф</option>
-                    <option value="option-2">Зарядно</option>
+                <select name="selectItem" ng-model="item.itemTypeId" ng-options="itemType.id as itemType.name for itemType in itemTypes" class="form-control" style="width: 100%">
+                    <option value="" selected/>
                 </select>
             </div>
             <div class="col-xs-2 item-attribute">
@@ -64,10 +49,10 @@
                 </select>
             </div>
             <div class="col-xs-2 item-attribute">
-                <input class="form-control" name="inputPrice" required="true" ng-minlength="1">
+                <input class="form-control" name="inputPrice" ng-model="item.price" required="true" ng-minlength="1">
             </div>
             <div class="col-xs-1 item-attribute">
-                <input class="form-control" name="inputQuantity" required="true" ng-minlength="1">
+                <input class="form-control" name="inputQuantity" ng-model="item.quantity" required="true" ng-minlength="1">
             </div>
              <div class="col-xs-1 item-attribute">
                 <a href="" ng-click="deleteItemForStock($index)" style="text-decoration:none;">

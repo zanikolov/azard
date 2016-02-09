@@ -22,21 +22,24 @@ angular
     $urlRouterProvider.otherwise('/');
     
     $stateProvider
-        .state('newBrand', {
-            url: '/new-brand',
-            templateUrl: '/views/partials/partial-new-brand.html'
-        }).state('newModel', {
+        .state('brand', {
+            url: '/brand',
+            templateUrl: '/views/partials/partial-brand.html'
+        }).state('model', {
             url: '/new-model',
-            templateUrl: '/views/partials/partial-new-model.html'      
-        }).state('newType', {
-            url: '/new-type',
-            templateUrl: '/views/partials/partial-new-type.html'      
+            templateUrl: '/views/partials/partial-model.html'      
+        }).state('itemType', {
+            url: '/item-type',
+            templateUrl: '/views/partials/partial-item-type.html'      
         }).state('newStock', {
             url: '/new-stock',
             templateUrl: '/views/partials/partial-new-stock.html'      
-        }).state('search', {
-            url: '/search',
-            templateUrl: '/views/partials/partial-search.html'      
+        }).state('inStock', {
+            url: '/in-stock',
+            templateUrl: '/views/partials/partial-in-stock.html'      
+        }).state('deviceType', {
+            url: '/device-type',
+            templateUrl: '/views/partials/partial-device-type.html'      
         });
         
 });

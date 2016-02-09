@@ -1,0 +1,30 @@
+<div ng-controller="ModelController">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="selectBrand" class="col-xs-3">Избери марка:</label>
+            <div class="col-xs-9">
+                <select name="selectBrand" ng-model="model.deviceBrandId" ng-options="brand.id as brand.name for brand in brands" class="form-control" style="width: 100%">
+                    <option value="" selected/>
+                </select><br>
+            </div>
+
+            <label for="selectDeviceType" class="col-xs-3">Избери тип:</label>
+            <div class="col-xs-9">
+                <select name="selectDeviceType" ng-model="model.deviceTypeId" ng-options="deviceType.id as deviceType.name for deviceType in deviceTypes" class="form-control" style="width: 100%">
+                    <option value="" selected/>
+                </select><br>
+            </div>
+
+            <label for="inputModel" class="col-xs-3">Модел:</label>
+            <div class="col-xs-9">
+                <input class="form-control" name="inputModel" ng-model="model.name" placeholder="Модел">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn submit-button" ng-click="submitModel()">Въведи</button>
+            </div>
+        </div>
+    </form>
+</div>

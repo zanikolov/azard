@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kalafcheFrontendApp')
 	.controller('SearchController', function ($scope) {
 	    $scope.showModal = false;
