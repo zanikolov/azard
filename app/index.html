@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
@@ -11,40 +12,70 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/spinner.css">
     <!-- endbuild -->
-  <style type="text/css">
-  
-</style>
-  </head>
-  <body ng-app="kalafcheFrontendApp">
- 	<!-- Open the output in a new blank tab (Click the arrow next to "Show Output" button) and resize the browser window to understand how the Bootstrap responsive grid system works. -->
-	<div class="container-fluid">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body ng-app="kalafcheFrontendApp">
+
+<!-- Pop up for login  -->
+   <!-- <div class="modal fade " id="loginModal" role="dialog" ng-controller="loginModalController">
+    <div class="popupModal-backdrop">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="text-center"><img src="../images/logo_small.png" /></h1>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" id="username" class="form-control" ng-model="credentials.username" required />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="tel" name="password" id="password" class="form-control" ng-model="credentials.password" ng-minlength="4" autocomplete="off" required/>
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">PIN is required</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" ng-disabled="form.$invalid" class="btn btn-block sidebar-btn">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+   <!-- End of pop up for login -->
+    <!-- Open the output in a new blank tab (Click the arrow next to "Show Output" button) and resize the browser window to understand how the Bootstrap responsive grid system works. -->
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xs-1">
             </div>
             <div class="col-xs-10 main-container">
-            	<div class="row header" style="padding: 0px;">
-                    
+                <div class="row header" style="padding: 0px;">
                     <div class="col-xs-6" style="padding: 0px;">
-                        <img src="../images/logo_small.png" class="header-img"/>
+                        <img src="../images/logo_small.png" class="header-img" />
                     </div>
                     <div class="col-xs-6">
                         <div class="user-info">
                             <span class="glyphicon glyphicon-user"></span><span> Zahari Nikolov</span>
                         </div>
                     </div>
-
                 </div>
                 <div class="row main-container">
                     <div class="col-xs-2" style="padding: 0px;">
-                        <div class="sidebar">  
-                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="inStock">Наличност</button>               
+                        <div class="sidebar">
+                            <button type="button" class="btn btn-block sidebar-btn" ui-sref="inStock">Наличност</button>
                             <button type="button" class="btn btn-block sidebar-btn" ui-sref="deviceType">Тип устройства</button>
                             <button type="button" class="btn btn-block sidebar-btn" ui-sref="brand">Mарки</button>
                             <button type="button" class="btn btn-block sidebar-btn" ui-sref="model">Модели</button>
@@ -54,7 +85,6 @@
                         </div>
                     </div>
                     <div class="col-xs-10" style="padding: 0px;">
-
                         <div class="content">
                             <div ui-view></div>
                             <!-- <div class="spinner">
@@ -64,7 +94,6 @@
                                 <div></div>
                             </div> -->
                         </div>
-
                     </div>
                 </div>
                 <div class="row">
@@ -77,18 +106,21 @@
             </div>
         </div>
     </div>
-
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <script>
+    $(document).ready(function() {
+        $("#loginModal").modal('show');
+    });
+    ! function(A, n, g, u, l, a, r) {
+        A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
+                (A[l].q = A[l].q || []).push(arguments)
+            }, A[l].l = +new Date, a = n.createElement(g),
+            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+    }(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
+    ga('create', 'UA-XXXXX-X');
+    ga('send', 'pageview');
     </script>
-
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -103,9 +135,9 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <!-- Controllers -->
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/about.js"></script>
     <script src="scripts/controllers/NewStockController.js"></script>
@@ -115,12 +147,17 @@
     <script src="scripts/controllers/ModelController.js"></script>
     <script src="scripts/controllers/DeviceTypeController.js"></script>
     <script src="scripts/controllers/ItemTypeController.js"></script>
+    <script src="scripts/controllers/loginModalController.js"></script>
+    <!--<script src="scripts/controllers/loginController.js"></script> -->
+    <!-- Services -->
     <script src="scripts/services/BrandService.js"></script>
     <script src="scripts/services/ModelService.js"></script>
     <script src="scripts/services/DeviceTypeService.js"></script>
     <script src="scripts/services/ItemTypeService.js"></script>
     <script src="scripts/services/NewStockService.js"></script>
+    <!--<script src="scripts/services/loginService.js"></script> -->
+    <!-- Directives -->
     <script src="scripts/directives/SaleModalDirective.js"></script>
-
 </body>
+
 </html>

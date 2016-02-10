@@ -1,40 +1,50 @@
-    .main-container {
-    }
-    .header{
+    .main-container {}
+    
+    .header {
         min-height: 150px;
-        line-height:150px;
+        line-height: 150px;
         position: relative;
     }
-    .header-img{
+    
+    .header-img {
         vertical-align: middle;
     }
-    .footer{
+    
+    .footer {
         min-height: 100px;
     }
-    .footer{
+    
+    .footer {
         background: #2f2f2f;
     }
-    .sidebar{
-    }
-    .content{
+    
+    .sidebar {}
+    
+    .content {
         border: #dbdfe5 solid 1px;
         border-left-style: none;
         padding: 10px;
         margin-left: 5px;
         position: relative;
     }
-    .sidebar, .content{
+    
+    .sidebar,
+    .content {
         height: 500px;
     }
+    
     .sidebar-btn {
-        text-align: left;
+        text-align: center;
     }
+    
     .sidebar-btn:hover {
         background-color: #ffef68;
     }
+    
     .sidebar-btn:focus {
         background-color: #ffcc00;
     }
+    
     .user-info {
         text-align: right;
         font-size: 12px;
@@ -44,54 +54,77 @@
         top: 55px;
         right: 0px;
     }
+    
     .submit-button {
         position: absolute;
         right: 10px;
     }
+    
     .add-item-icon {
         color: #ffcc00;
         font-size: 18px;
         margin-right: 3px;
     }
+    
     .delete-item-icon {
         color: #cf7000;
         font-size: 18px;
         position: absolute;
         top: 6px;
     }
-    .add-new-row {
-    }
+    
+    .add-new-row {}
+    
     .item-attribute {
         padding-bottom: 15px;
         position: relative;
     }
+    
     .new-stock-table-header {
         text-align: center;
     }
+    
     .sell-item-icon {
         color: #ffef68;
         font-size: 18px;
-        margin-right: 3px; 
+        margin-right: 3px;
     }
+    
     .sell-item-icon:hover {
         color: #ffcc00;
     }
+    
     .modal-dialog {
-        width: 400px;
+        padding-top: 10%;
     }
-    .modal-content {
+    
+    .modal-header {}
+    /*.modal-content {
         height: 215px;
     }
     .modal-submit-button {
         position: absolute;
         right: 15px;
+    }*/
+    
+    .popupModal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        background-color: white;
+        opacity: 1;
     }
+    
     label {
         font-weight: normal !important;
         color: #5c531c;
     }
+    
     button {
         border-radius: 10px;
-        background-color: #ffe64e; 
+        background-color: #ffe64e;
         color: #5c531c;
     }
