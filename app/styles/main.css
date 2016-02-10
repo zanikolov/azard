@@ -59,7 +59,10 @@
         position: absolute;
         right: 10px;
     }
-    
+    .submit-new-stock-button {
+        position: absolute;
+        right: 50px;
+    }
     .add-item-icon {
         color: #ffcc00;
         font-size: 18px;
