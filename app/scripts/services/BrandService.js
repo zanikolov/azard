@@ -1,18 +1,14 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.service('BrandService', function($http) {
+	.service('BrandService', function($http, Environment) {
 		angular.extend(this, {
 			submitBrand: submitBrand,
             getAllDeviceBrands: getAllDeviceBrands
 		});
 
     	function submitBrand(brand) {	
-    		var config = {"headers" : {
-    			"Access-Control-Allow-Origin" : "localhost:9000"
-    			}
-    		};
-			return $http.post('http://localhost:8080/KalafcheBackend/service/deviceBrand/insertBrand', brand, config)
+			return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/deviceBrand/insertBrand', brand)
             	.then(
                 	function(response) {
                     	console.log(response);
@@ -20,12 +16,12 @@ angular.module('kalafcheFrontendApp')
             	)
     	}
 
-        function getAllDeviceBrands() {   
-            return $http.get('http://localhost:8080/KalafcheBackend/service/deviceBrand/getAllDeviceBrands')
+        function getAllDeviceBrands() {  
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/deviceBrand/getAllDeviceBrands')
                 .then(
                     function(response) {
                         return response.data
                     }
-                ) ;
+                );
         }
 	});

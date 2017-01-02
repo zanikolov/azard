@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.service('ModelService', function($http) {
+	.service('ModelService', function($http, Environment) {
 		angular.extend(this, {
 			submitModel: submitModel,
             getAllDeviceModels: getAllDeviceModels
 		});
 
     	function submitModel(model) {	
-			return $http.post('http://localhost:8080/KalafcheBackend/service/deviceModel/insertModel', model)
+			return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/deviceModel/insertModel', model)
             	.then(
                 	function(response) {
                     	console.log(response);
@@ -17,7 +17,7 @@ angular.module('kalafcheFrontendApp')
     	}
 
         function getAllDeviceModels() {   
-            return $http.get('http://localhost:8080/KalafcheBackend/service/deviceModel/getAllModelsGrouppedByBrand')
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/deviceModel/getAllDeviceModels')
                 .then(
                     function(response) {
                         return response.data

@@ -1,70 +1,122 @@
 <div ng-controller="NewStockController">
-    <div class="row new-stock-table-header" ng-if="itemsForStock.length > 0">
-        <div class="col-xs-2">
-            <label>Марка</label>
-        </div>
-        <div class="col-xs-2">
-            <label>Модел</label>
-        </div>
-        <div class="col-xs-2">
-            <label>Тип</label>
-        </div>
-        <div class="col-xs-2">
-            <label>Цвят</label>
-        </div>
-        <div class="col-xs-2">
-            <label>Цена</label>
-        </div>
-        <div class="col-xs-1">
-            <label>Брой</label>
-        </div>
-        <div class="col-xs-1">
-        </div>
-    </div>
     <div class="row">
-        <div ng-repeat="item in itemsForStock track by $index">
-            <div class="col-xs-2 item-attribute">
-                <select name="selectBrand" ng-model="item.deviceBrandId" ng-options="brand.id as brand.name for brand in brands" class="form-control" style="width: 100%">
-                    <option value="" selected/>
-                </select>
-            </div>
-            <div class="col-xs-2 item-attribute">
-                <select name="selectModel" ng-model="item.deviceModelId" ng-options="model.id as model.name for model in models | filter: {deviceBrandId : item.deviceBrandId}" class="form-control" style="width: 100%">
-                    <option value="" selected/>
-                </select>
-            </div>
-            <div class="col-xs-2 item-attribute">
-                <select name="selectItem" ng-model="item.itemTypeId" ng-options="itemType.id as itemType.name for itemType in itemTypes" class="form-control" style="width: 100%">
-                    <option value="" selected/>
-                </select>
-            </div>
-            <div class="col-xs-2 item-attribute">
-                <select name="selectColor" ng-model="item.colorId" ng-options="color.id as color.name for color in colors" class="form-control" style="width: 100%">
-                    <option value="" selected/>
-                </select>
-            </div>
-            <div class="col-xs-2 item-attribute">
-                <input class="form-control" name="inputPrice" ng-model="item.price" required="true" ng-minlength="1">
-            </div>
-            <div class="col-xs-1 item-attribute">
-                <input class="form-control" name="inputQuantity" ng-model="item.quantity" required="true" ng-minlength="1">
-            </div>
-             <div class="col-xs-1 item-attribute">
-                <a href="" ng-click="deleteItemForStock($index)" style="text-decoration:none;">
-                    <span class="glyphicon glyphicon-minus-sign delete-item-icon"></span>
-                </a>
-            </div>
+        <div class="col-xs-6" ng-if="isAdmin()">
+            <h4><label><u>Одобряване на нова стока</u><label></h4>
+        </div>
+        <div class="col-xs-6" ng-if="!isAdmin()">
+            <h4><label><u>Въвеждане на нова стока за одобрение</u><label></h4>
+        </div>
+        <div class="col-xs-2 col-xs-offset-4">
+            <button ng-if="isAdmin() && stocksWaitingForApproval.length > 0 && isApproveButtonVisible()" type="submit" class="btn submit-new-stock-button" ng-click="approveStockForKalafcheStore()">Одобри</button>
         </div>
     </div>
-    <div class="row add-new-row">
+
+    <form class="form-horizontal" ng-if="isAdmin()">
+        <div class="form-group">
+            <div class="col-xs-1">
+                <label for="selectBrand">Магазин:</label>
+            </div>
+            <div class="col-xs-11">
+                <select name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" class="form-control" style="width: auto" >
+                </select><br>
+            </div>
+        </div>
+    </form>
+
+    <div class="row" ng-show="stocksWaitingForApprovalByKalafcheStore[selectedKalafcheStore.id].length > 0 || newStocks.length > 0">
+        <div class="col-xs-12">
+            <form name="newStockForm" novalidate>
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <label>Код</label>
+                            </th>
+                            <th>
+                                <label>Артикул</label>
+                            </th>
+                            <th>
+                                <label>Марка</label>
+                            </th>
+                            <th>
+                                <label>Модел</label>
+                            </th>
+                            <th>
+                                <label>Налични</label>
+                            </th>
+                            <th>
+                                <label>Цена</label>
+                            </th>
+                            <th>
+                                <label>Брой</label>
+                            </th>
+                            <th ng-if="!isAdmin()"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="stockForApproval in stocksWaitingForApprovalByKalafcheStore[selectedKalafcheStore.id] track by $index" class="item-row">
+                            <td>{{$index + 1}}</td>
+                            <td>{{stockForApproval.itemProductCode}}</td>
+                            <td>{{stockForApproval.itemName}}</td>
+                            <td>{{stockForApproval.deviceBrandName}}</td>
+                            <td>{{stockForApproval.deviceModelName}}</td>
+                            <td>{{stockForApproval.quantityInStock}}</td>
+                            <td>{{stockForApproval.itemPrice}}</td>
+                            <td>{{stockForApproval.quantity}}</td>
+                            <td ng-if="!isAdmin()">
+                                <a href="" ng-click="deleteStockWaitingForApproval($index)">
+                                    <span class="glyphicon glyphicon-minus-sign delete-item-icon"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="stock in newStocks track by $index" ng-form name="newStockFormRow">
+                            <td>{{stocksWaitingForApproval.length + $index + 1}}</td>
+                            <td>
+                                <input name="stockItemProductCode" class="form-control item-quantity" ng-class="{'error-form-control': newStockFormRow.stockItemProductCode.$dirty && newStockFormRow.stockItemProductCode.$invalid}" ng-model="stock.itemProductCode" ng-blur="getItemProperties(stock)" ng-focus="resetItemProperties(stock)" ng-maxlength="4" required>
+                            </td>
+                            <td>{{stock.itemName}}</td>
+                            <td>
+                                <select class="form-control new-stock-table-control" ng-change="onBrandChange($index)" ng-class="{'error-form-control': newStockFormRow.selectBrand.$dirty && newStockFormRow.selectBrand.$invalid}" name="selectBrand" ng-model="stock.deviceBrandId" ng-options="brand.id as brand.name for brand in brands" required>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control new-stock-table-control" ng-change="onModelChange($index)" ng-class="{'error-form-control': newStockFormRow.selectModel.$dirty && newStockFormRow.selectModel.$invalid}" name="selectModel" ng-model="stock.deviceModelId" ng-disabled="!stock.deviceBrandId" ng-options="model.id as model.name for model in models | filter: {deviceBrandId : stock.deviceBrandId} : true" required>
+                                </select>
+                            </td>
+                            <td>{{stock.quantityInStock}}</td>
+                            <td>{{stock.itemPrice}}</td>
+                            <td>
+                                <input type="number" min="1" name="stockQuantity" class="form-control item-quantity" ng-class="{'error-form-control': newStockFormRow.stockQuantity.$dirty && newStockFormRow.stockQuantity.$invalid}" ng-model="stock.quantity" required>
+                            </td>
+                            <td>
+                                <a href="" ng-click="deleteNewAddedStock($index)" style="text-decoration:none;">
+                                    <span class="glyphicon glyphicon-minus-sign delete-item-icon"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" ng-if="stocksWaitingForApprovalByKalafcheStore[selectedKalafcheStore.id].length === 0 && newStocks.length === 0">
+        <div class="no-results-found col-xs-12">
+            <label ng-if="!isAdmin()">Няма въведена стока за одобрение</label>
+            <label ng-if="isAdmin()">Няма стока, чакаща за одобрение</label>
+        </div>
+    </div>
+
+    <div class="row add-new-row" ng-if="!isAdmin()">
         <div class="col-xs-2">
-            <a href="" ng-click="addItemForStock()" style="text-decoration:none;">
+            <a href="" ng-click="addNewStock()" style="text-decoration:none;">
                 <span class="glyphicon glyphicon-plus-sign add-item-icon"></span>
             </a>
             <label> Добави ред</label>
         </div>
         <div class="col-xs-2 col-xs-offset-8">
-            <button ng-if="itemsForStock.length > 0" type="submit" class="btn submit-new-stock-button" ng-click="submitNewStock()">Въведи</button>
+            <button ng-if="newStocks.length > 0 || deletedStocks.length > 0" type="submit" ng-disabled="newStockForm.$invalid" class="btn submit-new-stock-button" ng-click="submitNewStockForApproval()">Запази</button>
         </div>
     </div>
 </div>

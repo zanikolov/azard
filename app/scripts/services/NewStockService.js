@@ -1,26 +1,52 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.service('NewStockService', function($http) {
+	.service('NewStockService', function($http, SessionService, Environment) {
 		angular.extend(this, {
-			submitNewStock: submitNewStock
+			submitNewStockForApproval: submitNewStockForApproval,
+            getStocksWaitingForApproval: getStocksWaitingForApproval,
+            approveNewStock: approveNewStock,
+            getQuantityInStock: getQuantityInStock
+
 		});
 
-    	function submitNewStock(newStockList) {	
-			return $http.post('http://localhost:8080/KalafcheBackend/service/deviceModel/insertModel', newStockList)
+    	function submitNewStockForApproval(stockList) {	
+			return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/stock/updateStocksForApproval', stockList)
             	.then(
                 	function(response) {
-                    	console.log(response);
+                    	return response.data;
                 	}
             	) 
     	}
 
-        // function getAllDeviceModels() {   
-        //     return $http.get('http://localhost:8080/KalafcheBackend/service/deviceModel/getAllDeviceModels')
-        //         .then(
-        //             function(response) {
-        //                 console.log(response);
-        //             }
-        //         ) 
-        // }
+        function getStocksWaitingForApproval() { 
+            var kalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId;
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getUnapprovedStocksByKalafcheStoreId', {"params" : {"kalafcheStoreId" : kalafcheStoreId}})
+                .then(
+                    function(response) {
+                        return response.data;
+                    }
+                );
+        }
+
+        function approveNewStock(stockList) {  
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/stock/approveStocksForApproval', stockList)
+                .then(
+                    function(response) {
+                        console.log(response);
+                    }
+                ) 
+        }
+
+        function getQuantityInStock(itemId, deviceModelId) { 
+            var kalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId;
+            var params = {"params" : {"itemId": itemId, "deviceModelId": deviceModelId, "kalafcheStoreId" : kalafcheStoreId}};
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getQuantitiyOfStock', params)
+                .then(
+                    function(response) {
+                        console.log(response.data)
+                        return response.data;
+                    }
+                );
+        }
 	});

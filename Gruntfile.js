@@ -63,6 +63,37 @@ module.exports = function (grunt) {
       }
     },
 
+    ngconstant: {
+      options: {
+        space: '  ',
+        wrap: '"use strict";\n\n {%= __ngModule %}',
+        name: 'config'
+      },
+      // Environment targets
+      development: {
+        options: {
+          dest: '.tmp/scripts/config.js',
+        },
+        constants: {
+          Environment: {
+            name: 'development',
+            apiEndpoint: 'http://localhost:8080'
+          }
+        }
+      },
+      production: {
+        options: {
+          dest: '.tmp/scripts/config.js',
+        },
+        constants: {
+          Environment: {
+            name: 'production',
+            apiEndpoint: 'http://52.28.152.198:8080'
+          }
+        }
+      }
+    },
+
     // The actual grunt server settings
     connect: {
       options: {
@@ -205,7 +236,7 @@ module.exports = function (grunt) {
         src: [
           '<%= yeoman.dist %>/scripts/{,*/}*.js',
           '<%= yeoman.dist %>/styles/{,*/}*.css',
-          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          //'<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
         ]
       }
@@ -397,6 +428,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngconstant:development',
       'wiredep',
       'concurrent:server',
       'autoprefixer:server',
@@ -421,6 +453,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:production',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

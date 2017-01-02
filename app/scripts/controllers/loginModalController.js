@@ -17,6 +17,10 @@
 
         console.log("Controller!!");
 
+        $scope.closeModal = function() {
+            $scope.$close();
+        }
+
         function login() {
             // var headers = $scope.credentials ? {
             // 	authorization: "Basic " + window.btoa($scope.credentials.username + ":" + $scope.credentials.password)

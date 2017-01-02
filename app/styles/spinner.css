@@ -5,9 +5,9 @@ body {
   width: 20px;
   height: 20px;
   position: absolute;
-  left: -20px;
-  top: 40px;
-  background-color: #333;
+  left: 0;
+  top: 150px;
+  background-color: #ffef68;
   border-radius: 50%;
   animation: move 4s infinite cubic-bezier(.2,.64,.81,.23);
 }
