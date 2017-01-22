@@ -46,7 +46,7 @@ angular.module('kalafcheFrontendApp')
 
 	  	$scope.isSuperAdmin = function() {
 	  		var roles = SessionService.currentUser.userRoles;
-
+	  		console.log(roles);
 	  		if (roles) {
 		  		for (var i = 0; i < roles.length; i++) {
 	                var role = roles[i];

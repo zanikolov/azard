@@ -49,6 +49,12 @@ angular
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin]
                 }      
+            }).state('employee', {
+                url: '/employee',
+                templateUrl: 'views/partials/partial-employee.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin]
+                }      
             }).state('partnerStore', {
                 url: '/partner-store',
                 templateUrl: 'views/partials/partial-partner-store.html',
