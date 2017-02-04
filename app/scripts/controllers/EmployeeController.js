@@ -7,6 +7,7 @@ angular.module('kalafcheFrontendApp')
 
         function init() {
             $scope.newEmployee = {};
+            $scope.selectedEmployee = null;
             $scope.kalafcheStores = [];
             $scope.employees = [];
             $scope.isErrorMessageVisible = false;  
@@ -39,10 +40,18 @@ angular.module('kalafcheFrontendApp')
             $scope.isErrorMessageVisible = false;
         };
 
-        $scope.deactivateAccount = function(emlpoyee) {
+        $scope.deactivateAccount = function(employee) {
             EmployeeService.deactivateAccount(employee.userId).then(function(response) {
                 employee.enabled = false;
             });
+        };
+
+        $scope.selectEmployeeForEdit = function(employee) {
+            $scope.selectedEmployee = employee;
+        };
+
+        $scope.cancelEditEmployee = function() {
+            $scope.selectedEmployee = null;
         };
 
         function getAllKalafcheStores() {

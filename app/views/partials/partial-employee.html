@@ -4,7 +4,7 @@
             <h4><label><u>Въвеждане на нов служител</u><label></h4>
         </div>
     </div>
-    <form class="form-horizontal" name="employeeForm">
+    <form class="form-horizontal" name="employeeForm" ng-if="!selectedEmployee">
         <div class="form-group">
             <label for="inputEmployeeName" class="col-xs-3">Имена:</label>
             <div class="col-xs-9 submit-inputs-margin-bottom">
@@ -36,6 +36,41 @@
         </div>
     </form>
 
+    <form class="form-horizontal" name="editEmployeeForm" ng-if="selectedEmployee">
+        <div class="form-group">
+            <label for="inputEmployeeName" class="col-xs-3">Имена:</label>
+            <div class="col-xs-9 submit-inputs-margin-bottom">
+                <input class="form-control" style="width: 50%" ng-class="{'error-form-control': editEmployeeForm.inputEmployeeName.$invalid && editEmployeeForm.inputEmployeeName.$dirty}" name="inputEmployeeName" ng-model="selectedEmployee.name" placeholder="Име" ng-change="resetErrorMessage()" required>
+                <span ng-if="isErrorMessageVisible" class="error-message">{{errorMessage}}</span>
+            </div>
+
+            <label for="selectKalafcheStore" class="col-xs-3">Избери магазин:</label>
+            <div class="col-xs-9">
+                <select name="selectKalafcheStore" ng-model="selectedEmployee.kalafcheStoreId" ng-class="{'error-form-control': editEmployeeForm.selectKalafcheStore.$invalid && editEmployeeForm.selectKalafcheStore.$dirty}" ng-options="kalafcheStore.id as kalafcheStore.city + ' - ' + kalafcheStore.name for kalafcheStore in kalafcheStores" class="form-control" style="width: 50%" required="">
+                </select><br>
+            </div>
+
+            <label for="inputEmployeeUsername" class="col-xs-3">Акаунт:</label>
+            <div class="col-xs-9 submit-inputs-margin-bottom">
+                <span>{{selectedEmployee.username}}</span>
+            </div>
+
+            <label for="inputEmployeePassword" class="col-xs-3">Парола:</label>
+            <div class="col-xs-9 submit-inputs-margin-bottom">
+                <input class="form-control" style="width: 50%" ng-class="{'error-form-control': editEmployeeForm.inputEmployeePassword.$invalid && editEmployeeForm.inputEmployeePassword.$dirty}" name="inputEmployeePassword" ng-model="selectedEmployee.password" placeholder="Парола" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn submit-button" ng-disabled="employeeForm.$invalid" ng-click="editEmployee()">Отмени</button>
+            </div>
+            <div>
+                <button type="submit" class="btn submit-button" ng-disabled="employeeForm.$invalid" ng-click="cancelEmployeeEdit()">Запази</button>
+            </div>
+        </div>
+    </form>
+
     <div class="row">
         <div class="col-xs-8">
             <table class="table table-hover table-condensed">
@@ -57,8 +92,8 @@
                         <td>{{employee.password}}</td>
                         <td>{{employee.kalafcheStoreName}}</td>
                         <td>
-                            <a href="" ng-click="editEmployee()"><span class="glyphicon glyphicon-edit kalafche-icon"></span></a>
-                            <a href="" ng-if="employee.enabled" ng-click="deactivateAccount()"><span class="glyphicon glyphicon glyphicon-ban-circle sell-item-icon"></span></a>
+                            <a href="" ng-click="selectEmployeeForEdit(employee)"><span class="glyphicon glyphicon-edit kalafche-icon"></span></a>
+                            <a href="" ng-if="employee.enabled" ng-click="deactivateAccount(employee)"><span class="glyphicon glyphicon glyphicon-ban-circle sell-item-icon"></span></a>
                         </td>
                     </tr>
                 </tbody>

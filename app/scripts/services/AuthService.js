@@ -11,7 +11,6 @@ angular.module('kalafcheFrontendApp')
 
 
         function login(credentials) {
-            console.log(">>>>>>>> " + Environment.apiEndpoint);
             var authorizationHeader = 'Basic ' + btoa(credentials.username + ':' + credentials.password);
             //$http.defaults.headers.common['Authorization'] = authorizationHeader;
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/employee/getEmployee', 
