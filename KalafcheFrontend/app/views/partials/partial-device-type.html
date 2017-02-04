@@ -1,0 +1,45 @@
+<div ng-controller="DeviceTypeController">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4><label><u>Въвеждане на нов тип устройство</u><label></h4>
+        </div>
+    </div>
+    <form class="form-horizontal" name="deviceTypeForm">
+        <div class="form-group">
+            <label for="inputType" class="col-xs-3">Тип устройство:</label>
+            <div class="col-xs-9">
+                <input class="form-control" ng-class="{'error-form-control': deviceTypeForm.inputType.$invalid && deviceTypeForm.inputType.$dirty}" ng-model="deviceType.name" name="inputType" required="true" placeholder="Тип устройство" ng-change="resetErrorMessage()">
+                <span ng-if="isErrorMessageVisible" class="error-message">{{errorMessage}}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" ng-click="submitDeviceType()" ng-disabled="deviceTypeForm.$invalid" class="btn submit-button">Въведи</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-xs-3">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="type in deviceTypes track by $index" class="item-row">
+                        <td>{{$index + 1}}</td>
+                        <td>{{type.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-9">
+        </div>
+    </div>
+</div>
