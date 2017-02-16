@@ -17,6 +17,7 @@ angular.module('kalafcheFrontendApp')
             $scope.sales = []; 
             $scope.kalafcheStores = [];
             $scope.selectedKalafcheStore = {};
+            $scope.productCode = "";
             //$scope.displayCostWithDiscounts = true;
             
             $scope.dateFormat = 'dd-MMMM-yyyy';
@@ -151,5 +152,17 @@ angular.module('kalafcheFrontendApp')
             } else {
                 return false;
             }
+        };
+
+        $scope.filterByProductCode = function() {
+            var productCodesString = $scope.productCode;
+            var productCodes = productCodesString.split(" ");
+            return function predicateFunc(sale) {
+                return productCodes.indexOf(sale.itemProductCode) !== -1 ;
+            };
+        };
+
+        $scope.resetCurrentPage = function() {
+            $scope.currentPage = 1;
         };
     });

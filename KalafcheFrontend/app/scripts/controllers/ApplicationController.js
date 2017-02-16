@@ -12,11 +12,8 @@ angular.module('kalafcheFrontendApp')
         $scope.logout = function() {
             AuthService.logout().then(function (response) {
                 SessionService.destroy();
-                console.log(">>>> 1");
                 $rootScope.currentUser = {};
-                console.log(">>>> 2");
                 $rootScope.$broadcast(AuthEvents.logoutSuccess);
-                console.log(">>>> 3");
             });
         }
 
@@ -46,7 +43,6 @@ angular.module('kalafcheFrontendApp')
 
 	  	$scope.isSuperAdmin = function() {
 	  		var roles = SessionService.currentUser.userRoles;
-	  		console.log(roles);
 	  		if (roles) {
 		  		for (var i = 0; i < roles.length; i++) {
 	                var role = roles[i];

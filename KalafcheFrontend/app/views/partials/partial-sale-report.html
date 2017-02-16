@@ -6,17 +6,17 @@
     </div>
     <form class="form-horizontal">
         <div class="form-group">
-            <label for="selectKalafcheStore" class="col-xs-1">Магазин:</label>
-            <div class="col-xs-2">
+            <label for="selectKalafcheStore" class="col-xs-1" ng-if="isAdmin()">Магазин:</label>
+            <div  ng-if="isAdmin()" class="col-xs-2">
                 <select class="form-control" name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" ng-change="changeKalafcheStore()">
                     <option value="" selected/>
                 </select>
             </div>
 
-            <div class="col-xs-2"></div>
+            <div class="col-xs-1"></div>
 
             <label for="selectKalafcheStore" class="col-xs-1">Период: </label>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <p class="input-group">
                     <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="startDate" is-open="startDatePopup.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close" ng-change="changeStartDate()" show-button-bar="false" onkeydown="return false" ng-paste="$event.preventDefault()"/>
                     <span class="input-group-btn">
@@ -25,13 +25,20 @@
                 </p>
             </div>
 
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <p class="input-group">
                     <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="endDate" is-open="endDatePopup.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close"  ng-change="changeEndDate()" show-button-bar="false" onkeydown="return false" ng-paste="$event.preventDefault()"/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openEndDatePopup()"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </p>
+            </div>
+
+            <div class="col-xs-1"></div>
+
+            <div class="col-xs-2 search-control-group">
+                <label class="search-control-label" for="inputProductCode">Код:</label>           
+                <input name="inputProductCode" class="form-control search-control-code" ng-model="productCode" maxlength="30" ng-change="resetCurrentPage()" style="width:60%">
             </div>
         </div>
     </form>
@@ -68,7 +75,10 @@
                         </th>
                         <th>
                             <label>Дата</label>
-                        </th>                        
+                        </th> 
+                        <th>
+                            <label>Партньор</label>
+                        </th>                       
                         <th>
                             <label>Цена</label>
                         </th>
@@ -78,7 +88,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="sale in sales | itemsPerPage: salesPerPage" current-page="currentPage" class="item-row">
+                    <tr dir-paginate="sale in sales | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: salesPerPage" current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * 15 + $index + 1}}</td>
                         <td>{{sale.deviceBrandName}}</td>
                         <td>{{sale.deviceModelName}}</td>
@@ -87,8 +97,9 @@
                         <td ng-if="!selectedKalafcheStore.id">{{sale.kalafcheStoreName}}</td>
                         <td>{{sale.employeeName}}</td>
                         <td>{{getSaleTimestamp(sale)}}</td>
+                        <td>{{sale.partnerCode}}</td>
                         <td>{{sale.cost}}</td>
-                        <td>{{sale.salePrice}}</td>
+                        <td>{{sale.salePrice}}</td>                        
                     </tr>
                     <tr ng-show="isTotalSumRowVisible()" class="warning total-sum-row item-row">
                         <td></td>
@@ -97,6 +108,7 @@
                         <td></td>
                         <td></td>
                         <td ng-if="!selectedKalafcheStore.id"></td>
+                        <td></td>
                         <td></td>
                         <td><b>Брой продажби: {{sales.length}}</b></td>
                         <td></td>

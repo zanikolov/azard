@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('StockRelocationController', function ($scope, StockRelocationService, SessionService, ApplicationService) {
+    .controller('StockRelocationController', function ($scope, KalafcheStoreService, StockRelocationService, SessionService, ApplicationService) {
 
         init();
 
@@ -9,6 +9,9 @@ angular.module('kalafcheFrontendApp')
             $scope.allStockRelocations = [];
             $scope.outgoingStockRelocations = [];
             $scope.incomingStockRelocations = [];
+            $scope.fromKalafcheStore = {};
+            $scope.toKalafcheStore = {};
+            $scope.selectedKalafcheStore = {};
 
             $scope.selectedRelocationStatus = "pending";
 
@@ -18,6 +21,7 @@ angular.module('kalafcheFrontendApp')
                 getOutgoingStockRelocations();
                 getIncomingStockRelocations();
             }
+            getAllKalafcheStores();
 
         };
 
@@ -54,6 +58,13 @@ angular.module('kalafcheFrontendApp')
             StockRelocationService.getIncomingStockRelocations().then(function(response) {
                 $scope.incomingStockRelocations = response;
             });
+        };
+
+        function getAllKalafcheStores() {
+            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+                $scope.kalafcheStores = response;
+            });
+
         };
 
         $scope.setStockRelocationArrived = function(relocation) {

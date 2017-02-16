@@ -1,14 +1,26 @@
 <div ng-controller="StockRelocationController">
     <form class="form-horizontal">
         <div class="form-group">
-            <div class="col-xs-2">
+            <div class="col-xs-4 search-control-group">
                 <label class="search-control-label" for="selectRelocationStatus">Статут:</label> 
                 <select class="form-control search-control" name="selectRelocationStatus" ng-model="selectedRelocationStatus">
                     <option value="pending" ng-selected="true">Чакащи</option>
                     <option value="completed">Обработени</option>
                 </select>
             </div>
-            <div class="col-xs-10"></div>
+            <div ng-if="isAdmin()" class="col-xs-4 search-control-group">
+                <label class="search-control-label" for="fromKalafcheStore">От:</label>
+                <select class="form-control search-control" name="fromKalafcheStore" ng-model="fromKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores">
+                    <option value="" selected/>
+                </select>
+            </div>
+            <div ng-if="isAdmin()" class="col-xs-4 search-control-group">
+                <label class="search-control-label" for="toKalafcheStore">За:</label>
+                <select class="form-control search-control" name="toKalafcheStore" ng-model="toKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores">
+                    <option value="" selected/>
+                </select>
+            </div>
+            <!-- <div class="col-xs-10"></div> -->
         </div>
     </form>
     <div ng-if="!isAdmin()">
@@ -57,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>               
-                        <tr ng-repeat="relocation in incomingStockRelocations | filter: filterRelocation track by $index" class="item-row">
+                        <tr ng-repeat="relocation in incomingStockRelocations | filter: filterRelocation | filter:(!!fromKalafcheStore.id || undefined) && {fromKalafcheStoreId: fromKalafcheStore.id} : true track by $index" class="item-row">
                             <td>{{$index + 1}}</td>
                             <td>{{relocation.deviceBrandName + ' ' + relocation.deviceModelName}}</td>
                             <td>{{relocation.itemProductCode}}</td>
