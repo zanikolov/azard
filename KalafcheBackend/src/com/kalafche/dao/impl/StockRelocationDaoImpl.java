@@ -30,6 +30,7 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"sr.relocation_request_timestamp, " +
 			"sr.relocation_complete_timestamp, " +
 			"sr.to_kalafche_store_id, " +
+			"sr.from_kalafche_store_id, " +
 			"sr.archived, " +
 			"i.price as itemPrice, " +
 			"e.name as employee_name, " +

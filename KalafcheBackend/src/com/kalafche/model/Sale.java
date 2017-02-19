@@ -17,6 +17,7 @@ public class Sale {
 	private String employeeName;
 	private float cost;
 	private float salePrice;
+	private String partnerCode;
 
 	public int getId() {
 		return this.id;
@@ -48,6 +49,14 @@ public class Sale {
 
 	public void setSalePrice(float salePrice) {
 		this.salePrice = salePrice;
+	}
+
+	public String getPartnerCode() {
+		return partnerCode;
+	}
+
+	public void setPartnerCode(String partnerCode) {
+		this.partnerCode = partnerCode;
 	}
 
 	public int getEmployeeId() {

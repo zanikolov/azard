@@ -26,7 +26,7 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 			+ "u.password, "
 			+ "e.name, "
 			+ "e.kalafche_store_id, "
-			+ "ks.name as kalafche_store_name, "
+			+ "concat(ks.city, ', ',ks.name) as kalafche_store_name, "
 			+ "e.job_responsibility_id, "
 			+ "jr.name as job_responsibility_name,"
 			+ "u.enabled "

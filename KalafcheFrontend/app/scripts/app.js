@@ -55,6 +55,12 @@ angular
                 data: {
                     authorizedRoles: [UserRoles.superAdmin]
                 }      
+            }).state('kalafcheStore', {
+                url: '/kalafcheStore',
+                templateUrl: 'views/partials/partial-kalafche-store.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin]
+                }      
             }).state('partnerStore', {
                 url: '/partner-store',
                 templateUrl: 'views/partials/partial-partner-store.html',
@@ -116,6 +122,8 @@ angular
                 return $injector.get('AuthInterceptor');
             }
         ]);
+
+        $httpProvider.interceptors.push('LoadingInterceptor');
 
         $httpProvider.interceptors.push(['$injector',
             function ($injector) {

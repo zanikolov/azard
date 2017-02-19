@@ -16,6 +16,7 @@ import com.kalafche.model.KalafcheStore;
 public class KalafcheStoreDaoImpl extends JdbcDaoSupport implements KalafcheStoreDao {
 
 	private static final String GET_ALL_KALAFCHE_STORES = "select * from kalafche_store";
+	private static final String INSERT_KALAFCHE_STORE = "insert into kalafche_store (name, city) values (?, ?)";
 
 	private BeanPropertyRowMapper<KalafcheStore> rowMapper;
 	
@@ -39,6 +40,11 @@ public class KalafcheStoreDaoImpl extends JdbcDaoSupport implements KalafcheStor
 		List<KalafcheStore> kalafcheStores = getJdbcTemplate().query(GET_ALL_KALAFCHE_STORES, getRowMapper());
 
 		return kalafcheStores;
+	}
+
+	@Override
+	public void insertKalafcheStore(KalafcheStore kalafcheStore) {
+		getJdbcTemplate().update(INSERT_KALAFCHE_STORE, kalafcheStore.getName(), kalafcheStore.getCity());		
 	}
 
 }

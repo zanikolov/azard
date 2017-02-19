@@ -3,12 +3,6 @@
 angular.module('kalafcheFrontendApp')
     .controller('SaleReportController', function($scope, ApplicationService, SaleService, KalafcheStoreService) {
 
-        $scope.searchSales = function() {
-             SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.id).then(function(response) {
-                $scope.sales = response;
-            });           
-        }
-
         init();
 
         function init() {
@@ -45,7 +39,6 @@ angular.module('kalafcheFrontendApp')
             };
 
             getAllKalafcheStores();
-            $scope.searchSales();
         }
 
         function getCurrentDate() {
@@ -59,6 +52,17 @@ angular.module('kalafcheFrontendApp')
             $scope.endDateMilliseconds = $scope.endDate.getTime();
 
         };
+
+        $scope.searchSales = function() {
+            getSales();         
+        }
+
+        function getSales() {
+            console.log($scope.selectedKalafcheStore.id);
+            SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.id).then(function(response) {
+                $scope.sales = response;
+            });           
+        }
 
         $scope.clear = function() {
             $scope.startDate = null;
@@ -108,6 +112,7 @@ angular.module('kalafcheFrontendApp')
             KalafcheStoreService.getAllKalafcheStores().then(function(response) {
                 $scope.kalafcheStores = response;
                 $scope.selectedKalafcheStore = KalafcheStoreService.getSelectedKalafcheStore($scope.kalafcheStores, $scope.isAdmin());
+                getSales();
             });
 
         };

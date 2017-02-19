@@ -24,14 +24,16 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"end as sale_price, " +
 			"e.name as employee_name, i.name as item_name, i.product_code as item_product_code, CONCAT(ks.city, \", \", ks.name) as kalafche_store_name, " +
 			"ks.id as kalafche_store_id, " +
-			"dm.id as device_model_id, dm.name as device_model_name, db.id as device_brand_id, db.name as device_brand_name " +
+			"dm.id as device_model_id, dm.name as device_model_name, db.id as device_brand_id, db.name as device_brand_name, " +
+			"p.code as partner_code " +
 			"from sale s " +
 			"join employee e on s.employee_id = e.id " +
 			"join stock st on s.stock_id = st.id " +
 			"join item i on st.item_id = i.id " +
 			"join kalafche_store ks on st.KALAFCHE_STORE_ID = ks.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
-			"join device_brand db on dm.device_brand_id = db.id ";
+			"join device_brand db on dm.device_brand_id = db.id " +
+			"left join partner p on p.id = s.partner_id ";
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id = ?";

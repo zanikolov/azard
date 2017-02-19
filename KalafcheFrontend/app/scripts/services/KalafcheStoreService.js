@@ -4,7 +4,8 @@ angular.module('kalafcheFrontendApp')
 	.service('KalafcheStoreService', function($http, Environment, SessionService) {
 		angular.extend(this, {
             getAllKalafcheStores: getAllKalafcheStores,
-            getSelectedKalafcheStore: getSelectedKalafcheStore
+            getSelectedKalafcheStore: getSelectedKalafcheStore,
+            submitKalafcheStore: submitKalafcheStore
 		});
 
         function getAllKalafcheStores() {   
@@ -16,6 +17,14 @@ angular.module('kalafcheFrontendApp')
                 ) ;
         };
 
+        function submitKalafcheStore(kalafcheStore) {
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/kalafcheStore', kalafcheStore)
+                .then(
+                    function(response) {
+                        console.log(response);
+                    }
+                )
+        };
 
         function getSelectedKalafcheStore(stores, isAdmin) {
             if (isAdmin) {

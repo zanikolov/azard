@@ -20,6 +20,11 @@
                     <option value="" selected/>
                 </select>
             </div>
+            <div ng-if="!isAdmin()" class="col-xs-4 search-control-group">
+                <select class="form-control search-control" name="selectedKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores | filter: { id: '!' + currentUser.employeeKalafcheStoreId }">
+                    <option value="" selected/>
+                </select>
+            </div>
             <!-- <div class="col-xs-10"></div> -->
         </div>
     </form>
@@ -29,7 +34,6 @@
                 <h4><label><u>За моят магазин</u><label></h4>
             </div>
         </div>
-
         <div class="row">
             <div class="col-xs-12" ng-if="incomingStockRelocations.length > 0">
                 <table class="table table-hover table-condensed">
@@ -45,7 +49,7 @@
                             <th>
                                 <label>Артикул</label>
                             </th>
-                            <th>
+                            <th ng-if="!selectedKalafcheStore.id">
                                 <label>Магазин</label>
                             </th>
                             <th>
@@ -69,12 +73,12 @@
                         </tr>
                     </thead>
                     <tbody>               
-                        <tr ng-repeat="relocation in incomingStockRelocations | filter: filterRelocation | filter:(!!fromKalafcheStore.id || undefined) && {fromKalafcheStoreId: fromKalafcheStore.id} : true track by $index" class="item-row">
+                        <tr ng-repeat="relocation in incomingStockRelocations | filter: filterRelocation | filter:(!!selectedKalafcheStore.id || undefined) && {fromKalafcheStoreId: selectedKalafcheStore.id} : true track by $index" class="item-row">
                             <td>{{$index + 1}}</td>
                             <td>{{relocation.deviceBrandName + ' ' + relocation.deviceModelName}}</td>
                             <td>{{relocation.itemProductCode}}</td>
                             <td>{{relocation.itemName}}</td>
-                            <td>{{relocation.fromKalafcheStoreName}}</td>
+                            <td ng-if="!selectedKalafcheStore.id">{{relocation.fromKalafcheStoreName}}</td>
                             <td>{{relocation.itemPrice}}</td>
                             <td>{{relocation.quantity}}</td>
                             <td>{{getRelocationTimestamp(relocation.relocationRequestTimestamp)}}</td>
@@ -124,7 +128,7 @@
                             <th>
                                 <label>Артикул</label>
                             </th>
-                            <th>
+                            <th ng-if="!selectedKalafcheStore.id">
                                 <label>Магазин</label>
                             </th>
                             <th>
@@ -148,12 +152,12 @@
                         </tr>
                     </thead>
                     <tbody>               
-                        <tr ng-repeat="relocation in outgoingStockRelocations | filter: filterRelocation track by $index" class="item-row">
+                        <tr ng-repeat="relocation in outgoingStockRelocations | filter: filterRelocation | filter:(!!selectedKalafcheStore.id || undefined) && {toKalafcheStoreId: selectedKalafcheStore.id} : true track by $index" class="item-row">
                             <td>{{$index + 1}}</td>
                             <td>{{relocation.deviceBrandName + ' ' + relocation.deviceModelName}}</td>
                             <td>{{relocation.itemProductCode}}</td>
                             <td>{{relocation.itemName}}</td>
-                            <td>{{relocation.toKalafcheStoreName}}</td>
+                            <td ng-if="!selectedKalafcheStore.id">{{relocation.toKalafcheStoreName}}</td>
                             <td>{{relocation.itemPrice}}</td>
                             <td>{{relocation.quantity}}</td>
                             <td>{{getRelocationTimestamp(relocation.relocationRequestTimestamp)}}</td>
@@ -196,10 +200,10 @@
                             <th>
                                 <label>Артикул</label>
                             </th>
-                            <th>
+                            <th ng-if="!fromKalafcheStore.id">
                                 <label>От магазин</label>
                             </th>
-                            <th>
+                            <th ng-if="!toKalafcheStore.id">
                                 <label>За магазин</label>
                             </th>
                             <th>
@@ -227,13 +231,13 @@
                         </tr>
                     </thead>
                     <tbody>               
-                        <tr ng-repeat="relocation in allStockRelocations | filter: filterRelocation track by $index" class="item-row">
+                        <tr ng-repeat="relocation in allStockRelocations | filter: filterRelocation | filter:(!!fromKalafcheStore.id || undefined) && {fromKalafcheStoreId: fromKalafcheStore.id} : true | filter:(!!toKalafcheStore.id || undefined) && {toKalafcheStoreId: toKalafcheStore.id} : true track by $index" class="item-row">
                             <td>{{$index + 1}}</td>
                             <td>{{relocation.deviceBrandName + ' ' + relocation.deviceModelName}}</td>
                             <td>{{relocation.itemProductCode}}</td>
                             <td>{{relocation.itemName}}</td>
-                            <td>{{relocation.fromKalafcheStoreName}}</td>
-                            <td>{{relocation.toKalafcheStoreName}}</td>
+                            <td ng-if="!fromKalafcheStore.id">{{relocation.fromKalafcheStoreName}}</td>
+                            <td ng-if="!toKalafcheStore.id">{{relocation.toKalafcheStoreName}}</td>
                             <td>{{relocation.employeeName}}</td>
                             <td>{{relocation.itemPrice}}</td>
                             <td>{{relocation.quantity}}</td>

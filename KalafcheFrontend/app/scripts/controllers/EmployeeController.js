@@ -3,9 +3,13 @@
 angular.module('kalafcheFrontendApp')
     .controller('EmployeeController', function($scope, EmployeeService, KalafcheStoreService, ApplicationService) {
         
-       init();
+        var addNewEmployeeTitle = "Въвеждане на нов служител";
+        var editEmployeeTitle = "Редактиране на служител";
+        
+        init();
 
         function init() {
+            $scope.pageTitle = addNewEmployeeTitle;
             $scope.newEmployee = {};
             $scope.selectedEmployee = null;
             $scope.kalafcheStores = [];
@@ -26,9 +30,11 @@ angular.module('kalafcheFrontendApp')
                     $scope.newEmployee.enabled = true;
                     $scope.newEmployee.kalafcheStoreName = getEmployeeKalafcheStoreName($scope.newEmployee.kalafcheStoreId);
                     $scope.employees.push($scope.newEmployee);
+                    console.log($scope.employeeForm);
+                    $scope.employeeForm.$setPristine();
                     resetEmployeeState();
                     $scope.isErrorMessageVisible = false; 
-                    $scope.employeeForm.$setPristine();
+                    
                 });
             } else {
                 $scope.isErrorMessageVisible = true;
@@ -47,11 +53,26 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.selectEmployeeForEdit = function(employee) {
-            $scope.selectedEmployee = employee;
+            $scope.selectedEmployee = angular.copy(employee);
+            $scope.pageTitle = editEmployeeTitle;
         };
 
         $scope.cancelEditEmployee = function() {
             $scope.selectedEmployee = null;
+            $scope.pageTitle = addNewEmployeeTitle;
+            $scope.resetErrorMessage();
+        };
+
+        $scope.editEmployee = function() {
+            if (ApplicationService.validateDuplication($scope.selectedEmployee.name, $scope.employees)) {    
+                EmployeeService.updateEmployee($scope.selectedEmployee).then(function(response) {
+                    $scope.cancelEditEmployee();
+                    getAllEmployees();
+                });
+            } else {
+                $scope.isErrorMessageVisible = true;
+                $scope.errorMessage = "Има въведен служител с това име";
+            }
         };
 
         function getAllKalafcheStores() {

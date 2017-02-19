@@ -5,7 +5,8 @@ angular.module('kalafcheFrontendApp')
 		angular.extend(this, {
 			getAllEmployees: getAllEmployees,
             submitEmployee: submitEmployee,
-            deactivateAccount
+            deactivateAccount: deactivateAccount,
+            updateEmployee: updateEmployee
 
 		});
 
@@ -29,6 +30,15 @@ angular.module('kalafcheFrontendApp')
 
         function deactivateAccount(userId) { 
             return $http.put(Environment.apiEndpoint + '/KalafcheBackend/service/employee/disable', userId)
+                .then(
+                    function(response) {
+                        console.log(response);
+                    }
+                );
+        }
+
+        function updateEmployee(employee) { 
+            return $http.put(Environment.apiEndpoint + '/KalafcheBackend/service/employee', employee)
                 .then(
                     function(response) {
                         console.log(response);

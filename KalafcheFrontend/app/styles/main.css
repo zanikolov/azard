@@ -81,13 +81,25 @@
         color: gray;
         position: absolute;
         top: 55px;
-        right: 0px;
+        right: 10px;
+    }
+
+    .logo {
+        padding: 0px;
+        position: absolute;
+        left: 10px;
     }
     
     .submit-button {
         position: absolute;
         right: 10px;
     }
+
+    .cancel-button {
+        position: absolute;
+        right: 100px;
+    }
+
     .submit-new-stock-button {
         position: absolute;
         right: 50px;
@@ -323,7 +335,7 @@
         width:100%;
         height:100%;
         z-index:1000;
-        opacity: 1;
+        opacity: 0.8;
         background-color: white;
     }
 
