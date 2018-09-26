@@ -52,7 +52,8 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"join kalafche_store ks2 on sr.TO_KALAFCHE_STORE_ID = ks2.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
 			"join device_brand db on dm.device_brand_id = db.id " +
-			"where archived = false";
+			"where archived = false " + 
+			"order by db.name, dm.name, i.id, ks.id ";
 	
 	private static final String BY_TO_KALAFCHE_STORE_ID = " and sr.to_kalafche_store_id = ? ";
 	
