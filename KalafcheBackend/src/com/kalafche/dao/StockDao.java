@@ -14,7 +14,7 @@ public abstract interface StockDao {
 
 	public abstract List<Stock> getUnapprovedStocksByKalafcheStoreId(int kalafcheStoreId);
 	
-	public abstract List<Stock> getAllApprovedStocks();
+	public abstract List<Stock> getAllApprovedStocks(int kalafcheStoreId);
 	
 	public abstract void insertStockForApproval(Stock stock) throws DuplicateKeyException;
 	
@@ -23,6 +23,8 @@ public abstract interface StockDao {
 	public abstract void updateTheQuantitiyOfSoldStock(int stockId);
 	
 	public abstract Integer getQuantitiyOfStock(int itemId, int deviceModelId, int kalafcheStoreId);
+	
+	public abstract Integer getCompanyQuantityOfStock(String productCode, int deviceModelId);
 
 	public abstract void updateTheQuantitiyOfRelocatedStock(int quantity, int stockId);
 
@@ -30,8 +32,10 @@ public abstract interface StockDao {
 
 	public abstract void approveStockForApproval(Stock stock);
 
-	Stock getStockByInfo(int kalafcheStoreId, int deviceModelId, String productCode);
+	public abstract Stock getStockByInfo(int kalafcheStoreId, int deviceModelId, String productCode);
 	
 	public abstract List<Stock> getAllStocksForReport(int stockOrderId);
+
+	public abstract Integer getQuantitiyOfStockInWH(String productCode, int deviceModelId);
 
 }

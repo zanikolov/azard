@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('SaleReportController', function($scope, ApplicationService, SaleService, KalafcheStoreService) {
+    .controller('SaleReportController', function($scope, ApplicationService, SaleService, KalafcheStoreService, BrandService, ModelService) {
 
         init();
 
@@ -10,6 +10,10 @@ angular.module('kalafcheFrontendApp')
             $scope.salesPerPage = 15;
             $scope.sales = []; 
             $scope.kalafcheStores = [];
+            $scope.brands = [];
+            $scope.models = [];
+            $scope.selectedBrand = {};
+            $scope.selectedModel = {};
             $scope.selectedKalafcheStore = {};
             $scope.productCode = "";
             //$scope.displayCostWithDiscounts = true;
@@ -21,6 +25,10 @@ angular.module('kalafcheFrontendApp')
             $scope.endDateMilliseconds = {};
             $scope.startDatePopup = {opened: false};
             $scope.endDatePopup = {opened: false};
+
+            $scope.warehouseQuantity = 0;
+            $scope.companyQuantity = 0;
+            $scope.isQuantitiesVisible = false;
 
             getCurrentDate();
             $scope.startDateOptions = {
@@ -38,7 +46,9 @@ angular.module('kalafcheFrontendApp')
                 showWeeks: false
             };
 
-            getAllKalafcheStores();
+            getAllRealStores();
+            getAllBrands();
+            getAllDeviceModels();   
         }
 
         function getCurrentDate() {
@@ -53,14 +63,36 @@ angular.module('kalafcheFrontendApp')
 
         };
 
+        function getAllBrands() {
+            BrandService.getAllDeviceBrands().then(function(response) {
+                $scope.brands = response;
+            });
+        };
+
+        function getAllDeviceModels() {
+            ModelService.getAllDeviceModels().then(function(response) {
+                $scope.models = response; 
+            });
+        };
+
+
         $scope.searchSales = function() {
             getSales();         
         }
 
         function getSales() {
-            console.log($scope.selectedKalafcheStore.id);
-            SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.id).then(function(response) {
-                $scope.sales = response;
+            console.log($scope.selectedKalafcheStore.idendtifiers);
+            SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.identifiers,
+                $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode).then(function(response) {
+                $scope.sales = response.sales;
+                $scope.warehouseQuantity = response.warehouseQuantity;
+                $scope.companyQuantity = response.companyQuantity;
+
+                if ($scope.selectedModel.id && $scope.productCode) {
+                    $scope.isQuantitiesVisible = true;
+                } else {
+                    $scope.isQuantitiesVisible = false;
+                }
             });           
         }
 
@@ -75,7 +107,7 @@ angular.module('kalafcheFrontendApp')
             $scope.startDate.setMinutes(1);
             $scope.startDateMilliseconds = $scope.startDate.getTime();
 
-            $scope.searchSales();
+            //$scope.searchSales();
         };
 
         $scope.changeEndDate = function() {
@@ -83,7 +115,7 @@ angular.module('kalafcheFrontendApp')
             $scope.endDate.setMinutes(59);
             $scope.endDateMilliseconds = $scope.endDate.getTime();
 
-            $scope.searchSales();
+            //$scope.searchSales();
         };
 
         $scope.changeKalafcheStore = function() {
@@ -108,10 +140,10 @@ angular.module('kalafcheFrontendApp')
             };
         };
 
-        function getAllKalafcheStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+        function getAllRealStores() {
+            KalafcheStoreService.getAllRealStores().then(function(response) {
                 $scope.kalafcheStores = response;
-                $scope.selectedKalafcheStore = KalafcheStoreService.getSelectedKalafcheStore($scope.kalafcheStores, $scope.isAdmin());
+                $scope.selectedKalafcheStore = KalafcheStoreService.getRealSelectedStore($scope.kalafcheStores, $scope.isAdmin());
                 getSales();
             });
 

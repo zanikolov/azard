@@ -69,7 +69,7 @@ angular.module('kalafcheFrontendApp')
         };
 
 		function getAllInStock() {
-            InStockService.getAllInStock().then(function(response) {
+            InStockService.getAllInStock(SessionService.currentUser.employeeKalafcheStoreId).then(function(response) {
                 $scope.inStockList = response;
             });
 		}

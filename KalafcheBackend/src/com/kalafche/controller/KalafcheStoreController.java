@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kalafche.dao.KalafcheStoreDao;
 import com.kalafche.model.KalafcheStore;
+import com.kalafche.model.StoreDto;
 
 @CrossOrigin
 @RestController
@@ -20,10 +21,18 @@ public class KalafcheStoreController {
 
 	@RequestMapping(value = { "/getAllKalafcheStores" }, method = {
 			org.springframework.web.bind.annotation.RequestMethod.GET })
-	public List<KalafcheStore> getAllKalafcheStores() {
-		List<KalafcheStore> kalafcheStores = this.kalafcheStoreDao.getAllKalafcheStores();
+	public List<KalafcheStore> getAllKalafcheEntities() {
+		List<KalafcheStore> kalafcheStores = this.kalafcheStoreDao.getAllKalafcheEntities();
 
 		return kalafcheStores;
+	}
+	
+	@RequestMapping(value = { "/getStores" }, method = {
+			org.springframework.web.bind.annotation.RequestMethod.GET })
+	public List<StoreDto> getAllStores() {
+		List<StoreDto> storeDtos = this.kalafcheStoreDao.getAllStores();
+
+		return storeDtos;
 	}
 
 	@RequestMapping(method = { org.springframework.web.bind.annotation.RequestMethod.POST })

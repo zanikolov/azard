@@ -14,5 +14,6 @@ public abstract interface SaleDao {
 	public abstract void insertSale(Sale sale);
 
 	public abstract List<Sale> searchSales(Long startDateMilliseconds,
-			Long endDateMilliseconds, Integer kalafcheStoreId);
+			Long endDateMilliseconds, String kalafcheStoreIds, String itemProductCode,
+			Integer deviceBrandId, Integer deviceModelId);
 }

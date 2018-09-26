@@ -21,7 +21,9 @@
                 </select>
             </div>
             <div ng-if="!isAdmin()" class="col-xs-4 search-control-group">
-                <select class="form-control search-control" name="selectedKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores | filter: { id: '!' + currentUser.employeeKalafcheStoreId }">
+<!--                 <select class="form-control search-control" name="selectedKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores | filter: { id: '!' + currentUser.employeeKalafcheStoreId }"> -->
+
+                <select class="form-control search-control" name="selectedKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores">
                     <option value="" selected/>
                 </select>
             </div>

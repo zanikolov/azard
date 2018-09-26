@@ -5,7 +5,9 @@ angular.module('kalafcheFrontendApp')
 		angular.extend(this, {
             getAllKalafcheStores: getAllKalafcheStores,
             getSelectedKalafcheStore: getSelectedKalafcheStore,
-            submitKalafcheStore: submitKalafcheStore
+            submitKalafcheStore: submitKalafcheStore,
+            getAllRealStores: getAllRealStores,
+            getRealSelectedStore: getRealSelectedStore
 		});
 
         function getAllKalafcheStores() {   
@@ -28,7 +30,7 @@ angular.module('kalafcheFrontendApp')
 
         function getSelectedKalafcheStore(stores, isAdmin) {
             if (isAdmin) {
-                return {};
+                return stores[0];
             } else {
                 for (var i = 0; i < stores.length; i++) {
                     var store = stores[i];
@@ -38,6 +40,30 @@ angular.module('kalafcheFrontendApp')
                     }
                 }
             }
-        }
+        };
+
+        function getAllRealStores() {
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/kalafcheStore/getStores')
+                .then(
+                    function(response) {
+                        return response.data
+                    }
+                ) ;
+        };
+
+        function getRealSelectedStore(stores, isAdmin) {
+            if (isAdmin) {
+                return stores[0];
+            } else {
+                for (var i = 0; i < stores.length; i++) {
+                    var store = stores[i];
+
+                    if (store.identifiers == SessionService.currentUser.employeeKalafcheStoreId) {
+                        return store;
+                    }
+                }
+            }
+        };
+
 	});
 

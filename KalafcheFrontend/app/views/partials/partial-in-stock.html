@@ -58,6 +58,10 @@
                         <th>
                             <label>Брой</label>
                         </th>
+                        <th ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">
+                            <label ng-show="selectedKalafcheStore.id==4">Моят Магазин</label>
+                            <label ng-show="selectedKalafcheStore.id!=4">Склад</label>
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -71,7 +75,7 @@
                         <td>{{inStock.itemProductCode}}</td>
                         <td>{{inStock.itemPrice}}</td>
                         <td>{{inStock.quantity}} <span ng-if="inStock.orderedQuantity && inStock.orderedQuantity > 0 && selectedKalafcheStore.name == 'Кауфланд 1'" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
-
+                        <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}</td>
                         <td>
                             <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openSaleModal(inStock)"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a>
                             <a ng-if="inStock.quantity > 0 && !isAdmin() && !isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openRelocationModal(inStock)"><span class="glyphicon glyphicon-share-alt kalafche-icon"></span></a>
@@ -85,7 +89,7 @@
                         <td ng-if="!selectedKalafcheStore.id"></td>
                         <td></td>
                         <td><b>{{getTotalSum()}}</b></td>
-                        <td></td>
+                        <td ng-show="!(selectedKalafcheStore.id==4 && isAdmin())"></td>
                         <td></td>
                     </tr>
                 </tbody>

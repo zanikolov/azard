@@ -18,6 +18,7 @@ public class Stock {
 	private boolean approved;
 	private int approver;
 	private int quantityInStock;
+	private int extraQuantity;
 
 	public int getId() {
 		return id;
@@ -154,4 +155,13 @@ public class Stock {
 	public void setOrderedQuantity(int orderedQuantity) {
 		this.orderedQuantity = orderedQuantity;
 	}
+
+	public int getExtraQuantity() {
+		return extraQuantity;
+	}
+
+	public void setExtraQuantity(int extraQuantity) {
+		this.extraQuantity = extraQuantity;
+	}
+
 }

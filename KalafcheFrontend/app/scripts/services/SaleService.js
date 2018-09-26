@@ -26,11 +26,13 @@ angular.module('kalafcheFrontendApp')
                 );
         }
 
-        function searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreId) { 
-            if (!kalafcheStoreId) {
-                kalafcheStoreId = 0;
-            }
-            var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, "kalafcheStoreId": kalafcheStoreId}};
+        function searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, selectedBrandId, selectedModelId, productCode) { 
+            // if (!kalafcheStoreId) {
+            //     kalafcheStoreId = 0;
+            // }
+            console.log(">>>>> 1 " + kalafcheStoreIds);
+            var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
+                "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "itemProductCode": productCode}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/sale/searchSales', params)

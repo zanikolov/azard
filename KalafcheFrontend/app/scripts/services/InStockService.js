@@ -17,8 +17,9 @@ angular.module('kalafcheFrontendApp')
    //          	) 
    //  	}
 
-  function getAllInStock() { 
-      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks')
+  function getAllInStock(kalafcheStoreId) {
+      console.log(">>>>>>> " + kalafcheStoreId);
+      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks', {"params" : {"kalafcheStoreId" : kalafcheStoreId}})
           .then(
               function(response) {
                   return response.data

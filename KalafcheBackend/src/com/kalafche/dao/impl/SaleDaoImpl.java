@@ -1,5 +1,6 @@
 package com.kalafche.dao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,10 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"left join partner p on p.id = s.partner_id ";
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
-	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id = ?";
+	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id in (%s)";
+	private static final String ITEM_PRODUCT_CODE_QUERY = " and i.product_code in (?)";
+	private static final String DEVICE_BRAND_QUERY = " and db.id = ?";
+	private static final String DEVICE_MODEL_QUERY = " and dm.id = ?";
 	private static final String INSERT_SALE = "insert into sale (partner_id, employee_id, discounted_cost, stock_id, cost, sale_timestamp)"
 			+ " values (?, ?, ?, ?, ?, ?)";
 	private static final String ORDER_BY = " order by s.sale_timestamp";
@@ -84,21 +88,44 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	@Override
 	public List<Sale> searchSales(Long startDateMilliseconds,
-			Long endDateMilliseconds, Integer kalafcheStoreId) {
-		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY;
-		Object[] args = null;
+			Long endDateMilliseconds, String kalafcheStoreIds, String itemProductCode, Integer deviceBrandId, Integer deviceModelId) {
+		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY + String.format(KALAFCHE_STORE_CRITERIA_QUERY, kalafcheStoreIds);
+		List<Object> argsList = new ArrayList<Object>();
+		argsList.add(startDateMilliseconds);
+		argsList.add(endDateMilliseconds);
+		//argsList.add(kalafcheStoreIds);
+
 		
-		if (kalafcheStoreId == 0) {			
-			args = new Object[] {startDateMilliseconds, endDateMilliseconds};
-		} else {
-			args = new Object[] {startDateMilliseconds, endDateMilliseconds, kalafcheStoreId};
-			searchQuery += KALAFCHE_STORE_CRITERIA_QUERY;
-			
-		}
+		searchQuery += addDetailedSearch(itemProductCode, deviceBrandId, deviceModelId, argsList);
 		
 		searchQuery += ORDER_BY;
 		
+		Object[] argsArr = new Object[argsList.size()];
+		argsArr = argsList.toArray(argsArr);
+		
+		//Foo[] array = list.toArray(new Foo[list.size()]);
+		
 		return getJdbcTemplate().query(
-				searchQuery, args, getRowMapper());
+				searchQuery, argsArr, getRowMapper());
+	}
+
+	private String addDetailedSearch(String itemProductCode, Integer deviceBrandId, Integer deviceModelId, List<Object> args) {
+		String detailedQuery = "";
+		if (itemProductCode != null && itemProductCode != "") {
+			detailedQuery += ITEM_PRODUCT_CODE_QUERY;
+			args.add(itemProductCode);
+		}
+		
+		if (deviceBrandId != null) {
+			detailedQuery += DEVICE_BRAND_QUERY;
+			args.add(deviceBrandId);
+		}
+		
+		if (deviceModelId != null) {
+			detailedQuery += DEVICE_MODEL_QUERY;
+			args.add(deviceModelId);
+		}
+		
+		return detailedQuery;
 	}
 }

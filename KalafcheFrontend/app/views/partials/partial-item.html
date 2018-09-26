@@ -86,27 +86,6 @@
                             </td>
                         </tr>
                         <tr ng-repeat="item in items track by $index" ng-include="getTemplate(item)" class="item-row" ng-form name="editItemFormRow">
-                            <script type="text/ng-template" id="display">
-                                <td>{{item.productCode}}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.onlineName}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{item.price}}</td>
-                                <td ng-if="isSuperAdmin()">{{item.purchasePrice}}</td>
-                                <td ng-if="isSuperAdmin()"><a href="" ng-click="editItem(item)"><span class="glyphicon glyphicon-edit sell-item-icon"></span></a></td>
-                            </script>
-                            <script type="text/ng-template" id="edit">
-                                <td>{{item.productCode}}</td>
-                                <td><input name="inputName" type="text" ng-model="selectedItem.name" class="form-control item-name" ng-class="{'error-form-control': editItemFormRow.inputName.$invalid && editItemFormRow.inputName.$dirty}" required/></td>
-                                <td><input name="inputOnlineName" type="text" ng-model="selectedItem.onlineName" class="form-control item-name" ng-class="{'error-form-control': editItemFormRow.inputOnlineName.$invalid && editItemFormRow.inputOnlineName.$dirty}" required="true"/></td>
-                                <td><input name="inputDescription" type="text" ng-model="selectedItem.description" class="form-control item-description" ng-class="{'error-form-control': editItemFormRow.inputDescription.$invalid && editItemFormRow.inputDescription.$dirty}"/></td>
-                                <td><input name="inputPrice" type="number" min="0" ng-model="selectedItem.price" class="form-control item-price" ng-class="{'error-form-control':editItemFormRow.inputPrice.$dirty && editItemFormRow.inputPrice.$invalid}" required/></td>
-                                <td><input  ng-if="isSuperAdmin()" name="inputPurchasePrice" type="number" min="0" ng-model="selectedItem.purchasePrice" class="form-control item-price" ng-class="{'error-form-control':editItemFormRow.inputPurchasePrice.$dirty && editItemFormRow.inputPurchasePrice.$invalid}" required/></td>
-                                <td ng-if="isSuperAdmin()">
-                                    <a href="" ng-click="updateEdittedItem($index)"><span class="glyphicon glyphicon-ok sell-item-icon"></span></a>
-                                    <a href="" ng-click="resetSelectedItem()"><span class="glyphicon glyphicon-remove sell-item-icon"></span></a>
-                                </td>
-                            </script>
                         </tr>
                     </tbody>
                 </table>
@@ -116,3 +95,25 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="display">
+    <td>{{item.productCode}}</td>
+    <td>{{item.name}}</td>
+    <td>{{item.onlineName}}</td>
+    <td>{{item.description}}</td>
+    <td>{{item.price}}</td>
+    <td ng-if="isSuperAdmin()">{{item.purchasePrice}}</td>
+    <td ng-if="isSuperAdmin()"><a href="" ng-click="editItem(item)"><span class="glyphicon glyphicon-edit sell-item-icon"></span></a></td>
+</script>
+<script type="text/ng-template" id="edit">
+    <td>{{item.productCode}}</td>
+    <td><input name="inputName" type="text" ng-model="selectedItem.name" class="form-control item-name" ng-class="{'error-form-control': editItemFormRow.inputName.$invalid && editItemFormRow.inputName.$dirty}" required/></td>
+    <td><input name="inputOnlineName" type="text" ng-model="selectedItem.onlineName" class="form-control item-name" ng-class="{'error-form-control': editItemFormRow.inputOnlineName.$invalid && editItemFormRow.inputOnlineName.$dirty}" required="true"/></td>
+    <td><input name="inputDescription" type="text" ng-model="selectedItem.description" class="form-control item-description" ng-class="{'error-form-control': editItemFormRow.inputDescription.$invalid && editItemFormRow.inputDescription.$dirty}"/></td>
+    <td><input name="inputPrice" type="number" min="0" ng-model="selectedItem.price" class="form-control item-price" ng-class="{'error-form-control':editItemFormRow.inputPrice.$dirty && editItemFormRow.inputPrice.$invalid}" required/></td>
+    <td><input  ng-if="isSuperAdmin()" name="inputPurchasePrice" type="number" min="0" ng-model="selectedItem.purchasePrice" class="form-control item-price" ng-class="{'error-form-control':editItemFormRow.inputPurchasePrice.$dirty && editItemFormRow.inputPurchasePrice.$invalid}" required/></td>
+    <td ng-if="isSuperAdmin()">
+        <a href="" ng-click="updateEdittedItem($index)"><span class="glyphicon glyphicon-ok sell-item-icon"></span></a>
+        <a href="" ng-click="resetSelectedItem()"><span class="glyphicon glyphicon-remove sell-item-icon"></span></a>
+    </td>
+</script>

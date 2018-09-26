@@ -50,9 +50,9 @@ public class StockController {
 		this.stockService.approveStocksForApproval(stocks);
 	}
 	
-	@RequestMapping(value = { "/getAllApprovedStocks" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public List<Stock> getAllApprovedStocks() {
-		List<Stock> stocks = this.stockDao.getAllApprovedStocks();
+	@RequestMapping(value = { "/getAllApprovedStocks" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET}, params = {"kalafcheStoreId"})
+	public List<Stock> getAllApprovedStocks(@RequestParam (value = "kalafcheStoreId") int kalafcheStoreId) {
+		List<Stock> stocks = this.stockDao.getAllApprovedStocks(kalafcheStoreId);
 
 		return stocks;
 	}

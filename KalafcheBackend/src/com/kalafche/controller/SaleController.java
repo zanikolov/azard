@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kalafche.dao.SaleDao;
+import com.kalafche.dao.StockDao;
 import com.kalafche.model.Sale;
+import com.kalafche.model.SaleReport;
 import com.kalafche.service.StockService;
 
 @CrossOrigin
@@ -22,6 +24,9 @@ public class SaleController {
 	
 	@Autowired
 	private StockService stockService;
+	
+	@Autowired
+	private StockDao stockDao;
 
 	@RequestMapping(value = { "/getAllSales" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public List<Sale> getAllSales() {
@@ -31,10 +36,20 @@ public class SaleController {
 	}
 	
 	@RequestMapping(value = { "/searchSales" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public List<Sale> searchSales(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, @RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds, @RequestParam(value = "kalafcheStoreId") Integer kalafcheStoreId) {
-		List<Sale> sales = this.saleDao.searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreId);
+	public SaleReport searchSales(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
+			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds, @RequestParam(value = "kalafcheStoreIds") String kalafcheStoreIds,
+			@RequestParam(value = "itemProductCode", required = false) String itemProductCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
+			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId) {
+		List<Sale> sales = this.saleDao.searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, itemProductCode, deviceBrandId, deviceModelId);
 
-		return sales;
+		int warehouseQuantity = 0;
+		int companyQuantity = 0;
+		if (deviceModelId != null && itemProductCode != null && itemProductCode != "") {
+			warehouseQuantity = stockDao.getQuantitiyOfStockInWH(itemProductCode, deviceModelId);
+			companyQuantity = stockDao.getCompanyQuantityOfStock(itemProductCode, deviceModelId);
+		}
+		
+		return new SaleReport(sales, warehouseQuantity, companyQuantity);
 	}
 	
 	@RequestMapping(value = { "/insertSale" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
