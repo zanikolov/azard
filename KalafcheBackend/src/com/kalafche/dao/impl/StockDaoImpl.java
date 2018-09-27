@@ -107,7 +107,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
 			"join item i on s.ITEM_ID=i.ID " +
 			"left join stock ws on ws.device_model_id=dm.ID and ws.item_id=i.ID and ws.kalafche_store_id=4 and ws.approved=true " +
-			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
+			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and sr1.rejected=false) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
 			"where s.approved is true " +
 			"and ks.CODE <> 'RU_WH' " +
 			"union all " +
@@ -127,14 +127,14 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"s.approved, " +
 			"s.approver, " +
 			"es.quantity as extraQuantity, " +
-			"0 as orderedQuantity " +
+			"sr2.quantity as orderedQuantity " +
 			"from stock s " +
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
 			"join item i on s.ITEM_ID=i.ID " +
 			"left join stock es on es.device_model_id=dm.ID and es.item_id=i.ID and es.kalafche_store_id=? and es.approved=true " +
-			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and sr2.to_kalafche_store_id=? " +
+			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and sr1.rejected=false) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and sr2.to_kalafche_store_id=? " +
 			"where s.approved is true " +
 			"and ks.CODE = 'RU_WH' " +
 			"order by device_brand_name, device_model_name, item_id, kalafche_store_id ";
