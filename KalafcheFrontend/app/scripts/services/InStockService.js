@@ -17,9 +17,9 @@ angular.module('kalafcheFrontendApp')
    //          	) 
    //  	}
 
-  function getAllInStock(kalafcheStoreId) {
-      console.log(">>>>>>> " + kalafcheStoreId);
-      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks', {"params" : {"kalafcheStoreId" : kalafcheStoreId}})
+  function getAllInStock(userKalafcheStoreId, selectedKalafcheStoreId) {
+      console.log(">>>>>>> " + userKalafcheStoreId + "  " + selectedKalafcheStoreId);
+      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks', {"params" : {"userKalafcheStoreId" : userKalafcheStoreId, "selectedKalafcheStoreId" : selectedKalafcheStoreId}})
           .then(
               function(response) {
                   return response.data

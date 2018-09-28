@@ -25,7 +25,7 @@
             </div>
             <div class="col-xs-4 search-control-group">
                 <label class="search-control-label" for="selectKalafcheStore">Магазин:</label>
-                <select class="form-control search-control" name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" ng-change="resetCurrentPage()">
+                <select class="form-control search-control" name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" ng-change="getAllInStock()">
                     <option value="" selected/>
                 </select>
             </div>
@@ -66,7 +66,7 @@
                     </tr>
                 </thead>
                 <tbody>               
-                    <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!selectedKalafcheStore.id || undefined) && {kalafcheStoreId: selectedKalafcheStore.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
+                    <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
                         <td>{{inStock.deviceBrandName}}</td>
                         <td>{{inStock.deviceModelName}}</td>

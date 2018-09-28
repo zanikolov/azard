@@ -14,7 +14,7 @@ public abstract interface StockDao {
 
 	public abstract List<Stock> getUnapprovedStocksByKalafcheStoreId(int kalafcheStoreId);
 	
-	public abstract List<Stock> getAllApprovedStocks(int kalafcheStoreId);
+	public abstract List<Stock> getAllApprovedStocks(int userKalafcheStoreId, int selectedKalafcheStoreId);
 	
 	public abstract void insertStockForApproval(Stock stock) throws DuplicateKeyException;
 	

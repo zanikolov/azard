@@ -62,6 +62,7 @@ angular.module('kalafcheFrontendApp')
                 StockRelocationService.submitRelocation(relocation).then(
                     function(response) {
                         $scope.selectedStock.quantity -= $scope.quantityForRelocation;
+                        $scope.selectedStock.orderedQuantity += $scope.quantityForRelocation;
                         $uibModalInstance.close($scope.selectedStock);
                     }
                 );

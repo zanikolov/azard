@@ -84,7 +84,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	
 	private static final String DELETE_STOCK_FOR_APPROVAL = "delete from stock where id = ?";
 
-	private static final String GET_ALL_APPROVED_STOCKS = "select " +
+	private static final String GET_ALL_APPROVED_STOCKS_FOR_STORES = "select " +
 			"s.ID, " +
 			"db.ID as device_brand_id, " +
 			"db.NAME as device_brand_name, " +
@@ -109,9 +109,17 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"left join stock ws on ws.device_model_id=dm.ID and ws.item_id=i.ID and ws.kalafche_store_id=4 and ws.approved=true " +
 			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and sr1.rejected=false) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
 			"where s.approved is true " +
-			"and ks.CODE <> 'RU_WH' " +
-			"union all " +
-			"select " +
+			"and ks.CODE <> 'RU_WH' ";
+	
+//	private static final String NON_WAREHOUSE_CLAUSE = 		
+//			"and ks.CODE <> 'RU_WH' ";
+	
+	private static final String BY_STORE_CLAUSE = 		
+			"and ks.ID = ? ";
+			
+//			"union all " +
+	
+	private static final String GET_ALL_APPROVED_STOCKS_FROM_WH = "select " +
 			"s.ID, " +
 			"db.ID as device_brand_id, " +
 			"db.NAME as device_brand_name, " +
@@ -259,10 +267,22 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 					stock.isApproved(), stock.getApprover(), stock.getQuantity());	
 	}
 
-	public List<Stock> getAllApprovedStocks(int kalafcheStoreId) {
-		List<Stock> stocks = getJdbcTemplate().query(GET_ALL_APPROVED_STOCKS, new Object[]{kalafcheStoreId, kalafcheStoreId},
-				getRowMapper());
-		return stocks;
+	public List<Stock> getAllApprovedStocks(int userKalafcheStoreId, int selectedKalafcheStoreId) {
+		if (selectedKalafcheStoreId == 0) {
+			List<Stock> stocks = getJdbcTemplate().query(GET_ALL_APPROVED_STOCKS_FOR_STORES,
+					getRowMapper());
+			stocks.addAll(getJdbcTemplate().query(GET_ALL_APPROVED_STOCKS_FROM_WH, 
+					new Object[]{userKalafcheStoreId, userKalafcheStoreId}, getRowMapper()));
+
+			return stocks;
+			
+		} else if (selectedKalafcheStoreId == 4) {
+			return getJdbcTemplate().query(GET_ALL_APPROVED_STOCKS_FROM_WH, 
+					new Object[]{userKalafcheStoreId, userKalafcheStoreId}, getRowMapper());
+		} else {
+			return getJdbcTemplate().query(GET_ALL_APPROVED_STOCKS_FOR_STORES + BY_STORE_CLAUSE, new Object[]{selectedKalafcheStoreId},
+					getRowMapper());
+		}
 	}
 	
 	@Override

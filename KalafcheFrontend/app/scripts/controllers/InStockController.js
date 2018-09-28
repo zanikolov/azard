@@ -29,7 +29,7 @@ angular.module('kalafcheFrontendApp')
             getAllDeviceModels();        
             //getAllPartners(); 
             getAllKalafcheStores();
-			getAllInStock();
+			//getAllInStock();
 
 
 		}
@@ -60,19 +60,24 @@ angular.module('kalafcheFrontendApp')
 
         };
 
+
+        $scope.getAllInStock = function() {
+            var userKalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId ? SessionService.currentUser.employeeKalafcheStoreId : 0;
+            var selectedKalafcheStoreId = $scope.selectedKalafcheStore.id ? $scope.selectedKalafcheStore.id : 0;
+            InStockService.getAllInStock(userKalafcheStoreId, selectedKalafcheStoreId).then(function(response) {
+                $scope.inStockList = response;
+                $scope.resetCurrentPage();
+            });
+        }
+
         function getAllKalafcheStores() {
             KalafcheStoreService.getAllKalafcheStores().then(function(response) {
                 $scope.kalafcheStores = response;
                 $scope.selectedKalafcheStore = KalafcheStoreService.getSelectedKalafcheStore($scope.kalafcheStores, $scope.isAdmin());
+                $scope.getAllInStock();
             });
 
         };
-
-		function getAllInStock() {
-            InStockService.getAllInStock(SessionService.currentUser.employeeKalafcheStoreId).then(function(response) {
-                $scope.inStockList = response;
-            });
-		}
 
         $scope.filterByProductCode = function() {
             var productCodesString = $scope.productCode;
