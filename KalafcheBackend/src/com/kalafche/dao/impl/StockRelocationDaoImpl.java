@@ -19,7 +19,7 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 	private static final String INSERT_STOCK_RELOCATION = "insert into stock_relocation (relocation_request_timestamp, employee_id, stock_id, quantity, from_kalafche_store_id, to_kalafche_store_id, approved, arrived, relocation_complete_timestamp, price, archived)"
 			+ " values (?, ?, ?, ?, ?, ?, ? , ?, ?, ? * (select i.purchase_price from stock st join item i on st.item_id = i.id where st.id = ?), ?)";
 	
-	private static final String GET_STOCK_RELOCATIONS_BY_KALAFCHE_STORE = "select " +
+	private static final String GET_STOCK_RELOCATIONS = "select " +
 			"sr.id, " +
 			"sr.employee_id, " +
 			"sr.stock_id, " +
@@ -52,8 +52,9 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"join kalafche_store ks2 on sr.TO_KALAFCHE_STORE_ID = ks2.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
 			"join device_brand db on dm.device_brand_id = db.id " +
-			"where archived = false " + 
-			"order by db.name, dm.name, i.id, ks.id ";
+			"where archived = false ";
+	
+	private static final String ORDER_BY_CLAUSE = "order by db.name, dm.name, i.id, ks.id ";
 	
 	private static final String BY_TO_KALAFCHE_STORE_ID = " and sr.to_kalafche_store_id = ? ";
 	
@@ -120,7 +121,7 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 
 	@Override
 	public List<StockRelocation> getAllStockRelocations() {
-			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS_BY_KALAFCHE_STORE, getRowMapper());
+			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS + ORDER_BY_CLAUSE, getRowMapper());
 	}
 	
 	@Override
@@ -130,13 +131,13 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 	
 	@Override
 	public List<StockRelocation> getIncomingStockRelocations(int kalafcheStoreId) {
-			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS_BY_KALAFCHE_STORE + BY_TO_KALAFCHE_STORE_ID,
+			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS + BY_TO_KALAFCHE_STORE_ID + ORDER_BY_CLAUSE,
 					getRowMapper(), kalafcheStoreId);
 	}
 	
 	@Override
 	public List<StockRelocation> getOutgoingStockRelocations(int kalafcheStoreId) {
-			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS_BY_KALAFCHE_STORE + BY_FROM_KALAFCHE_STORE_ID,
+			return getJdbcTemplate().query(GET_STOCK_RELOCATIONS + BY_FROM_KALAFCHE_STORE_ID + ORDER_BY_CLAUSE,
 					getRowMapper(), kalafcheStoreId);
 	}
 
