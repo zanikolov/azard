@@ -1,0 +1,71 @@
+<div ng-controller="ActivityReportController">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4><label><u>Активности</u><label></h4>
+        </div>
+    </div>
+    <form class="form-horizontal" ng-show="isAdmin()">
+        <div class="form-group">
+            <label for="selectEmployee" class="col-xs-1" ng-if="isAdmin()">Служител:</label>
+            <div class="col-xs-2">
+                <select class="form-control" name="selectEmployee" ng-model="selectedEmployee.id" ng-options="employee.id as employee.name for employee in employees">
+                    <option value="" selected/>
+                </select>
+            </div>
+
+            <div class="col-xs-1"></div>
+
+            <label for="selectKalafcheStore" class="col-xs-1">Дата:</label>
+            <div class="col-xs-3">
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="activityDate" is-open="activityDatePopup.opened" datepicker-options="activityDateOptions" ng-required="true" close-text="Close" ng-change="changeActivityDate()" show-button-bar="false" onkeydown="return false" ng-paste="$event.preventDefault()"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openActivityDatePopup()"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+
+            <div class="col-xs-1"></div>
+
+            <!-- <button ng-if="isAdmin()" class="btn submit-new-stock-button" ng-click="searchSales()">Търси</button> -->
+        </div>
+
+            
+    </form>
+
+    <div class="row">
+        <div class="col-xs-12" ng-show="activities.length > 0">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <label>Служител</label>
+                        </th>
+                        <th>
+                            <label>Магазин</label>
+                        </th>
+                        <th>
+                            <label>Дата</label>
+                        </th>
+                    </tr>
+                </thead>               
+                <tbody>
+                    <tr dir-paginate="activity in activities | filter:(!!selectedEmployee.id || undefined) && {employeeId: selectedEmployee.id} : true | itemsPerPage: activitiesPerPage track by $index" current-page="currentPage" class="item-row">
+                    <!-- <tr dir-paginate="activity in activities | itemsPerPage: activitiesPerPage" current-page="currentPage" class="item-row"> -->
+                        <td>{{(currentPage - 1) * 15 + $index + 1}}</td>
+                        <td>{{activity.employeeName}}</td>
+                        <td>{{activity.employeeStoreName}}</td>
+                        <td>{{getActivityTimestamp(activity.loginTimestamp)}}</td>                      
+                    </tr>
+                </tbody>
+            </table>
+            <div class="centered-pagination">
+                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+            <div>
+        </div>
+        <div class="no-results-found col-xs-12" ng-if="activities.length == 0">
+            <label>Няма регистрирани активности за тази дата</label>
+        </div>
+    </div>
+</div>

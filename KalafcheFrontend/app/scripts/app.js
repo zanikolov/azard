@@ -109,6 +109,12 @@ angular
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin]
                 }      
+            }).state('activityReport', {
+                url: '/activity-report',
+                templateUrl: 'views/partials/activity-report.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin]
+                }      
             }).state('login',{
                 url: '/login',
                 templateUrl: 'views/partials/partial-login.html',

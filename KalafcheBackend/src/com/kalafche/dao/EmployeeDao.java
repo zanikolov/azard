@@ -14,4 +14,6 @@ public interface EmployeeDao {
 
 	public abstract void updateEmployee(Employee employee);
 
+	public abstract List<Employee> getAllActiveEmployees();
+
 }

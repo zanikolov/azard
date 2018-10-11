@@ -34,6 +34,16 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 			+ "join employee e on u.id = e.user_id "
 			+ "join kalafche_store ks on e.kalafche_store_id = ks.id "
 			+ "join job_responsibility jr on e.job_responsibility_id = jr.id ";
+	private static final String GET_ALL_ACTIVE_EMPLOYEES = "select " +
+			"e.id as id, " +
+			"e.name, " +
+			"e.kalafche_store_id, " +
+			"concat(ks.city, ', ',ks.name) as kalafche_store_name " +
+			"from user u " +
+			"join employee e on u.id = e.user_id " +
+			"join kalafche_store ks on e.kalafche_store_id = ks.id " +
+			"where u.enabled is true " +
+			"order by e.id ";
 	private static final String INSERT_EMPLOYEE = "insert into employee (name, kalafche_store_id, job_responsibility_id, user_id) values (?, ?, ?, ?)";
 	
 	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, kalafche_store_id = ? where id = ?";
@@ -83,6 +93,11 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 	public void updateEmployee(Employee employee) {
 		getJdbcTemplate().update(UPDATE_EMPLOYEE, employee.getName(), employee.getKalafcheStoreId(), employee.getId());
 		
+	}
+
+	@Override
+	public List<Employee> getAllActiveEmployees() {
+		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES, getRowMapper());
 	}
 
 }

@@ -112,6 +112,13 @@
                                         </div>
                                     </div>
                                 </div> 
+                                <div ng-if="isAdmin()" class="panel panel-default" ui-sref="activityReport">
+                                    <div class="panel-heading sidebar-btn collapseall">
+                                        <div class="panel-title">
+                                            <span class="menu-panel-header">Активности</span>
+                                        </div>
+                                    </div>
+                                </div>
                             <!--<div ng-if="isAdmin()" class="panel panel-default" ui-sref="stockOrder">
                                     <div class="panel-heading sidebar-btn collapseall">
                                         <div class="panel-title">
@@ -202,6 +209,7 @@
     <script src="scripts/controllers/StockOrderController.js"></script>
     <script src="scripts/controllers/EmployeeController.js"></script>
     <script src="scripts/controllers/KalafcheStoreController.js"></script>
+    <script src="scripts/controllers/ActivityReportController.js"></script>
     <!-- Services -->
     <script src="scripts/services/ApplicationService.js"></script>
     <script src="scripts/services/BrandService.js"></script>
@@ -221,6 +229,7 @@
     <script src="scripts/services/StockOrderService.js"></script>
     <script src="scripts/services/OrderedStockService.js"></script>
     <script src="scripts/services/EmployeeService.js"></script>
+    <script src="scripts/services/ActivityReportService.js"></script>
     
     <!-- Directives -->
     <script src="scripts/directives/SaleModalDirective.js"></script>

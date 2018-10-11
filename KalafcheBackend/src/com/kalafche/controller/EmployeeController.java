@@ -1,6 +1,5 @@
 package com.kalafche.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kalafche.dao.EmployeeDao;
 import com.kalafche.exceptions.CommonException;
 import com.kalafche.model.Employee;
+import com.kalafche.model.LoginHistory;
 import com.kalafche.service.EmployeeService;
+import com.kalafche.service.LoginHistoryService;
 
 @CrossOrigin
 @RestController
@@ -27,6 +28,9 @@ public class EmployeeController {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Autowired
+	LoginHistoryService loginHistoryService;
 	
 	@Autowired
 	EmployeeDao employeeDao;
@@ -38,6 +42,11 @@ public class EmployeeController {
 		Employee employee = employeeService.getEmployeeInfo(username);
 		
 		return employee;
+	}
+	
+	@RequestMapping(value = { "/enabled" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public List<Employee> getAllActiveEmployees() {	
+		return employeeService.getAllActiveEmployees();
 	}
 	
 	@RequestMapping(value = { "/admin/getEmployeeByName" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET }, params = { "username" })
@@ -75,6 +84,11 @@ public class EmployeeController {
 	@RequestMapping(value = { "/disable" }, method = {org.springframework.web.bind.annotation.RequestMethod.PUT })
 	public void deactivateAccount(@RequestBody int userId) {
 		employeeService.deactivateAccount(userId);		
+	}
+		
+	@RequestMapping(value = { "/firstLoginForDate" }, method = {org.springframework.web.bind.annotation.RequestMethod.GET })
+	public List<LoginHistory> getFirstLoginForDate(@RequestParam(value = "dateMillis")  long dateMillis) {
+		return loginHistoryService.getLoginHistoryRecords(dateMillis);
 	}
 	
 }

@@ -1,6 +1,5 @@
 package com.kalafche.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,18 @@ public class EmployeeService {
 	@Autowired
 	UserToRoleDao userToRoleDao;
 	
+	@Autowired
+	LoginHistoryService loginHistoryService;
+	
+	@Transactional
 	public Employee getEmployeeInfo(String username) {		
 		
 		Employee employee = employeeDao.getEmployee(username);
 		if (employee == null) {
 			return null;
 		}
+		
+		loginHistoryService.trackLoginHistory(employee.getId());
 		
 		List<AuthRole> roles = authRoleDao.getAllRolesForUser(employee.getUserId());
 		employee.setRoles(roles);
@@ -60,5 +65,9 @@ public class EmployeeService {
 
 	public void deactivateAccount(int userId) {
 		userDao.disableUser(userId);
+	}
+
+	public List<Employee> getAllActiveEmployees() {
+		return employeeDao.getAllActiveEmployees();
 	}
 }
