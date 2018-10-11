@@ -6,11 +6,11 @@ public class Stock {
 	private String deviceBrandName;
 	private int deviceModelId;
 	private String deviceModelName;
-	private int itemId;
-	private String itemProductCode;
-	private String itemName;
-	private String itemDescription;
-	private String itemPrice;
+	private int productId;
+	private String productCode;
+	private String productName;
+	private String productDescription;
+	private String productPrice;
 	private int kalafcheStoreId;
 	private String kalafcheStoreName;
 	private int quantity;
@@ -100,44 +100,44 @@ public class Stock {
 		this.kalafcheStoreName = kalafcheStoreName;
 	}
 
-	public int getItemId() {
-		return itemId;
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 
-	public String getItemProductCode() {
-		return itemProductCode;
+	public String getProductCode() {
+		return productCode;
 	}
 
-	public void setItemProductCode(String itemProductCode) {
-		this.itemProductCode = itemProductCode;
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 
-	public String getItemName() {
-		return itemName;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public String getItemDescription() {
-		return itemDescription;
+	public String getProductDescription() {
+		return productDescription;
 	}
 
-	public void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
 	}
 
-	public String getItemPrice() {
-		return itemPrice;
+	public String getProductPrice() {
+		return productPrice;
 	}
 
-	public void setItemPrice(String itemPrice) {
-		this.itemPrice = itemPrice;
+	public void setProductPrice(String productPrice) {
+		this.productPrice = productPrice;
 	}
 
 	public int getQuantityInStock() {

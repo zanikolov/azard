@@ -3,9 +3,9 @@ package com.kalafche.model;
 public class OrderedStock {
 
 	private int id;
-	private int itemId;
-	private String itemName;
-	private String itemProductCode;
+	private int productId;
+	private String productName;
+	private String productCode;
 	private int deviceModelId;
 	private String deviceModelName;
 	private int deviceBrandId;
@@ -21,22 +21,6 @@ public class OrderedStock {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-
-	public String getItemName() {
-		return itemName;
-	}
-
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
 	}
 
 	public int getDeviceModelId() {
@@ -103,11 +87,28 @@ public class OrderedStock {
 		this.deviceBrandId = deviceBrandId;
 	}
 
-	public String getItemProductCode() {
-		return itemProductCode;
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setItemProductCode(String itemProductCode) {
-		this.itemProductCode = itemProductCode;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
 }

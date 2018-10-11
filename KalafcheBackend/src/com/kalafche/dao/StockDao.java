@@ -10,7 +10,7 @@ public abstract interface StockDao {
 	
 	public abstract List<Stock> getAllStocks();
 
-	public abstract List<Stock> searchStocks(int deviceBrandId, int deviceModelId, int itemId);
+	public abstract List<Stock> searchStocks(int deviceBrandId, int deviceModelId, int productId);
 
 	public abstract List<Stock> getUnapprovedStocksByKalafcheStoreId(int kalafcheStoreId);
 	
@@ -22,7 +22,7 @@ public abstract interface StockDao {
 
 	public abstract void updateTheQuantitiyOfSoldStock(int stockId);
 	
-	public abstract Integer getQuantitiyOfStock(int itemId, int deviceModelId, int kalafcheStoreId);
+	public abstract Integer getQuantitiyOfStock(int productId, int deviceModelId, int kalafcheStoreId);
 	
 	public abstract Integer getCompanyQuantityOfStock(String productCode, int deviceModelId);
 

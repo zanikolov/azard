@@ -105,10 +105,10 @@ public class StockRelocationController {
 		
 		List<StockRelocation> srList =  stockRelocationDao.getAllStockRelocationsTest();
 		for (StockRelocation relocation : srList) {
-			Stock stock = stockDao.getStockByInfo(relocation.getToKalafcheStoreId(), relocation.getDeviceModelId(), relocation.getItemProductCode());
+			Stock stock = stockDao.getStockByInfo(relocation.getToKalafcheStoreId(), relocation.getDeviceModelId(), relocation.getProductCode());
 			if (stock.getQuantity() < relocation.getQuantity()) {
 				System.out.println(">>>>>>>");
-				System.out.println(relocation.getItemProductCode() + "  " + relocation.getDeviceModelId() + "  " + stock.getQuantity() + "  " + relocation.getQuantity());
+				System.out.println(relocation.getProductCode() + "  " + relocation.getDeviceModelId() + "  " + stock.getQuantity() + "  " + relocation.getQuantity());
 			}
 			this.stockDao.updateTheQuantitiyOfRelocatedStock(relocation.getQuantity() * (-1), stock.getId());
 		}

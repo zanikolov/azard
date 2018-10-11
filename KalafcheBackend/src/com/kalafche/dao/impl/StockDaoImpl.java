@@ -28,11 +28,11 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.description as item_description, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.description as product_description, " +
+			"p.PRICE as product_price, " +
 			"ks.ID as kalafche_store_id, " +
 			"CONCAT(ks.CITY, \", \", ks.NAME) as kalafche_store_name, " +
 			"s.QUANTITY, " +
@@ -43,8 +43,8 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join item i on s.ITEM_ID=i.ID " +
-			"left join (select id, device_model_id, item_id, KALAFCHE_STORE_ID, quantity from stock where approved = true) s2 on s.device_model_id = s2.device_model_id and s.item_id = s2.item_id and s.KALAFCHE_STORE_ID = s2.KALAFCHE_STORE_ID " +
+			"join product p on s.PRODUCT_ID=p.ID " +
+			"left join (select id, device_model_id, product_id, KALAFCHE_STORE_ID, quantity from stock where approved = true) s2 on s.device_model_id = s2.device_model_id and s.product_id = s2.product_id and s.KALAFCHE_STORE_ID = s2.KALAFCHE_STORE_ID " +
 			"where s.approved is false " +
 			"and s.kalafche_store_id = ? ";
 	
@@ -54,11 +54,11 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.description as item_description, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.description as product_description, " +
+			"p.PRICE as product_price, " +
 			"ks.ID as kalafche_store_id, " +
 			"CONCAT(ks.CITY, \", \", ks.NAME) as kalafche_store_name, " +
 			"s.QUANTITY, " +
@@ -69,17 +69,17 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join item i on s.ITEM_ID=i.ID " +
-			"left join (select id, device_model_id, item_id, KALAFCHE_STORE_ID, quantity from stock where approved = true) s2 on s.device_model_id = s2.device_model_id and s.item_id = s2.item_id and s.KALAFCHE_STORE_ID = s2.KALAFCHE_STORE_ID " +
+			"join product i on s.product_id=p.ID " +
+			"left join (select id, device_model_id, product_id, KALAFCHE_STORE_ID, quantity from stock where approved = true) s2 on s.device_model_id = s2.device_model_id and s.product_id = s2.product_id and s.KALAFCHE_STORE_ID = s2.KALAFCHE_STORE_ID " +
 			"where s.approved is false ";
 	
 	private static final String INSERT_APPROVED_STOCK = "insert into stock "
-			+ "(device_model_id, item_id, kalafche_store_id, quantity, approved, approver) values "
+			+ "(device_model_id, product_id, kalafche_store_id, quantity, approved, approver) values "
 			+ "(?, ?, ?, ?, ?, ?) "
 			+ "on duplicate key update quantity = quantity + ?";
 	
 	private static final String INSERT_STOCK_FOR_APPROVAL = "insert into stock "
-			+ "(device_model_id, item_id, kalafche_store_id, quantity, approved, approver) values "
+			+ "(device_model_id, product_id, kalafche_store_id, quantity, approved, approver) values "
 			+ "(?, ?, ?, ?, ?, ?);";
 	
 	private static final String DELETE_STOCK_FOR_APPROVAL = "delete from stock where id = ?";
@@ -90,10 +90,10 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.PRICE as product_price, " +
 			"ks.ID as kalafche_store_id, " +
 			"CONCAT(ks.CITY, \", \", ks.NAME) as kalafche_store_name, " +
 			"s.QUANTITY, " +
@@ -105,9 +105,9 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join item i on s.ITEM_ID=i.ID " +
-			"left join stock ws on ws.device_model_id=dm.ID and ws.item_id=i.ID and ws.kalafche_store_id=4 and ws.approved=true " +
-			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
+			"join product i on s.PRODUCT_ID=p.ID " +
+			"left join stock ws on ws.device_model_id=dm.ID and ws.product_id=p.ID and ws.kalafche_store_id=4 and ws.approved=true " +
+			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.product_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.product_id=p.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
 			"where s.approved is true " +
 			"and ks.CODE <> 'RU_WH' ";
 	
@@ -128,10 +128,10 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.PRICE as product_price, " +
 			"ks.ID as kalafche_store_id, " +
 			"CONCAT(ks.CITY, \", \", ks.NAME) as kalafche_store_name, " +
 			"s.QUANTITY, " +
@@ -143,27 +143,27 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join item i on s.ITEM_ID=i.ID " +
-			"left join stock es on es.device_model_id=dm.ID and es.item_id=i.ID and es.kalafche_store_id=? and es.approved=true " +
-			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.item_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.item_id=i.id and sr2.device_model_id=dm.id and sr2.to_kalafche_store_id=? " +
+			"join product i on s.PRODUCT_ID=p.ID " +
+			"left join stock es on es.device_model_id=dm.ID and es.product_id=p.ID and es.kalafche_store_id=? and es.approved=true " +
+			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.product_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.product_id=p.id and sr2.device_model_id=dm.id and sr2.to_kalafche_store_id=? " +
 			"where s.approved is true " +
 			"and ks.CODE = 'RU_WH' ";
 	
 	private static final String ORDER_BY_CLAUSE =
-			"order by device_brand_name, device_model_name, item_id, kalafche_store_id ";
+			"order by device_brand_name, device_model_name, product_id, kalafche_store_id ";
 	
 	private static final String UPDATE_QUANTITY_OF_SOLD_STOCK = "update stock set quantity = quantity - 1 where id = ?";
 	
-	private static final String GET_QUANTITY_OF_STOCK_BY_STORE = "select coalesce((select quantity from stock where item_id = ? and device_model_id = ? and kalafche_store_id = ? and approved = true), 0)";
+	private static final String GET_QUANTITY_OF_STOCK_BY_STORE = "select coalesce((select quantity from stock where product_id = ? and device_model_id = ? and kalafche_store_id = ? and approved = true), 0)";
 	
-	private static final String GET_QUANTITY_OF_STOCK_IN_WH = "select coalesce((select quantity from stock st join item i on st.item_id = i.id join kalafche_store ks on st.kalafche_store_id = ks.id where i.product_code = ? and device_model_id = ? and ks.code = 'RU_WH' and approved = true), 0); ";
+	private static final String GET_QUANTITY_OF_STOCK_IN_WH = "select coalesce((select quantity from stock st join product p on st.product_id = p.id join kalafche_store ks on st.kalafche_store_id = ks.id where p.code = ? and device_model_id = ? and ks.code = 'RU_WH' and approved = true), 0); ";
 	
 	private static final String GET_COMPANY_QUANTITY_OF_STOCK = "select coalesce((select " +
 			"sum(st.quantity) " +
 			"from stock st " +
-			"join item i on st.item_id = i.id " +
+			"join product p on st.product_id = p.id " +
 			"join kalafche_store ks on ks.id = st.kalafche_store_id " +
-			"where i.product_code = ? " +
+			"where p.code = ? " +
 			"and st.device_model_id = ? " +
 			"and ks.code != 'RU_KAUFL_1' " +
 			"and ks.code != 'RU_KAUFL_2' " +
@@ -174,7 +174,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	
 	private static final String GET_STOCK_BY_ID = "select * from stock where id = ?";
 	
-	private static final String GET_STOCK_BY_INFO = "select * from stock where kalafche_store_id = ? and device_model_id = ? and item_id = (select id from item where product_code = ?)";
+	private static final String GET_STOCK_BY_INFO = "select * from stock where kalafche_store_id = ? and device_model_id = ? and product_id = (select id from product where code = ?)";
 
 	private static final String GET_ALL_STOCKS_FOR_REPORT = "select " +
 			"s.ID, " +
@@ -182,20 +182,20 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.PRICE as product_price, " +
 			"os.QUANTITY as ordered_quantity, " +
 			"sum(s.QUANTITY) as quantity " +
 			"from stock s " +
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join item i on s.ITEM_ID=i.ID " +
-			"left join ordered_stock os on os.item_id = i.id and os.DEVICE_MODEL_ID = dm.id and os.STOCK_ORDER_ID = ? " +
+			"join product i on s.PRODUCT_ID=p.ID " +
+			"left join ordered_stock os on os.product_id = p.id and os.DEVICE_MODEL_ID = dm.id and os.STOCK_ORDER_ID = ? " +
 			"where s.approved is true " +
-			"group by i.PRODUCT_CODE, i.NAME, db.name, dm.name " +
+			"group by p.CODE, p.NAME, db.name, dm.name " +
 			"order by device_brand_name, device_model_name, quantity desc ";
 
 	private BeanPropertyRowMapper<Stock> rowMapper;
@@ -251,7 +251,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	@Override
 	public void insertStockForApproval(Stock stock) throws DuplicateKeyException {
 		getJdbcTemplate().update(INSERT_STOCK_FOR_APPROVAL, 
-				stock.getDeviceModelId(), stock.getItemId(),
+				stock.getDeviceModelId(), stock.getProductId(),
 				stock.getKalafcheStoreId(), stock.getQuantity(), 
 				stock.isApproved(), stock.getApprover());
 	}
@@ -267,7 +267,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	public void approveStockForApproval(Stock stock) {
 			stock.setApproved(true);
 			getJdbcTemplate().update(INSERT_APPROVED_STOCK, 
-					stock.getDeviceModelId(), stock.getItemId(),
+					stock.getDeviceModelId(), stock.getProductId(),
 					stock.getKalafcheStoreId(), stock.getQuantity(), 
 					stock.isApproved(), stock.getApprover(), stock.getQuantity());	
 	}
@@ -292,13 +292,13 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	
 	@Override
 	public List<Stock> searchStocks(int deviceBrandId, int deviceModelId,
-			int itemTypeId) {
-		List<Stock> items;
+			int stockTypeId) {
+		List<Stock> stocks;
 		List<Integer> args = new ArrayList<Integer>();
 
 		StringBuilder query = new StringBuilder(GET_ALL_STOCKS_QUERY);
 
-		if (deviceBrandId != 0 || deviceModelId != 0 || itemTypeId != 0) {
+		if (deviceBrandId != 0 || deviceModelId != 0 || stockTypeId != 0) {
 			boolean shouldAppendAnd = false;
 			query.append(" WHERE");
 
@@ -316,22 +316,22 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 				args.add(deviceModelId);
 			}
 
-			if (itemTypeId != 0) {
+			if (stockTypeId != 0) {
 				if (shouldAppendAnd) {
 					query.append(" and");
 				}
-				query.append(" ITEM_TYPE_ID = ?");
-				args.add(itemTypeId);
+				query.append(" PRODUCT_TYPE_ID = ?");
+				args.add(stockTypeId);
 			}
 
-			items = getJdbcTemplate().query(query.toString(),
+			stocks = getJdbcTemplate().query(query.toString(),
 					args.toArray(new Integer[args.size()]), getRowMapper());
 		} else {
-			items = getJdbcTemplate().query(GET_ALL_STOCKS_QUERY,
+			stocks = getJdbcTemplate().query(GET_ALL_STOCKS_QUERY,
 					getRowMapper());
 		}
 
-		return items;
+		return stocks;
 	}
 
 	@Override
@@ -339,8 +339,8 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 		getJdbcTemplate().update(UPDATE_QUANTITY_OF_SOLD_STOCK, stockId);
 	}
 	
-	public Integer getQuantitiyOfStock(int itemId, int deviceModelId, int kalafcheStoreId) {
-		Integer quantity = getJdbcTemplate().queryForObject(GET_QUANTITY_OF_STOCK_BY_STORE, Integer.class, new Object[] {itemId, deviceModelId, kalafcheStoreId});
+	public Integer getQuantitiyOfStock(int productId, int deviceModelId, int kalafcheStoreId) {
+		Integer quantity = getJdbcTemplate().queryForObject(GET_QUANTITY_OF_STOCK_BY_STORE, Integer.class, new Object[] {productId, deviceModelId, kalafcheStoreId});
 		
 		return quantity;
 	}

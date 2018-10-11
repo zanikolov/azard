@@ -5,8 +5,8 @@ import com.kalafche.BaseModel;
 public class StockRelocation extends BaseModel {
 	private int id;
 	private int stockId;
-	private String itemName;
-	private String itemProductCode;
+	private String productName;
+	private String productCode;
 	private int fromKalafcheStoreId;
 	private String fromKalafcheStoreName;
 	private int toKalafcheStoreId;
@@ -23,7 +23,7 @@ public class StockRelocation extends BaseModel {
 	private boolean rejected;
 	private boolean arrived;
 	private int quantity;
-	private float itemPrice;
+	private float productPrice;
 	private float relocationPrice;
 	private boolean archived;
 
@@ -91,14 +91,6 @@ public class StockRelocation extends BaseModel {
 		this.employeeName = employeeName;
 	}
 
-	public String getItemName() {
-		return itemName;
-	}
-
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
-
 	public int getFromKalafcheStoreId() {
 		return fromKalafcheStoreId;
 	}
@@ -145,14 +137,6 @@ public class StockRelocation extends BaseModel {
 
 	public void setRelocationCompleteTimestamp(long relocationCompleteTimestamp) {
 		this.relocationCompleteTimestamp = relocationCompleteTimestamp;
-	}
-
-	public float getItemPrice() {
-		return itemPrice;
-	}
-
-	public void setItemPrice(float itemPrice) {
-		this.itemPrice = itemPrice;
 	}
 
 	public int getQuantity() {
@@ -209,11 +193,28 @@ public class StockRelocation extends BaseModel {
 		this.archived = archived;
 	}
 
-	public String getItemProductCode() {
-		return itemProductCode;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setItemProductCode(String itemProductCode) {
-		this.itemProductCode = itemProductCode;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	public float getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(float productPrice) {
+		this.productPrice = productPrice;
+	}
+
 }

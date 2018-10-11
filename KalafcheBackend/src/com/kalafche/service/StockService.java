@@ -24,11 +24,11 @@ public class StockService {
 	StockOrderDao stockOrderDao;
 	
 	public List<Stock> updateStocksForApproval(Map<String, List<Stock>> stocks) {				
-		List<Stock> newItemsForApproval = stocks.get("addedStocksForApproval");
-		List<Stock> deletedItemsForApproval = stocks.get("deletedStocksForApproval");
+		List<Stock> newStocksForApproval = stocks.get("addedStocksForApproval");
+		List<Stock> deletedStocksForApproval = stocks.get("deletedStocksForApproval");
 		
-		List<Stock> failedAttempts = insertStocksForApproval(newItemsForApproval);
-		stockDao.deleteStocksForApproval(deletedItemsForApproval);
+		List<Stock> failedAttempts = insertStocksForApproval(newStocksForApproval);
+		stockDao.deleteStocksForApproval(deletedStocksForApproval);
 		
 		return failedAttempts;
 	}

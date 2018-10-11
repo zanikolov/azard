@@ -60,9 +60,9 @@ public class StockController {
 		return stocks;
 	}
 
-	@RequestMapping(value = { "/getQuantitiyOfStock" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET}, params = {"itemId", "deviceModelId", "kalafcheStoreId"})
-	public Integer getQuantitiyOfStock(@RequestParam (value = "itemId") int itemId, @RequestParam (value = "deviceModelId") int deviceModelId, @RequestParam (value = "kalafcheStoreId") int kalafcheStoreId) {
-		Integer quantityInStock = this.stockDao.getQuantitiyOfStock(itemId, deviceModelId, kalafcheStoreId);
+	@RequestMapping(value = { "/getQuantitiyOfStock" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET}, params = {"productId", "deviceModelId", "kalafcheStoreId"})
+	public Integer getQuantitiyOfStock(@RequestParam (value = "productId") int productId, @RequestParam (value = "deviceModelId") int deviceModelId, @RequestParam (value = "kalafcheStoreId") int kalafcheStoreId) {
+		Integer quantityInStock = this.stockDao.getQuantitiyOfStock(productId, deviceModelId, kalafcheStoreId);
 
 		return quantityInStock;
 	}

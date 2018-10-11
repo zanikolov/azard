@@ -31,8 +31,8 @@ public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockD
 	@Autowired
 	StockOrderDao stockOrderDao;
 	
-	private static final String INSERT_ORDERED_STOCK_2 = "insert into ordered_stock(stock_order_id, item_id, device_model_id, quantity, create_timestamp, created_by) values (?, ?, ?, ?, ?, ?)";
-	private static final String INSERT_ORDERED_STOCK = "insert into ordered_stock(stock_order_id, item_id, device_model_id, quantity, create_timestamp, created_by) values (?, ?, ?, ?, ?, ?) " +
+	//private static final String INSERT_ORDERED_STOCK_2 = "insert into ordered_stock(stock_order_id, product_id, device_model_id, quantity, create_timestamp, created_by) values (?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_ORDERED_STOCK = "insert into ordered_stock(stock_order_id, product_id, device_model_id, quantity, create_timestamp, created_by) values (?, ?, ?, ?, ?, ?) " +
 			"on duplicate key update quantity = ?";
 	private static final String GET_ALL_ORDERED_STOCK_FOR_STOCK_ORDER = "select " +
 			"os.ID, " +
@@ -40,15 +40,15 @@ public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockD
 			"db.NAME as device_brand_name, " +
 			"dm.ID as device_model_id, " +
 			"dm.NAME as device_model_name, " +
-			"i.ID as item_id, " +
-			"i.PRODUCT_CODE as item_product_code, " +
-			"i.NAME as item_name, " +
-			"i.PRICE as item_price, " +
+			"p.ID as product_id, " +
+			"p.CODE as product_code, " +
+			"p.NAME as product_name, " +
+			"p.PRICE as product_price, " +
 			"os.QUANTITY " +
 			"from ordered_stock os " +
 			"join device_model dm on os.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
-			"join item i on os.ITEM_ID=i.ID " +
+			"join product p on os.PRODUCT_ID=p.ID " +
 			"where os.stock_order_id = ? " +
 			"order by device_brand_name, device_model_name, quantity desc ";
 	private static final String DELETE_ORDERED_STOCK = "delete from ordered_stock where id = ?";
@@ -77,7 +77,7 @@ public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockD
 				PreparedStatement statement = connection.prepareStatement(
 						INSERT_ORDERED_STOCK, Statement.RETURN_GENERATED_KEYS);) {
 			statement.setInt(1, orderedStock.getStockOrderId());
-			statement.setInt(2, orderedStock.getItemId());
+			statement.setInt(2, orderedStock.getProductId());
 			statement.setInt(3, orderedStock.getDeviceModelId());
 			statement.setInt(4, orderedStock.getQuantity());
 			statement.setLong(5, orderedStock.getCreateTimestamp());

@@ -3,8 +3,8 @@ package com.kalafche.model;
 public class Sale {
 	private int id;
 	private int stockId;
-	private String itemName;
-	private String itemProductCode;
+	private String productName;
+	private String productCode;
 	private int kalafcheStoreId;
 	private String kalafcheStoreName;
 	private int deviceModelId;
@@ -123,12 +123,12 @@ public class Sale {
 		this.employeeName = employeeName;
 	}
 
-	public String getItemName() {
-		return itemName;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public String getKalafcheStoreName() {
@@ -147,11 +147,11 @@ public class Sale {
 		this.kalafcheStoreId = kalafcheStoreId;
 	}
 
-	public String getItemProductCode() {
-		return itemProductCode;
+	public String getProductCode() {
+		return productCode;
 	}
 
-	public void setItemProductCode(String itemProductCode) {
-		this.itemProductCode = itemProductCode;
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 }

@@ -17,7 +17,7 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 		StockRelocationDao {
 
 	private static final String INSERT_STOCK_RELOCATION = "insert into stock_relocation (relocation_request_timestamp, employee_id, stock_id, quantity, from_kalafche_store_id, to_kalafche_store_id, approved, arrived, relocation_complete_timestamp, price, archived)"
-			+ " values (?, ?, ?, ?, ?, ?, ? , ?, ?, ? * (select i.purchase_price from stock st join item i on st.item_id = i.id where st.id = ?), ?)";
+			+ " values (?, ?, ?, ?, ?, ?, ? , ?, ?, ? * (select p.purchase_price from stock st join product p on st.product_id = p.id where st.id = ?), ?)";
 	
 	private static final String GET_STOCK_RELOCATIONS = "select " +
 			"sr.id, " +
@@ -32,10 +32,10 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"sr.to_kalafche_store_id, " +
 			"sr.from_kalafche_store_id, " +
 			"sr.archived, " +
-			"i.price as itemPrice, " +
+			"p.price as productPrice, " +
 			"e.name as employee_name, " +
-			"i.name as item_name, " +
-			"i.product_code as item_product_code, " +
+			"p.name as product_name, " +
+			"p.code as product_code, " +
 			"CONCAT(ks.city, \", \", ks.name) as from_kalafche_store_name, " +
 			"ks.id as from_kalafche_store_id, " +
 			"CONCAT(ks2.city, \", \", ks2.name) as to_kalafche_store_name, " +
@@ -47,14 +47,14 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"from stock_relocation sr " +
 			"join employee e on sr.employee_id = e.id " +
 			"join stock st on sr.stock_id = st.id " +
-			"join item i on st.item_id = i.id " +
+			"join product p on st.product_id = p.id " +
 			"join kalafche_store ks on st.KALAFCHE_STORE_ID = ks.ID " +
 			"join kalafche_store ks2 on sr.TO_KALAFCHE_STORE_ID = ks2.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
 			"join device_brand db on dm.device_brand_id = db.id " +
 			"where archived = false ";
 	
-	private static final String ORDER_BY_CLAUSE = "order by db.name, dm.name, i.id, ks.id ";
+	private static final String ORDER_BY_CLAUSE = "order by db.name, dm.name, p.id, ks.id ";
 	
 	private static final String BY_TO_KALAFCHE_STORE_ID = " and sr.to_kalafche_store_id = ? ";
 	
@@ -80,10 +80,10 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"sr.relocation_complete_timestamp, " +
 			"sr.to_kalafche_store_id, " +
 			"sr.archived, " +
-			"i.price as itemPrice, " +
+			"p.price as productPrice, " +
 			"e.name as employee_name, " +
-			"i.name as item_name, " +
-			"i.product_code as item_product_code, " +
+			"p.name as product_name, " +
+			"p.code as product_code, " +
 			"CONCAT(ks.city, \", \", ks.name) as from_kalafche_store_name, " +
 			"ks.id as from_kalafche_store_id, " +
 			"CONCAT(ks2.city, \", \", ks2.name) as to_kalafche_store_name, " +
@@ -95,7 +95,7 @@ public class StockRelocationDaoImpl extends JdbcDaoSupport implements
 			"from stock_relocation sr " +
 			"join employee e on sr.employee_id = e.id " +
 			"join stock st on sr.stock_id = st.id " +
-			"join item i on st.item_id = i.id " +
+			"join product p on st.product_id = p.id " +
 			"join kalafche_store ks on st.KALAFCHE_STORE_ID = ks.ID " +
 			"join kalafche_store ks2 on sr.TO_KALAFCHE_STORE_ID = ks2.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +

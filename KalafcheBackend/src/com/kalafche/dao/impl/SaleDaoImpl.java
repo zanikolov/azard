@@ -23,14 +23,14 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"	when 0 then s.cost " +
 			"	else s.discounted_cost " +
 			"end as sale_price, " +
-			"e.name as employee_name, i.name as item_name, i.product_code as item_product_code, CONCAT(ks.city, \", \", ks.name) as kalafche_store_name, " +
+			"e.name as employee_name, p.name as product_name, p.code as product_code, CONCAT(ks.city, \", \", ks.name) as kalafche_store_name, " +
 			"ks.id as kalafche_store_id, " +
 			"dm.id as device_model_id, dm.name as device_model_name, db.id as device_brand_id, db.name as device_brand_name, " +
 			"p.code as partner_code " +
 			"from sale s " +
 			"join employee e on s.employee_id = e.id " +
 			"join stock st on s.stock_id = st.id " +
-			"join item i on st.item_id = i.id " +
+			"join product p on st.product_id = p.id " +
 			"join kalafche_store ks on st.KALAFCHE_STORE_ID = ks.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
 			"join device_brand db on dm.device_brand_id = db.id " +
@@ -38,7 +38,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id in (%s)";
-	private static final String ITEM_PRODUCT_CODE_QUERY = " and i.product_code in (?)";
+	private static final String PRODUCT_CODE_QUERY = " and p.code in (?)";
 	private static final String DEVICE_BRAND_QUERY = " and db.id = ?";
 	private static final String DEVICE_MODEL_QUERY = " and dm.id = ?";
 	private static final String INSERT_SALE = "insert into sale (partner_id, employee_id, discounted_cost, stock_id, cost, sale_timestamp)"
@@ -88,7 +88,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	@Override
 	public List<Sale> searchSales(Long startDateMilliseconds,
-			Long endDateMilliseconds, String kalafcheStoreIds, String itemProductCode, Integer deviceBrandId, Integer deviceModelId) {
+			Long endDateMilliseconds, String kalafcheStoreIds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
 		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY + String.format(KALAFCHE_STORE_CRITERIA_QUERY, kalafcheStoreIds);
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
@@ -96,7 +96,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		//argsList.add(kalafcheStoreIds);
 
 		
-		searchQuery += addDetailedSearch(itemProductCode, deviceBrandId, deviceModelId, argsList);
+		searchQuery += addDetailedSearch(productCode, deviceBrandId, deviceModelId, argsList);
 		
 		searchQuery += ORDER_BY;
 		
@@ -109,11 +109,11 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 				searchQuery, argsArr, getRowMapper());
 	}
 
-	private String addDetailedSearch(String itemProductCode, Integer deviceBrandId, Integer deviceModelId, List<Object> args) {
+	private String addDetailedSearch(String productCode, Integer deviceBrandId, Integer deviceModelId, List<Object> args) {
 		String detailedQuery = "";
-		if (itemProductCode != null && itemProductCode != "") {
-			detailedQuery += ITEM_PRODUCT_CODE_QUERY;
-			args.add(itemProductCode);
+		if (productCode != null && productCode != "") {
+			detailedQuery += PRODUCT_CODE_QUERY;
+			args.add(productCode);
 		}
 		
 		if (deviceBrandId != null) {

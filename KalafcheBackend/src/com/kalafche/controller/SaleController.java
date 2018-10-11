@@ -38,15 +38,15 @@ public class SaleController {
 	@RequestMapping(value = { "/searchSales" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public SaleReport searchSales(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
 			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds, @RequestParam(value = "kalafcheStoreIds") String kalafcheStoreIds,
-			@RequestParam(value = "itemProductCode", required = false) String itemProductCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
+			@RequestParam(value = "productCode", required = false) String productCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
 			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId) {
-		List<Sale> sales = this.saleDao.searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, itemProductCode, deviceBrandId, deviceModelId);
+		List<Sale> sales = this.saleDao.searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, productCode, deviceBrandId, deviceModelId);
 
 		int warehouseQuantity = 0;
 		int companyQuantity = 0;
-		if (deviceModelId != null && itemProductCode != null && itemProductCode != "") {
-			warehouseQuantity = stockDao.getQuantitiyOfStockInWH(itemProductCode, deviceModelId);
-			companyQuantity = stockDao.getCompanyQuantityOfStock(itemProductCode, deviceModelId);
+		if (deviceModelId != null && productCode != null && productCode != "") {
+			warehouseQuantity = stockDao.getQuantitiyOfStockInWH(productCode, deviceModelId);
+			companyQuantity = stockDao.getCompanyQuantityOfStock(productCode, deviceModelId);
 		}
 		
 		return new SaleReport(sales, warehouseQuantity, companyQuantity);
