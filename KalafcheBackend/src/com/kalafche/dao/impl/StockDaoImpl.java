@@ -69,7 +69,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join product i on s.product_id=p.ID " +
+			"join product p on s.product_id=p.ID " +
 			"left join (select id, device_model_id, product_id, KALAFCHE_STORE_ID, quantity from stock where approved = true) s2 on s.device_model_id = s2.device_model_id and s.product_id = s2.product_id and s.KALAFCHE_STORE_ID = s2.KALAFCHE_STORE_ID " +
 			"where s.approved is false ";
 	
@@ -105,7 +105,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join product i on s.PRODUCT_ID=p.ID " +
+			"join product p on s.PRODUCT_ID=p.ID " +
 			"left join stock ws on ws.device_model_id=dm.ID and ws.product_id=p.ID and ws.kalafche_store_id=4 and ws.approved=true " +
 			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.product_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.product_id=p.id and sr2.device_model_id=dm.id and ks.id=sr2.to_kalafche_store_id " +
 			"where s.approved is true " +
@@ -143,7 +143,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join product i on s.PRODUCT_ID=p.ID " +
+			"join product p on s.PRODUCT_ID=p.ID " +
 			"left join stock es on es.device_model_id=dm.ID and es.product_id=p.ID and es.kalafche_store_id=? and es.approved=true " +
 			"left join (select sr1.quantity, sr1.to_kalafche_store_id, st3.product_id, st3.device_model_id from stock_relocation sr1 join stock st3 on sr1.stock_id=st3.id where sr1.from_kalafche_store_id=4 and sr1.arrived=false and sr1.archived=false and (sr1.rejected=false or sr1.rejected is null)) sr2 on sr2.product_id=p.id and sr2.device_model_id=dm.id and sr2.to_kalafche_store_id=? " +
 			"where s.approved is true " +
@@ -192,7 +192,7 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			"join device_model dm on s.DEVICE_MODEL_ID=dm.ID " +
 			"join device_brand db on dm.DEVICE_BRAND_ID=db.ID " +
 			"join kalafche_store ks on s.KALAFCHE_STORE_ID=ks.ID " +
-			"join product i on s.PRODUCT_ID=p.ID " +
+			"join product p on s.PRODUCT_ID=p.ID " +
 			"left join ordered_stock os on os.product_id = p.id and os.DEVICE_MODEL_ID = dm.id and os.STOCK_ORDER_ID = ? " +
 			"where s.approved is true " +
 			"group by p.CODE, p.NAME, db.name, dm.name " +

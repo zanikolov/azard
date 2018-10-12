@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('InStockController', function ($scope, $uibModal, ModelService, BrandService, ItemService, ColorService, InStockService, SessionService, KalafcheStoreService, SaleService, PartnerService, ApplicationService) {
+	.controller('InStockController', function ($scope, $uibModal, ModelService, BrandService, ProductService, ColorService, InStockService, SessionService, KalafcheStoreService, SaleService, PartnerService, ApplicationService) {
 
 		init();
 
@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
 			$scope.showSaleModal = false;
 			$scope.inStockList = [];
             $scope.brands = [];
-            $scope.items = [];
+            $scope.products = [];
             $scope.models = [];
             $scope.colors = [];
             $scope.kalafcheStores = [];
@@ -25,7 +25,7 @@ angular.module('kalafcheFrontendApp')
             $scope.submitSaleErrorText = "";
 
             getAllBrands();
-            getAllItems();
+            getAllProducts();
             getAllDeviceModels();        
             //getAllPartners(); 
             getAllKalafcheStores();
@@ -40,9 +40,9 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        function getAllItems() {
-            ItemService.getAllItems().then(function(response) {
-                $scope.items = response;
+        function getAllProducts() {
+            ProductService.getAllProducts().then(function(response) {
+                $scope.products = response;
             });
 
         };
@@ -52,14 +52,6 @@ angular.module('kalafcheFrontendApp')
                 $scope.models = response; 
             });
         };
-
-        function getAllColors() {
-            ColorService.getAllColors().then(function(response) {
-                $scope.colors = response;
-            });
-
-        };
-
 
         $scope.getAllInStock = function() {
             var userKalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId ? SessionService.currentUser.employeeKalafcheStoreId : 0;
@@ -83,7 +75,7 @@ angular.module('kalafcheFrontendApp')
             var productCodesString = $scope.productCode;
             var productCodes = productCodesString.split(" ");
             return function predicateFunc(inStock) {
-                return productCodes.indexOf(inStock.itemProductCode) !== -1 ;
+                return productCodes.indexOf(inStock.productCode) !== -1 ;
             };
         };
 
@@ -183,7 +175,7 @@ angular.module('kalafcheFrontendApp')
 
             for (var i = 0; i < $scope.inStockList.length; i++) {
                 var currStock = $scope.inStockList[i];
-                    totalSum += currStock.itemPrice * currStock.quantity;               
+                    totalSum += currStock.productPrice * currStock.quantity;               
             }
 
             return Math.round(totalSum * 100) / 100;
@@ -200,7 +192,7 @@ angular.module('kalafcheFrontendApp')
         //              function(partner) {
         //                  if (partner) {  
         //                      var stock = $scope.selectedStock;
-        //                      var sale = {"stockId": stock.id, "partnerId": partner.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.itemPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
+        //                      var sale = {"stockId": stock.id, "partnerId": partner.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
         //                      SaleService.submitSale(sale).then(
         //                          function(response) {
         //                              $scope.selectedStock.quantity -= 1;
@@ -217,7 +209,7 @@ angular.module('kalafcheFrontendApp')
         //         }
         //     } else {
         //         var stock = $scope.selectedStock;
-        //         var sale = {"stockId": stock.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.itemPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
+        //         var sale = {"stockId": stock.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
         //         SaleService.submitSale(sale).then(
         //             function(response) {
         //                 $scope.selectedStock.quantity -= 1;

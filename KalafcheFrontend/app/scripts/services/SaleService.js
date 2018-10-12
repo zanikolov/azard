@@ -32,7 +32,7 @@ angular.module('kalafcheFrontendApp')
             // }
             console.log(">>>>> 1 " + kalafcheStoreIds);
             var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
-                "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "itemProductCode": productCode}};
+                "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/sale/searchSales', params)

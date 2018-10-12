@@ -95,7 +95,7 @@
                             <label>Код</label>
                         </th>
                         <th>
-                            <label>Артикул</label>
+                            <label>Продукт</label>
                         </th>
                         <th ng-if="!selectedKalafcheStore.id">
                             <label>Магазин</label>
@@ -123,8 +123,8 @@
                         <td>{{(currentPage - 1) * 15 + $index + 1}}</td>
                         <td>{{sale.deviceBrandName}}</td>
                         <td>{{sale.deviceModelName}}</td>
-                        <td>{{sale.itemProductCode}}</td>
-                        <td>{{sale.itemName}}</td>
+                        <td>{{sale.productCode}}</td>
+                        <td>{{sale.productName}}</td>
                         <td ng-if="!selectedKalafcheStore.id">{{sale.kalafcheStoreName}}</td>
                         <td ng-if="isAdmin()">{{sale.employeeName}}</td>
                         <td ng-if="isAdmin()">{{getSaleTimestamp(sale)}}</td>

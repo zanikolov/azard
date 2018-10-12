@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('NewStockController', function ($scope, ModelService, BrandService, ItemService, ColorService, NewStockService, SessionService, KalafcheStoreService) {
+    .controller('NewStockController', function ($scope, ModelService, BrandService, ProductService, ColorService, NewStockService, SessionService, KalafcheStoreService) {
 
         init();
 
@@ -13,16 +13,15 @@ angular.module('kalafcheFrontendApp')
             $scope.stocksWaitingForApprovalByKalafcheStore = [];
             $scope.deletedStocks = [];
             $scope.brands = [];
-            $scope.items = [];
+            $scope.products = [];
             $scope.models = [];
             $scope.colors = [];
             $scope.kalafcheStores = [];
             $scope.selectedKalafcheStore = {};
 
             getAllBrands();
-            getAllItems();
-            getAllDeviceModels();        
-            getAllColors(); 
+            getAllProducts();
+            getAllDeviceModels();         
             getAllKalafcheStores();
         };
 
@@ -81,9 +80,9 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        function getAllItems() {
-            ItemService.getAllItems().then(function(response) {
-                $scope.items = response;
+        function getAllProducts() {
+            ProductService.getAllProducts().then(function(response) {
+                $scope.products = response;
             });
 
         };
@@ -92,13 +91,6 @@ angular.module('kalafcheFrontendApp')
             ModelService.getAllDeviceModels().then(function(response) {
                 $scope.models = response; 
             });
-        };
-
-        function getAllColors() {
-            ColorService.getAllColors().then(function(response) {
-                $scope.colors = response;
-            });
-
         };
 
         function getAllKalafcheStores() {
@@ -174,40 +166,40 @@ angular.module('kalafcheFrontendApp')
             var stock = $scope.newStocks[index];
             stock.quantityInStock = null;
 
-            if (stock.deviceBrandId && stock.deviceModelId && stock.itemName) {
-                NewStockService.getQuantityInStock(stock.itemId, stock.deviceModelId).then(function(response) {
+            if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
+                NewStockService.getQuantityInStock(stock.productId, stock.deviceModelId).then(function(response) {
                     stock.quantityInStock = response;
                 });
             }
         };
 
 
-        $scope.getItemProperties = function (stock) {
+        $scope.getProductProperties = function (stock) {
             stock.quantityInStock = null;
 
-            for (var i = 0; i < $scope.items.length; i++) {
-                var curr = $scope.items[i];
+            for (var i = 0; i < $scope.products.length; i++) {
+                var curr = $scope.products[i];
 
-                if (stock.itemProductCode === curr.productCode) {
-                    stock.itemId = curr.id;
-                    stock.itemName = curr.name;
-                    stock.itemPrice = curr.price;
+                if (stock.productCode === curr.code) {
+                    stock.productId = curr.id;
+                    stock.productName = curr.name;
+                    stock.productPrice = curr.price;
 
                     break;
                 }
             }
 
-            if (stock.deviceBrandId && stock.deviceModelId && stock.itemName) {
-                NewStockService.getQuantityInStock(stock.itemId, stock.deviceModelId).then(function(response) {
+            if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
+                NewStockService.getQuantityInStock(stock.productId, stock.deviceModelId).then(function(response) {
                     stock.quantityInStock = response;
                 });
             }
         };
 
-        $scope.resetItemProperties = function (stock) {
-            stock.itemId = null;
-            stock.itemName = null;
-            stock.itemPrice = null;
+        $scope.resetProductProperties = function (stock) {
+            stock.productId = null;
+            stock.productName = null;
+            stock.productPrice = null;
             stock.quantityInStock = null;
         };
   });

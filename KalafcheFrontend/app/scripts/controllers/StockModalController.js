@@ -32,7 +32,7 @@ angular.module('kalafcheFrontendApp')
         			if ($scope.partner) {  
         				var stock = $scope.selectedStock;
                         var partner = $scope.partner;
-        				var sale = {"stockId": stock.id, "partnerId": partner.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.itemPrice, "salePrice": $scope.salePrice, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
+        				var sale = {"stockId": stock.id, "partnerId": partner.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "salePrice": $scope.salePrice, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
     		        	SaleService.submitSale(sale).then(
     			            function(response) {
     			            	$scope.selectedStock.quantity -= 1;
@@ -44,7 +44,7 @@ angular.module('kalafcheFrontendApp')
                 }
             } else {
                 var stock = $scope.selectedStock;
-                var sale = {"stockId": stock.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.itemPrice, "salePrice": $scope.salePrice, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
+                var sale = {"stockId": stock.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "salePrice": $scope.salePrice, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
                 SaleService.submitSale(sale).then(
                     function(response) {
                         $scope.selectedStock.quantity -= 1;
@@ -70,7 +70,7 @@ angular.module('kalafcheFrontendApp')
 
         $scope.submitOrderedStock = function() {
             var stock = $scope.stockForOrder;
-            var orderedStock = {"itemId": stock.itemId, "deviceModelId": stock.deviceModelId, "stockOrderId": stock.stockOrderId, "quantity": $scope.quantityForOrder, "deviceModelName": stock.deviceModelName, "deviceBrandName": stock.deviceBrandName, "itemName": stock.itemName, "itemProductCode": stock.itemProductCode};
+            var orderedStock = {"productId": stock.productId, "deviceModelId": stock.deviceModelId, "stockOrderId": stock.stockOrderId, "quantity": $scope.quantityForOrder, "deviceModelName": stock.deviceModelName, "deviceBrandName": stock.deviceBrandName, "productName": stock.productName, "productCode": stock.productCode};
             OrderedStockService.submitOrderedStock(orderedStock).then(
                 function(response) {
                     console.log(">>>>>");

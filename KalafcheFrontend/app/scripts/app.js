@@ -37,9 +37,9 @@ angular
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user]
                 }     
-            }).state('item', {
-                url: '/item',
-                templateUrl: 'views/partials/partial-item.html',
+            }).state('product', {
+                url: '/product',
+                templateUrl: 'views/partials/partial-product.html',
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user]
                 }      

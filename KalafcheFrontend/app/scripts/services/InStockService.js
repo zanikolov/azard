@@ -9,7 +9,7 @@ angular.module('kalafcheFrontendApp')
 		});
 
    //  	function submitNewStockForApproval(stockList) {	
-			// return $http.post('http://localhost:8080/KalafcheBackend/service/item/updateItemsForApproval', stockList)
+			// return $http.post('http://localhost:8080/KalafcheBackend/product/updateProductsForApproval', stockList)
    //          	.then(
    //              	function(response) {
    //                  	console.log(response);

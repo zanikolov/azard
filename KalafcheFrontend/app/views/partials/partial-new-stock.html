@@ -34,7 +34,7 @@
                                 <label>Код</label>
                             </th>
                             <th>
-                                <label>Артикул</label>
+                                <label>Продукт</label>
                             </th>
                             <th>
                                 <label>Марка</label>
@@ -57,12 +57,12 @@
                     <tbody>
                         <tr ng-repeat="stockForApproval in stocksWaitingForApprovalByKalafcheStore[selectedKalafcheStore.id] track by $index" class="item-row">
                             <td>{{$index + 1}}</td>
-                            <td>{{stockForApproval.itemProductCode}}</td>
-                            <td>{{stockForApproval.itemName}}</td>
+                            <td>{{stockForApproval.productCode}}</td>
+                            <td>{{stockForApproval.productName}}</td>
                             <td>{{stockForApproval.deviceBrandName}}</td>
                             <td>{{stockForApproval.deviceModelName}}</td>
                             <td>{{stockForApproval.quantityInStock}}</td>
-                            <td>{{stockForApproval.itemPrice}}</td>
+                            <td>{{stockForApproval.productPrice}}</td>
                             <td>{{stockForApproval.quantity}}</td>
                             <td ng-if="!isAdmin()">
                                 <a href="" ng-click="deleteStockWaitingForApproval($index)">
@@ -73,9 +73,9 @@
                         <tr ng-repeat="stock in newStocks track by $index" ng-form name="newStockFormRow">
                             <td>{{stocksWaitingForApproval.length + $index + 1}}</td>
                             <td>
-                                <input name="stockItemProductCode" class="form-control item-quantity" ng-class="{'error-form-control': newStockFormRow.stockItemProductCode.$dirty && newStockFormRow.stockItemProductCode.$invalid}" ng-model="stock.itemProductCode" ng-blur="getItemProperties(stock)" ng-focus="resetItemProperties(stock)" ng-maxlength="4" required>
+                                <input name="stockProductProductCode" class="form-control item-quantity" ng-class="{'error-form-control': newStockFormRow.stockProductProductCode.$dirty && newStockFormRow.stockProductProductCode.$invalid}" ng-model="stock.productCode" ng-blur="getProductProperties(stock)" ng-focus="resetProductProperties(stock)" ng-maxlength="4" required>
                             </td>
-                            <td>{{stock.itemName}}</td>
+                            <td>{{stock.productName}}</td>
                             <td>
                                 <select class="form-control new-stock-table-control" ng-change="onBrandChange($index)" ng-class="{'error-form-control': newStockFormRow.selectBrand.$dirty && newStockFormRow.selectBrand.$invalid}" name="selectBrand" ng-model="stock.deviceBrandId" ng-options="brand.id as brand.name for brand in brands" required>
                                 </select>
@@ -85,7 +85,7 @@
                                 </select>
                             </td>
                             <td>{{stock.quantityInStock}}</td>
-                            <td>{{stock.itemPrice}}</td>
+                            <td>{{stock.productPrice}}</td>
                             <td>
                                 <input type="number" min="1" name="stockQuantity" class="form-control item-quantity" ng-class="{'error-form-control': newStockFormRow.stockQuantity.$dirty && newStockFormRow.stockQuantity.$invalid}" ng-model="stock.quantity" required>
                             </td>

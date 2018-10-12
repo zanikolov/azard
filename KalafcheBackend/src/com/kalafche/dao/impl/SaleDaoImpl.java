@@ -23,14 +23,14 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"	when 0 then s.cost " +
 			"	else s.discounted_cost " +
 			"end as sale_price, " +
-			"e.name as employee_name, p.name as product_name, p.code as product_code, CONCAT(ks.city, \", \", ks.name) as kalafche_store_name, " +
+			"e.name as employee_name, pr.name as product_name, pr.code as product_code, CONCAT(ks.city, \", \", ks.name) as kalafche_store_name, " +
 			"ks.id as kalafche_store_id, " +
 			"dm.id as device_model_id, dm.name as device_model_name, db.id as device_brand_id, db.name as device_brand_name, " +
 			"p.code as partner_code " +
 			"from sale s " +
 			"join employee e on s.employee_id = e.id " +
 			"join stock st on s.stock_id = st.id " +
-			"join product p on st.product_id = p.id " +
+			"join product pr on st.product_id = pr.id " +
 			"join kalafche_store ks on st.KALAFCHE_STORE_ID = ks.ID " +
 			"join device_model dm on st.device_model_id = dm.id " +
 			"join device_brand db on dm.device_brand_id = db.id " +
@@ -38,7 +38,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id in (%s)";
-	private static final String PRODUCT_CODE_QUERY = " and p.code in (?)";
+	private static final String PRODUCT_CODE_QUERY = " and pr.code in (?)";
 	private static final String DEVICE_BRAND_QUERY = " and db.id = ?";
 	private static final String DEVICE_MODEL_QUERY = " and dm.id = ?";
 	private static final String INSERT_SALE = "insert into sale (partner_id, employee_id, discounted_cost, stock_id, cost, sale_timestamp)"

@@ -44,7 +44,7 @@
                             <label>Модел</label>
                         </th>
                         <th>
-                            <label>Артикул</label>
+                            <label>Продукт</label>
                         </th>
                         <th ng-if="!selectedKalafcheStore.id">
                             <label>Магазин</label>
@@ -70,10 +70,10 @@
                         <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
                         <td>{{inStock.deviceBrandName}}</td>
                         <td>{{inStock.deviceModelName}}</td>
-                        <td>{{inStock.itemName}}</td>
+                        <td>{{inStock.productName}}</td>
                         <td ng-if="!selectedKalafcheStore.id">{{inStock.kalafcheStoreName}}</td>
-                        <td>{{inStock.itemProductCode}}</td>
-                        <td>{{inStock.itemPrice}}</td>
+                        <td>{{inStock.productCode}}</td>
+                        <td>{{inStock.productPrice}}</td>
                         <td>{{inStock.quantity}} <span ng-if="selectedKalafcheStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
                         <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedKalafcheStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
                         <td>
@@ -107,7 +107,7 @@
         <div class="modal-header">
             <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button> 
             <label><h4 class="modal-title">Продажба</h4></label><br/>
-            <label>на {{selectedStock.itemName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.itemPrice}}лв</label>
+            <label>на {{selectedStock.productName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.productPrice}}лв</label>
         </div>
         <div class="modal-body">                
             <form name="saleForm" class="form-horizontal">
@@ -139,7 +139,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> 
             <label><h4 class="modal-title">Заявка за релокация</h4></label><br/>
-            <label>на {{selectedStock.itemName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.itemPrice}}лв <b>от магазин {{selectedStock.kalafcheStoreName}}</b></label>
+            <label>на {{selectedStock.productName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.productPrice}}лв <b>от магазин {{selectedStock.kalafcheStoreName}}</b></label>
         </div>
         <div class="modal-body">                
             <form name="relocationForm" class="form-horizontal">
