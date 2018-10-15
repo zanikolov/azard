@@ -2,8 +2,8 @@ package com.kalafche.model;
 
 public class Stock {
 	private int id;
+	private int itemId;
 	private int deviceBrandId;
-	private String deviceBrandName;
 	private int deviceModelId;
 	private String deviceModelName;
 	private int productId;
@@ -26,6 +26,14 @@ public class Stock {
 
 	public int setId(int id) {
 		return this.id = id;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 
 	public int getDeviceBrandId() {
@@ -74,14 +82,6 @@ public class Stock {
 
 	public void setApprover(int approver) {
 		this.approver = approver;
-	}
-
-	public String getDeviceBrandName() {
-		return deviceBrandName;
-	}
-
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
 	}
 
 	public String getDeviceModelName() {

@@ -3,6 +3,7 @@ package com.kalafche.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +70,11 @@ public class EmployeeService {
 
 	public List<Employee> getAllActiveEmployees() {
 		return employeeDao.getAllActiveEmployees();
+	}
+	
+	public Employee getLoggedInEmployee() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		return employeeDao.getEmployee(username);
 	}
 }

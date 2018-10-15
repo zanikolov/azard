@@ -97,9 +97,9 @@ angular
                 data: {
                     authorizedRoles: [ UserRoles.admin, UserRoles.superAdmin]
                 }      
-            }).state('stockRelocation', {
-                url: '/stock-relocation',
-                templateUrl: 'views/partials/partial-stock-relocation.html',
+            }).state('relocation', {
+                url: '/rrelocation',
+                templateUrl: 'views/partials/partial-relocation.html',
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user]
                 }      

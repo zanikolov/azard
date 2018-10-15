@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('ApplicationController', function ($scope, $rootScope, UserRoles, AuthService, AuthEvents, SessionService) {
+	.controller('ApplicationController', function ($scope, $rootScope, UserRoles, AuthService, AuthEvents, SessionService, ApplicationService) {
 
 		init();
 
@@ -23,7 +23,7 @@ angular.module('kalafcheFrontendApp')
 
 	  	$scope.isAuthorized = function(roles) {
 	  		return AuthService.isAuthorized(roles);
-	  	};
+	  	}
 
 	  	$scope.isAdmin = function() {
 	  		var roles = SessionService.currentUser.userRoles;
@@ -39,7 +39,7 @@ angular.module('kalafcheFrontendApp')
 			}
 
             return false;
-	  	};	
+	  	}	
 
 	  	$scope.isSuperAdmin = function() {
 	  		var roles = SessionService.currentUser.userRoles;
@@ -53,5 +53,22 @@ angular.module('kalafcheFrontendApp')
 			}
 
             return false;
-	  	}; 
+	  	}
+
+	  	$scope.convertEpochToDate = function(epochTime) {
+
+            if(epochTime != 0) {
+                var timeStamp = new Date(epochTime);
+
+                var minutes = ApplicationService.getTwoDigitNumber(timeStamp.getMinutes());
+                var hh = ApplicationService.getTwoDigitNumber(timeStamp.getHours());
+                var dd = ApplicationService.getTwoDigitNumber(timeStamp.getDate());
+                var mm = ApplicationService.getTwoDigitNumber(timeStamp.getMonth() + 1);
+                var yyyy = timeStamp.getFullYear();
+
+                return dd + '-' + mm + '-' + yyyy + ' ' + hh + ':' + minutes;
+            } else {
+                return '';
+            }
+        }; 
 	});

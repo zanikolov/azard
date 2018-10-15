@@ -38,9 +38,6 @@
                     <tr>
                         <th></th>
                         <th>
-                            <label>Марка</label>
-                        </th>
-                        <th>
                             <label>Модел</label>
                         </th>
                         <th>
@@ -68,7 +65,6 @@
                 <tbody>               
                     <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
-                        <td>{{inStock.deviceBrandName}}</td>
                         <td>{{inStock.deviceModelName}}</td>
                         <td>{{inStock.productName}}</td>
                         <td ng-if="!selectedKalafcheStore.id">{{inStock.kalafcheStoreName}}</td>
@@ -82,7 +78,6 @@
                         </td>
                     </tr>
                      <tr ng-show="isTotalSumRowVisible()" class="warning total-sum-row item-row">
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

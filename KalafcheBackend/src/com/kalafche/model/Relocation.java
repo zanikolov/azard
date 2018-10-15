@@ -1,20 +1,22 @@
 package com.kalafche.model;
 
 import com.kalafche.BaseModel;
+import com.kalafche.enums.RelocationStatus;
 
-public class StockRelocation extends BaseModel {
+public class Relocation extends BaseModel {
 	private int id;
 	private int stockId;
+	private int itemId;
 	private String productName;
 	private String productCode;
-	private int fromKalafcheStoreId;
-	private String fromKalafcheStoreName;
-	private int toKalafcheStoreId;
-	private String toKalafcheStoreName;
+	private float productPrice;
+	private int sourceStoreId;
+	private String sourceStoreName;
+	private int destStoreId;
+	private String destStoreName;
 	private int deviceModelId;
 	private String deviceModelName;
 	private int deviceBrandId;
-	private String deviceBrandName;
 	private long relocationRequestTimestamp;
 	private long relocationCompleteTimestamp;
 	private int employeeId;
@@ -23,9 +25,9 @@ public class StockRelocation extends BaseModel {
 	private boolean rejected;
 	private boolean arrived;
 	private int quantity;
-	private float productPrice;
-	private float relocationPrice;
+	private float relocationAmount;
 	private boolean archived;
+	private RelocationStatus status;
 
 	public int getId() {
 		return this.id;
@@ -49,6 +51,14 @@ public class StockRelocation extends BaseModel {
 
 	public void setStockId(int stockId) {
 		this.stockId = stockId;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 
 	public int getDeviceModelId() {
@@ -75,52 +85,12 @@ public class StockRelocation extends BaseModel {
 		this.deviceBrandId = deviceBrandId;
 	}
 
-	public String getDeviceBrandName() {
-		return deviceBrandName;
-	}
-
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
-	}
-
 	public String getEmployeeName() {
 		return employeeName;
 	}
 
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
-	}
-
-	public int getFromKalafcheStoreId() {
-		return fromKalafcheStoreId;
-	}
-
-	public void setFromKalafcheStoreId(int fromKalafcheStoreId) {
-		this.fromKalafcheStoreId = fromKalafcheStoreId;
-	}
-
-	public String getFromKalafcheStoreName() {
-		return fromKalafcheStoreName;
-	}
-
-	public void setFromKalafcheStoreName(String fromKalafcheStoreName) {
-		this.fromKalafcheStoreName = fromKalafcheStoreName;
-	}
-
-	public int getToKalafcheStoreId() {
-		return toKalafcheStoreId;
-	}
-
-	public void setToKalafcheStoreId(int toKalafcheStoreId) {
-		this.toKalafcheStoreId = toKalafcheStoreId;
-	}
-
-	public String getToKalafcheStoreName() {
-		return this.toKalafcheStoreName;
-	}
-
-	public void setToKalafcheStoreName(String toKalafcheStoreName) {
-		this.toKalafcheStoreName = toKalafcheStoreName;
 	}
 
 	public long getRelocationRequestTimestamp() {
@@ -147,6 +117,14 @@ public class StockRelocation extends BaseModel {
 		this.quantity = quantity;
 	}
 
+	public float getRelocationAmount() {
+		return relocationAmount;
+	}
+
+	public void setRelocationAmount(float relocationAmount) {
+		this.relocationAmount = relocationAmount;
+	}
+
 	public boolean isApproved() {
 		return approved;
 	}
@@ -169,20 +147,6 @@ public class StockRelocation extends BaseModel {
 
 	public void setRejected(boolean rejected) {
 		this.rejected = rejected;
-	}
-
-	public float getRelocationPrice() {
-		if (userHasRole("ROLE_SUPERADMIN")) {
-			return relocationPrice;
-		} else {
-			return 0;
-		}
-	}
-
-	public void setRelocationPrice(float relocationPrice) {
-		if (userHasRole("ROLE_SUPERADMIN")) {
-			this.relocationPrice = relocationPrice;
-		}
 	}
 
 	public boolean isArchived() {
@@ -215,6 +179,46 @@ public class StockRelocation extends BaseModel {
 
 	public void setProductPrice(float productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	public RelocationStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RelocationStatus status) {
+		this.status = status;
+	}
+
+	public int getSourceStoreId() {
+		return sourceStoreId;
+	}
+
+	public void setSourceStoreId(int sourceStoreId) {
+		this.sourceStoreId = sourceStoreId;
+	}
+
+	public String getSourceStoreName() {
+		return sourceStoreName;
+	}
+
+	public void setSourceStoreName(String sourceStoreName) {
+		this.sourceStoreName = sourceStoreName;
+	}
+
+	public int getDestStoreId() {
+		return destStoreId;
+	}
+
+	public void setDestStoreId(int destStoreId) {
+		this.destStoreId = destStoreId;
+	}
+
+	public String getDestStoreName() {
+		return destStoreName;
+	}
+
+	public void setDestStoreName(String destStoreName) {
+		this.destStoreName = destStoreName;
 	}
 
 }

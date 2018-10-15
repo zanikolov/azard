@@ -2,6 +2,7 @@ package com.kalafche.model;
 
 public class Sale {
 	private int id;
+	private int itemId;
 	private int stockId;
 	private String productName;
 	private String productCode;
@@ -10,21 +11,42 @@ public class Sale {
 	private int deviceModelId;
 	private String deviceModelName;
 	private int deviceBrandId;
-	private String deviceBrandName;
 	private long saleTimestamp;
 	private int partnerId;
 	private int employeeId;
 	private String employeeName;
 	private float cost;
+	private float discountedCost;
 	private float salePrice;
 	private String partnerCode;
 
+	public Sale() {
+	}
+	
+	public Sale(int itemId, int employeeId, int kalafcheStoreId, long saleTimestamp, int partnerId, float cost, float discountedCost) {
+		this.itemId = itemId;
+		this.employeeId = employeeId;
+		this.kalafcheStoreId = kalafcheStoreId;
+		this.saleTimestamp = saleTimestamp;
+		this.partnerId = partnerId;
+		this.cost = cost;
+		this.discountedCost = discountedCost;
+	}
+	
 	public int getId() {
 		return this.id;
 	}
 
 	public int setId(int id) {
 		return this.id = id;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 
 	public long getSaleTimestamp() {
@@ -41,14 +63,6 @@ public class Sale {
 
 	public void setPartnerId(int partnerId) {
 		this.partnerId = partnerId;
-	}
-
-	public float getSalePrice() {
-		return this.salePrice;
-	}
-
-	public void setSalePrice(float salePrice) {
-		this.salePrice = salePrice;
 	}
 
 	public String getPartnerCode() {
@@ -73,6 +87,22 @@ public class Sale {
 
 	public void setCost(float cost) {
 		this.cost = cost;
+	}
+
+	public float getDiscountedCost() {
+		return discountedCost;
+	}
+
+	public void setDiscountedCost(float discountedCost) {
+		this.discountedCost = discountedCost;
+	}
+
+	public float getSalePrice() {
+		return salePrice;
+	}
+
+	public void setSalePrice(float salePrice) {
+		this.salePrice = salePrice;
 	}
 
 	public int getStockId() {
@@ -105,14 +135,6 @@ public class Sale {
 
 	public void setDeviceBrandId(int deviceBrandId) {
 		this.deviceBrandId = deviceBrandId;
-	}
-
-	public String getDeviceBrandName() {
-		return deviceBrandName;
-	}
-
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
 	}
 
 	public String getEmployeeName() {

@@ -16,7 +16,6 @@ angular.module('kalafcheFrontendApp')
             $scope.selectedModel = {};
             $scope.selectedKalafcheStore = {};
             $scope.productCode = "";
-            //$scope.displayCostWithDiscounts = true;
             
             $scope.dateFormat = 'dd-MMMM-yyyy';
             $scope.startDate = {};
@@ -106,25 +105,17 @@ angular.module('kalafcheFrontendApp')
             $scope.startDate.setHours(0);
             $scope.startDate.setMinutes(1);
             $scope.startDateMilliseconds = $scope.startDate.getTime();
-
-            //$scope.searchSales();
         };
 
         $scope.changeEndDate = function() {
             $scope.endDate.setHours(23);
             $scope.endDate.setMinutes(59);
             $scope.endDateMilliseconds = $scope.endDate.getTime();
-
-            //$scope.searchSales();
         };
 
         $scope.changeKalafcheStore = function() {
             $scope.searchSales();
         };
-
-        // $scope.changeDisplayCostWithDiscounts = function() {
-        //     console.log(">>>>> " + $scope.displayCostWithDiscounts);
-        // }
 
         $scope.openStartDatePopup = function() {
             $scope.startDatePopup.opened = true;
@@ -149,14 +140,6 @@ angular.module('kalafcheFrontendApp')
 
         };
 
-        // function getAllSales() {
-        //     SaleService.getAllSales().then(function(response) {
-        //         $scope.sales = response;
-        //     });
-        // };
-
-
-
         $scope.getSaleTimestamp = function(sale) {
             var timeStamp = new Date(sale.saleTimestamp);
 
@@ -174,7 +157,6 @@ angular.module('kalafcheFrontendApp')
 
             for (var i = 0; i < $scope.sales.length; i++) {
                 var currSale = $scope.sales[i];
-
                 if ((!$scope.selectedKalafcheStore.id || currSale.kalafcheStoreId === $scope.selectedKalafcheStore.id) && currSale.saleTimestamp >= $scope.startDateMilliseconds && currSale.saleTimestamp <= $scope.endDateMilliseconds) {
                     totalSum += currSale.salePrice;
                 }

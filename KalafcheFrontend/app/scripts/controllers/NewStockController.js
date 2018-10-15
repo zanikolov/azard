@@ -167,12 +167,11 @@ angular.module('kalafcheFrontendApp')
             stock.quantityInStock = null;
 
             if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
-                NewStockService.getQuantityInStock(stock.productId, stock.deviceModelId).then(function(response) {
+                NewStockService.getQuantityInStock(stock.itemId).then(function(response) {
                     stock.quantityInStock = response;
                 });
             }
         };
-
 
         $scope.getProductProperties = function (stock) {
             stock.quantityInStock = null;
@@ -190,7 +189,7 @@ angular.module('kalafcheFrontendApp')
             }
 
             if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
-                NewStockService.getQuantityInStock(stock.productId, stock.deviceModelId).then(function(response) {
+                NewStockService.getQuantityInStock(stock.itemId).then(function(response) {
                     stock.quantityInStock = response;
                 });
             }

@@ -40,8 +40,8 @@ public class StockService {
 		stockDao.deleteStocksForApproval(stocks);
 	}
 	
-	public void updateTheQuantitiyOfSoldStock(int stockId) {				
-		stockDao.updateTheQuantitiyOfSoldStock(stockId);
+	public void updateTheQuantitiyOfSoldStock(int itemId, int kalafcheStoreId) {				
+		stockDao.updateTheQuantitiyOfSoldStock(itemId, kalafcheStoreId);
 	}
 	
 	private List<Stock> insertStocksForApproval(List<Stock> stocks) {
@@ -72,6 +72,14 @@ public class StockService {
 		List<Stock> stockList = stockDao.getAllStocksForReport(stockOrderId);
 		
 		return stockList;
+	}
+
+	public int getQuantitiyOfStockInWH(String productCode, Integer deviceModelId) {
+		return stockDao.getQuantitiyOfStockInWH(productCode, deviceModelId);
+	}
+
+	public int getCompanyQuantityOfStock(String productCode, Integer deviceModelId) {
+		return stockDao.getCompanyQuantityOfStock(productCode, deviceModelId);
 	}
 	
 }

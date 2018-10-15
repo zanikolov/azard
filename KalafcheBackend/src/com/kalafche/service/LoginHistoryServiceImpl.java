@@ -1,8 +1,6 @@
 package com.kalafche.service;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +14,12 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 	@Autowired
 	LoginHistoryDao loginHistoryDao;
 	
+	@Autowired
+	DateService dateService;
+	
 	@Override
 	public void trackLoginHistory(int employeeId) {	
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Sofia"));
-		long loginTimestamp = cal.getTimeInMillis();
-		
+		long loginTimestamp = dateService.getCurrentMillisBGTimezone();
 		loginHistoryDao.insertLoginHistoryRecord(employeeId, loginTimestamp);	
 	}
 

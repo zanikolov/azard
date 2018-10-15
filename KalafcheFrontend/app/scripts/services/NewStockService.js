@@ -40,7 +40,7 @@ angular.module('kalafcheFrontendApp')
 
         function getQuantityInStock(productId, deviceModelId) { 
             var kalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId;
-            var params = {"params" : {"productId": productId, "deviceModelId": deviceModelId, "kalafcheStoreId" : kalafcheStoreId}};
+            var params = {"params" : {"itemId": itemId, "kalafcheStoreId" : kalafcheStoreId}};
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getQuantitiyOfStock', params)
                 .then(
                     function(response) {

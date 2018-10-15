@@ -26,12 +26,8 @@ angular.module('kalafcheFrontendApp')
 
             getAllBrands();
             getAllProducts();
-            getAllDeviceModels();        
-            //getAllPartners(); 
+            getAllDeviceModels();         
             getAllKalafcheStores();
-			//getAllInStock();
-
-
 		}
 
         function getAllBrands() {
@@ -120,6 +116,9 @@ angular.module('kalafcheFrontendApp')
                 resolve: {
                     selectedStock: function () {
                             return $scope.selectedStock;
+                        },
+                    selectedStore: function() {
+                            return $scope.selectedKalafcheStore;
                         }
                     }
                 });

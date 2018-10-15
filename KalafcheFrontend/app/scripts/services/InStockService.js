@@ -18,7 +18,6 @@ angular.module('kalafcheFrontendApp')
    //  	}
 
   function getAllInStock(userKalafcheStoreId, selectedKalafcheStoreId) {
-      console.log(">>>>>>> " + userKalafcheStoreId + "  " + selectedKalafcheStoreId);
       return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks', {"params" : {"userKalafcheStoreId" : userKalafcheStoreId, "selectedKalafcheStoreId" : selectedKalafcheStoreId}})
           .then(
               function(response) {

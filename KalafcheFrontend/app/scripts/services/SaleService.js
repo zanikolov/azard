@@ -9,7 +9,7 @@ angular.module('kalafcheFrontendApp')
 		});
 
         function submitSale(sale) { 
-            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/sale/insertSale', sale)
+            return $http.put(Environment.apiEndpoint + '/KalafcheBackend/sale', sale)
                 .then(
                     function(response) {
                         return response.data
@@ -27,15 +27,11 @@ angular.module('kalafcheFrontendApp')
         }
 
         function searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, selectedBrandId, selectedModelId, productCode) { 
-            // if (!kalafcheStoreId) {
-            //     kalafcheStoreId = 0;
-            // }
-            console.log(">>>>> 1 " + kalafcheStoreIds);
             var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
                 "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
             console.log(params);
 
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/sale/searchSales', params)
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale', params)
                 .then(
                     function(response) {
                         console.log(response.data);
