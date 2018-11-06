@@ -1,28 +1,23 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('InStockController', function ($scope, $uibModal, ModelService, BrandService, ProductService, ColorService, InStockService, SessionService, KalafcheStoreService, SaleService, PartnerService, ApplicationService) {
+	.controller('InStockController', function ($scope, $mdDialog, $uibModal, ModelService, BrandService, ProductService, InStockService, SessionService, KalafcheStoreService) {
 
 		init();
 
 		function init() {
             $scope.currentPage = 1; 
             $scope.inStockPerPage = 15;
-			$scope.showSaleModal = false;
 			$scope.inStockList = [];
             $scope.brands = [];
             $scope.products = [];
             $scope.models = [];
-            $scope.colors = [];
             $scope.kalafcheStores = [];
-            $scope.partners = [];
             $scope.productCode = "";
-            $scope.selectedBrand = {};
-            $scope.selectedModel = {};
-            $scope.selectedKalafcheStore = {};
-            $scope.selectedStock = {};
-            $scope.showSubmitSaleError = false;
-            $scope.submitSaleErrorText = "";
+            $scope.selectedKalafcheStore = null;
+
+            $scope.currentSale = {};
+            $scope.currentSale.selectedStocks = [];
 
             getAllBrands();
             getAllProducts();
@@ -51,8 +46,7 @@ angular.module('kalafcheFrontendApp')
 
         $scope.getAllInStock = function() {
             var userKalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId ? SessionService.currentUser.employeeKalafcheStoreId : 0;
-            var selectedKalafcheStoreId = $scope.selectedKalafcheStore.id ? $scope.selectedKalafcheStore.id : 0;
-            InStockService.getAllInStock(userKalafcheStoreId, selectedKalafcheStoreId).then(function(response) {
+            InStockService.getAllInStock(userKalafcheStoreId, $scope.selectedKalafcheStore.id).then(function(response) {
                 $scope.inStockList = response;
                 $scope.resetCurrentPage();
             });
@@ -61,7 +55,7 @@ angular.module('kalafcheFrontendApp')
         function getAllKalafcheStores() {
             KalafcheStoreService.getAllKalafcheStores().then(function(response) {
                 $scope.kalafcheStores = response;
-                $scope.selectedKalafcheStore = KalafcheStoreService.getSelectedKalafcheStore($scope.kalafcheStores, $scope.isAdmin());
+                $scope.selectedKalafcheStore = {"id": SessionService.currentUser.employeeKalafcheStoreId};
                 $scope.getAllInStock();
             });
 
@@ -99,60 +93,122 @@ angular.module('kalafcheFrontendApp')
 
             return null;
         };
-        
-        // $scope.openSaleModal = function(stock){
-        //     $scope.showSaleModal = true;
-        //     $scope.selectedStock = stock;
-        // };
 
 	    $scope.openRelocationModal = function(stock){
             $scope.selectedStock = stock;
 
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'relocationModal',
-                controller: 'StockModalController',
-                size: "md",
-                resolve: {
-                    selectedStock: function () {
-                            return $scope.selectedStock;
-                        },
-                    selectedStore: function() {
-                            return $scope.selectedKalafcheStore;
-                        }
-                    }
-                });
+            // var modalInstance = $uibModal.open({
+            //     animation: true,
+            //     templateUrl: 'views/modals/relocation-modal.html',
+            //     controller: 'RelocationModalController',
+            //     size: "md",
+            //     resolve: {
+            //         selectedStock: function () {
+            //                 return $scope.selectedStock;
+            //             },
+            //         selectedStore: function() {
+            //                 return $scope.selectedKalafcheStore;
+            //             }
+            //         }
+            //     });
 
-            modalInstance.result.then(function (selectedStock) {
-                    $scope.selectedStock = selectedStock;
-                }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
-                }
-            );
+            // modalInstance.result.then(function (selectedStock) {
+            //         $scope.selectedStock = selectedStock;
+            //     }, function () {
+            //         console.log('Modal dismissed at: ' + new Date());
+            //     }
+            // );
+
+            $mdDialog.show({
+              locals:{selectedStock: $scope.selectedStock, selectedStore: $scope.selectedKalafcheStore},
+              controller: 'RelocationModalController',
+              templateUrl: 'views/modals/relocation-modal.html',
+              parent: angular.element(document.body)
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
 	    };
 
         $scope.openSaleModal = function (stock) {
+            if (stock) {
+                $scope.currentSale.selectedStocks.push(stock);
+                stock.quantity -= 1;
+            }
+
+            // var modalInstance = $uibModal.open({
+            //     animation: true,
+            //     templateUrl: 'views/modals/sale-modal.html',
+            //     controller: 'SaleModalController',
+            //     size: "md",
+            //     resolve: {
+            //         currentSale: function() {
+            //                 return $scope.currentSale;
+            //             }
+            //         }
+            //     });
+
+            // modalInstance.result.then(function (currentSale) {
+            //         $scope.currentSale = currentSale;
+            //     }, function () {
+            //         console.log('Modal dismissed at: ' + new Date());
+            //     }
+            // );
+
+            $mdDialog.show({
+              locals:{currentSale: $scope.currentSale},
+              controller: 'SaleModalController',
+              templateUrl: 'views/modals/sale-modal.html',
+              parent: angular.element(document.body)
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
+
+        };
+
+        $scope.openWasteModal = function(stock){
             $scope.selectedStock = stock;
 
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'saleModal',
-                controller: 'StockModalController',
-                size: "md",
-                resolve: {
-                    selectedStock: function () {
-                            return $scope.selectedStock;
-                        }
-                    }
-                });
+            // var modalInstance = $uibModal.open({
+            //     animation: true,
+            //     templateUrl: 'views/modals/relocation-modal.html',
+            //     controller: 'RelocationModalController',
+            //     size: "md",
+            //     resolve: {
+            //         selectedStock: function () {
+            //                 return $scope.selectedStock;
+            //             },
+            //         selectedStore: function() {
+            //                 return $scope.selectedKalafcheStore;
+            //             }
+            //         }
+            //     });
 
-            modalInstance.result.then(function (selectedStock) {
-                    $scope.selectedStock = selectedStock;
-                }, function () {
-                    console.log('Modal dismissed at: ' + new Date());
-                }
-            );
+            // modalInstance.result.then(function (selectedStock) {
+            //         $scope.selectedStock = selectedStock;
+            //     }, function () {
+            //         console.log('Modal dismissed at: ' + new Date());
+            //     }
+            // );
+
+            $mdDialog.show({
+              locals:{selectedStock: $scope.selectedStock},
+              controller: 'WasteModalController',
+              templateUrl: 'views/modals/waste-modal.html',
+              parent: angular.element(document.body)
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
         };
+
 
         $scope.resetCurrentPage = function() {
             $scope.currentPage = 1;
@@ -178,46 +234,6 @@ angular.module('kalafcheFrontendApp')
             }
 
             return Math.round(totalSum * 100) / 100;
-        };
-
-        // $scope.submitSale = function() {
-        //     if ($scope.partnerCode) {
-        //         if (!$scope.discountPercentage) {
-        //             $scope.submitSaleErrorText = "Въведете процент на отстъпката!";
-        //             $scope.showSubmitSaleError = true;
-        //             console.log("Incorrect discount percentage!!!");
-        //         } else {
-        //          PartnerService.getPartnerByCode($scope.partnerCode).then(
-        //              function(partner) {
-        //                  if (partner) {  
-        //                      var stock = $scope.selectedStock;
-        //                      var sale = {"stockId": stock.id, "partnerId": partner.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
-        //                      SaleService.submitSale(sale).then(
-        //                          function(response) {
-        //                              $scope.selectedStock.quantity -= 1;
-        //                              $scope.closeModal();
-        //                          }
-        //                      );
-        //                  } else{
-        //                         $scope.submitSaleErrorText = "Несъществуващ код!";
-        //                         $scope.showSubmitSaleError = true;
-        //                      console.log("Incorrect partner's code!!!");
-        //                  }
-        //              }
-        //          );
-        //         }
-        //     } else {
-        //         var stock = $scope.selectedStock;
-        //         var sale = {"stockId": stock.id, "employeeId": SessionService.currentUser.employeeId, "cost": stock.productPrice, "discountPercentage": $scope.discountPercentage, "saleTimestamp": ApplicationService.getCurrentTimestamp()};
-        //         SaleService.submitSale(sale).then(
-        //             function(response) {
-        //                 $scope.selectedStock.quantity -= 1;
-        //                 $scope.closeModal();
-        //             }
-        //         );
-        //     }
-            
-        // };
-        
+        };      
         
 	});

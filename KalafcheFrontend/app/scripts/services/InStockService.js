@@ -8,17 +8,8 @@ angular.module('kalafcheFrontendApp')
 
 		});
 
-   //  	function submitNewStockForApproval(stockList) {	
-			// return $http.post('http://localhost:8080/KalafcheBackend/product/updateProductsForApproval', stockList)
-   //          	.then(
-   //              	function(response) {
-   //                  	console.log(response);
-   //              	}
-   //          	) 
-   //  	}
-
   function getAllInStock(userKalafcheStoreId, selectedKalafcheStoreId) {
-      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllApprovedStocks', {"params" : {"userKalafcheStoreId" : userKalafcheStoreId, "selectedKalafcheStoreId" : selectedKalafcheStoreId}})
+      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/stock', {"params" : {"userStoreId" : userKalafcheStoreId, "selectedStoreId" : selectedKalafcheStoreId}})
           .then(
               function(response) {
                   return response.data
@@ -27,7 +18,7 @@ angular.module('kalafcheFrontendApp')
   }
 
   function getAllInStockForReport() { 
-      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/stock/getAllStocksForReport')
+      return $http.get(Environment.apiEndpoint + '/KalafcheBackend/stock/getAllStocksForReport')
           .then(
               function(response) {
                   return response.data

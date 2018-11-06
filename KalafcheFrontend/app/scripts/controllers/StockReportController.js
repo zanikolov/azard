@@ -89,7 +89,6 @@ angular.module('kalafcheFrontendApp')
 
         //Stock order
         $scope.createNewStockOrder = function() {
-            console.log(">> test");
         };
 
         function getStockOrder() {

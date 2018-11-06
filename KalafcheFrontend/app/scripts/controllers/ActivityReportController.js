@@ -18,6 +18,9 @@ angular.module('kalafcheFrontendApp')
             // $scope.endDateMilliseconds = {};
             $scope.activityDatePopup = {opened: false};
 
+            $scope.maxDate = new Date();
+            $scope.minDate = new Date(2015, 5, 22);
+
             getCurrentDate();
             $scope.activityDateOptions = {
                 formatYear: 'yy',
@@ -38,8 +41,6 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.changeActivityDate = function() {
-            console.log(">>>>><<<<<");
-            //$scope.endDateOptions.minDate = $scope.startDate;
             $scope.activityDate.setHours(0);
             $scope.activityDate.setMinutes(1);
             $scope.activityDateMilliseconds = $scope.activityDate.getTime();
@@ -83,7 +84,6 @@ angular.module('kalafcheFrontendApp')
 
         $scope.getActivityTimestamp = function(activityTimestamp) {
             var timeStamp = new Date(activityTimestamp);
-            console.log(">>>>> " + timeStamp.getTimezoneOffset());
 
             var minutes = ApplicationService.getTwoDigitNumber(timeStamp.getMinutes());
             var hh = ApplicationService.getTwoDigitNumber(timeStamp.getHours()) + timeStamp.getTimezoneOffset();

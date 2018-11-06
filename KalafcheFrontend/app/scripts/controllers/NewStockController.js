@@ -1,77 +1,91 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('NewStockController', function ($scope, ModelService, BrandService, ProductService, ColorService, NewStockService, SessionService, KalafcheStoreService) {
+    .directive('newStockImport', function() {
+        return {
+            restrict: 'E',
+            scope: {},
+            templateUrl: 'views/partials/new-stock/import.html',
+            controller: NewStockController
+        }
+    });
+
+    function NewStockController($http, Environment, $scope, ModelService, BrandService, ProductService, ColorService, NewStockService, SessionService, KalafcheStoreService) {
 
         init();
 
         function init() {
             $scope.selecModelDisabled = true;
+            $scope.newStockFormVisible = false;
+            $scope.addNewStockButtonVisible = true;
 
+            $scope.newNewStock = {};
             $scope.newStocks = [];
-            $scope.stocksWaitingForApproval = [];
-            $scope.stocksWaitingForApprovalByKalafcheStore = [];
-            $scope.deletedStocks = [];
             $scope.brands = [];
             $scope.products = [];
             $scope.models = [];
-            $scope.colors = [];
-            $scope.kalafcheStores = [];
-            $scope.selectedKalafcheStore = {};
+            $scope.unexistingItems = [];
 
             getAllBrands();
             getAllProducts();
-            getAllDeviceModels();         
-            getAllKalafcheStores();
+            getAllDeviceModels();
+            getAllNewStocks();
         };
 
         $scope.addNewStock = function() {
-            var newStock = {};
-            newStock.approved = false;
-            newStock.kalafcheStoreId = $scope.selectedKalafcheStore.id;
-            newStock.approver = 1;
-            $scope.newStocks.push(newStock);
+            $scope.newStockFormVisible = true;
+            $scope.addNewStockButtonVisible = false;
         };
 
-        $scope.deleteStockWaitingForApproval = function(index) {
-            var deletedStock = $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id][index];
-            $scope.deletedStocks.push(deletedStock);
-
-            $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id].splice(index, 1);
+        $scope.cancelAdditionOfNewStock = function() {
+            $scope.newStockFormVisible = false;
+            $scope.addNewStockButtonVisible = true;
+            $scope.newNewStock = {};
         };
 
-        $scope.deleteNewAddedStock = function(index) {
-            $scope.newStocks.splice(index, 1);
-        };
-
-        $scope.submitNewStockForApproval = function() {
-            var stocks = {
-                "addedStocksForApproval": $scope.newStocks,
-                "deletedStocksForApproval": $scope.deletedStocks
-
+        $scope.submitNewAddedStock = function() {
+            if ($scope.newStockForm.$valid) {
+                NewStockService.submitNewStock($scope.newNewStock).then(function(response) {
+                    NewStockService.getAllNewStocks().then(function(response) {
+                        $scope.newStockFormVisible = false;
+                        $scope.newNewStock = {};
+                        $scope.newStocks = response;  
+                        $scope.addNewStockButtonVisible = true;               
+                    });
+                });
             }
+        };
 
-            console.log($scope.newStocks);
-
-            NewStockService.submitNewStockForApproval(stocks).then(
+        $scope.deleteNewStock = function(newStockId, index) {
+            NewStockService.deleteNewStock(newStockId).then(
                     function(response) {
-                        getStocksWaitingForApproval();
-                        $scope.newStocks = response;
-                        $scope.deletedStocks = [];
+                        $scope.newStocks.splice(index, 1);
                     }
                 );
             
         };
-            
 
-        $scope.approveStockForKalafcheStore = function() {
-            var stocks = $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id];
-
-            NewStockService.approveNewStock(stocks).then(
+        $scope.approveNewStock = function(newStock, index) {
+            NewStockService.approveNewStock(newStock).then(
                     function(response) {
-                        $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id] = [];
+                        $scope.newStocks.splice(index, 1);
                     }
-                );
+                );     
+        };
+
+        $scope.approveAllNewStocks = function() {
+            NewStockService.approveAllNewStocks($scope.newStocks).then(
+                    function(response) {
+                        $scope.newStocks = [];
+                    }
+                );     
+        };
+
+        $scope.printStickersForNewStocks = function() {
+            NewStockService.printStickersForNewStocks($scope.newStocks).then(
+                    function(response) {
+                    }
+                );     
         };
 
         function getAllBrands() {
@@ -93,25 +107,12 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        function getAllKalafcheStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
-                $scope.kalafcheStores = response;              
-                if ($scope.isAdmin()) {
-                    $scope.selectedKalafcheStore = $scope.kalafcheStores[0];
-                } else {
-                    $scope.selectedKalafcheStore = KalafcheStoreService.getSelectedKalafcheStore($scope.kalafcheStores, $scope.isAdmin());
-                }
-                getStocksWaitingForApproval();
-            });
-
-        };
-
-        function getStocksWaitingForApproval() {
-            NewStockService.getStocksWaitingForApproval().then(function(response) {
-                $scope.stocksWaitingForApproval = response;
-                sortStocksForApprovalByKalafcheStore();
+        function getAllNewStocks() {
+            NewStockService.getAllNewStocks().then(function(response) {
+                $scope.newStocks = response; 
             });
         };
+
 
         $scope.getNameById = function(list, id) {
             if (list) {
@@ -130,75 +131,29 @@ angular.module('kalafcheFrontendApp')
             return  $scope.isAdmin() && $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id].length > 0;
         };
 
-        function sortStocksForApprovalByKalafcheStore() {
-            var stores = $scope.kalafcheStores;
-            var stocks = $scope.stocksWaitingForApproval;
-
-            for (var i = 0; i < stores.length; i++) {
-                var store = stores[i];
-                var stocksForStore = [];
-
-                for (var j = 0; j < stocks.length; j++) {
-                    var stock = stocks[j];
-
-                    if (stock.kalafcheStoreId === store.id) {
-                        stocksForStore.push(stock);
-                    }
-                }
-
-                $scope.stocksWaitingForApprovalByKalafcheStore[store.id] = stocksForStore;
-            }
-        };
-
-        $scope.onBrandChange = function(index) {
-            var stock = $scope.newStocks[index];
-            stock.quantityInStock = null;
-
-
-            $scope.newStockForm.newStockFormRow.selectModel.$dirty = false;
-
-            if (stock.deviceBrandId == null) {
-                stock.deviceModelId = null;
-            }
-        };
-
-        $scope.onModelChange = function(index) {
-            var stock = $scope.newStocks[index];
-            stock.quantityInStock = null;
-
-            if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
-                NewStockService.getQuantityInStock(stock.itemId).then(function(response) {
-                    stock.quantityInStock = response;
-                });
-            }
-        };
-
-        $scope.getProductProperties = function (stock) {
-            stock.quantityInStock = null;
-
+        $scope.getProductProperties = function () {
             for (var i = 0; i < $scope.products.length; i++) {
                 var curr = $scope.products[i];
 
-                if (stock.productCode === curr.code) {
-                    stock.productId = curr.id;
-                    stock.productName = curr.name;
-                    stock.productPrice = curr.price;
+                if ($scope.newNewStock.productCode === curr.code) {
+                    $scope.newNewStock.productId = curr.id;
+                    $scope.newNewStock.productName = curr.name;
+                    $scope.newNewStock.productPrice = curr.price;
 
                     break;
                 }
             }
-
-            if (stock.deviceBrandId && stock.deviceModelId && stock.productName) {
-                NewStockService.getQuantityInStock(stock.itemId).then(function(response) {
-                    stock.quantityInStock = response;
-                });
-            }
         };
 
-        $scope.resetProductProperties = function (stock) {
-            stock.productId = null;
-            stock.productName = null;
-            stock.productPrice = null;
-            stock.quantityInStock = null;
+        $scope.resetProductProperties = function () {
+            $scope.newNewStock.productId = null;
+            $scope.newNewStock.productName = null;
         };
-  });
+
+        $scope.importFile = function () {
+            var file = $scope.myFile;
+            NewStockService.importFile(file).then(function(response) {
+                getAllNewStocks(); 
+            });
+        };
+  };

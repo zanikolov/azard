@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('LoginController', function($scope, $rootScope, AuthService, AuthEvents, SessionService) {
+    .controller('LoginController', function($scope, $rootScope, AuthService, SessionService) {
         $scope.credentials = {};
         $scope.currentUser = {};
 

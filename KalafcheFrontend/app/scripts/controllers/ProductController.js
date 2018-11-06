@@ -1,98 +1,75 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('ProductController', function($scope, ProductService, ApplicationService) {
+
+    .directive('product', function() {
+        return {
+            restrict: 'E',
+            scope: {},
+            templateUrl: 'views/partials/assortment/product.html',
+            controller: ProductController
+        }
+    });
+
+    function ProductController ($scope, ProductService, ServerValidationService) {
 
         init();
 
         function init() {
-            $scope.newProduct = {};
-            $scope.products = []; 
-            $scope.selectedProduct = {}; 
-            $scope.isNewProductRowVisible = false;
-            $scope.isNameErrorMessageVisible = false;
-            $scope.isCodeErrorMessageVisible = false;
-            $scope.nameErrorMessage = "Има въведен артикул с това име"; 
-            $scope.codeErrorMessage = "Има въведен артикул с този код"; 
-            $scope.currentPage = 1;
+            $scope.product = {}; 
+            $scope.products = [];
+            $scope.currentPage = 1; 
+            $scope.productsPerPage = 20;
+            $scope.serverErrorMessages = {};
 
             getAllProducts();
         }
 
-        $scope.submitNewProduct = function() {
-            if (ProductService.validateProduct($scope.newProduct, $scope.products, $scope.productFormTable.newProductFormRow)) {
-
-                // var fd = new FormData();
-
-                
-
-                // var oBlob = new Blob(['test'], { type: "text/plain"});
-                // fd.append("file", oBlob,'test.txt');
-
-                // $scope.newProduct.pic = fd;
-
-                ProductService.submitProduct($scope.newProduct).then(function(response) {
-                    var insertedProduct = response;
-                    insertedProduct.purchasePrice = Math.round((insertedProduct.purchasePrice * 1.956)*100)/100;
-                    $scope.products.unshift(insertedProduct);
-                    $scope.resetNewProduct();
-                    $scope.productFormTable.newProductFormRow.$setPristine();
-                });
-            }  
+        $scope.resetProduct = function () {
+            $scope.product = null;
         };
 
-        $scope.updateEdittedProduct = function(index) {
-            var productsWithoutSelected = angular.copy($scope.products);
-            productsWithoutSelected.splice(index, 1);
-
-            if (ProductService.validateProduct($scope.selectedProduct, productsWithoutSelected, $scope.productFormTable.editProductFormRow)) {
-                ProductService.updateProduct($scope.selectedProduct).then(function(response) {
-                    $scope.selectedProduct.purchasePrice = Math.round(($scope.selectedProduct.purchasePrice * 1.956)*100)/100;
-                    $scope.products[index] = angular.copy($scope.selectedProduct);
-                    $scope.selectedProduct = {};
-                    $scope.productFormTable.editProductFormRow.$setPristine();
-                });
-            }  
+        function getAllProducts() {
+            ProductService.getAllProducts().then(function(response) {
+                $scope.products = response;
+            });
         };
 
-        $scope.getTemplate = function(product) {
-            if ($scope.isSuperAdmin() && product && product.id === $scope.selectedProduct.id){
-                return 'edit';
-            } else {
-                return 'display';
-            }
+        function getProductSpecificPrice(productId) {
+            ProductService.getProductSpecificPrice(productId).then(function(response) {
+                return response;
+            });
         };
 
-        $scope.addNewProductRow = function() {
-            $scope.isNewProductRowVisible = true;
+        $scope.resetServerErrorMessages = function() {
+            $scope.serverErrorMessages = false;
         };
 
         $scope.editProduct = function (product) {
-            $scope.selectedProduct = angular.copy(product);
+            ProductService.getProductSpecificPrice(product.id).then(function(response) {
+                $scope.product = angular.copy(product);
+                $scope.product.specificPrices = response;
+                console.log($scope.product);
+            });
+
         };
 
-        $scope.resetSelectedProduct = function () {
-            $scope.selectedProduct = {};
+        $scope.cancelEditProduct = function() {
+            $scope.resetProduct();
+            $scope.resetServerErrorMessages
+            $scope.productForm.$setPristine();
         };
 
-        $scope.resetErrorMessage = function() {
-            $scope.isErrorMessageVisible = false;
-        };
-
-        $scope.resetNewProduct = function() {
-            $scope.isNewProductRowVisible = false;
-            $scope.newProduct = {};
-        };
-
-        function getAllProducts() {
-            ProductService.getAllProducts().then(function(response) {
-                $scope.products = response;
+        $scope.submitProduct = function() {
+            ProductService.submitProduct($scope.product).then(function(response) {
+                getAllProducts();
+                $scope.resetProduct();
+                $scope.productForm.$setPristine();
+            },
+            function(errorResponse) {
+                ServerValidationService.processServerErrors(errorResponse, $scope.productForm);
+                $scope.serverErrorMessages = errorResponse.data.errors;
             });
         };
 
-        function getAllProducts() {
-            ProductService.getAllProducts().then(function(response) {
-                $scope.products = response;
-            });
-        };
-    });
+    };

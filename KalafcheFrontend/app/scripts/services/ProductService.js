@@ -1,34 +1,34 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.service('ProductService', function($http, Environment, ApplicationService) {
+	.service('ProductService', function($http, Environment) {
 		angular.extend(this, {
 			submitProduct: submitProduct,
-            updateProduct: updateProduct,
             getAllProducts: getAllProducts,
-            validateProduct: validateProduct
+            getProductByCode: getProductByCode,
+            getProductSpecificPrice: getProductSpecificPrice
 		});
 
-    	function submitProduct(product) {	
-			return $http.post(Environment.apiEndpoint + '/KalafcheBackend/product/insertProduct', product)
-            	.then(
-                	function(response) {
-                    	return response.data;
-                	}
-            	) 
-    	}
-
-        function updateProduct(product) { 
-            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/product/updateProduct', product)
-                .then(
-                    function(response) {
-                        console.log(response);
-                    }
-                ) 
+        function submitProduct(product) { 
+            if (product.id) {
+                return $http.post(Environment.apiEndpoint + '/KalafcheBackend/product', product)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            } else {
+                return $http.put(Environment.apiEndpoint + '/KalafcheBackend/product', product)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            }
         }
 
         function getAllProducts() {   
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/product/getAllProducts')
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/product')
                 .then(
                     function(response) {
                         return response.data;
@@ -36,31 +36,22 @@ angular.module('kalafcheFrontendApp')
                 ) ;
         }
 
-        function validateProduct(product, products, productForm) {
-            if (productForm.inputProductCode && !ApplicationService.validateProductCodeDuplication(product, products)) {
-               productForm.inputProductCode.$invalid = true;
+        function getProductSpecificPrice(productId) {   
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/product/specificPrice/' + productId)
+                .then(
+                    function(response) {
+                        return response.data;
+                    }
+                ) ;
+        }
 
-                return false;
-
-            } else if (!ApplicationService.validateDuplication(product.name, products)) {
-                console.log(products);
-                productForm.inputName.$invalid = true;
-
-                return false;
-
-            } else if (!productForm.$valid) {
-                if (productForm.inputProductCode) {
-                    productForm.inputProductCode.$dirty = true;
-                }
-                productForm.inputName.$dirty = true;
-                productForm.inputPrice.$dirty = true;
-                productForm.inputPurchasePrice.$dirty = true;
-
-                return false;
-
-            } else  {
-                return true;
-            }
-        };
+        function getProductByCode(code) { 
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/product/' + code)
+                .then(
+                    function(response) {
+                        return response.data
+                    }
+                );
+        }
 
 	});

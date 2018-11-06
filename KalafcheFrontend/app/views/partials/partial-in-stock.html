@@ -1,38 +1,87 @@
-<div ng-controller="InStockController">
-    <div class="row">
-        <div class="col-xs-12">
-            <h4><label><u>Търсене в наличности</u><label></h4>
-        </div>
-    </div>
-    <form class="form-horizontal">
-        <div class="form-group">
-            <div class="col-xs-2 search-control-group">
-                <label class="search-control-label" for="inputProductCode">Код:</label>           
-                <input name="inputProductCode" class="form-control search-control-code" ng-model="productCode" maxlength="30" ng-change="resetCurrentPage()" style="width:70%">
-            </div>
-            <div class="col-xs-3 search-control-group">
-                <label class="search-control-label" for="selectBrand">Марка:</label>           
-                <select class="form-control search-control" name="selectBrand" ng-model="selectedBrand.id" ng-options="brand.id as brand.name for brand in brands" ng-change="resetCurrentPage()">
-                    <option value="" selected/>
-                </select>
-            </div>
+<div ng-controller="InStockController" layout="column" ng-cloak>
 
-            <div class="col-xs-3 search-control-group">
-                <label class="search-control-label" for="selectModel">Модел:</label>
-                <select class="form-control search-control" name="selectModel" ng-model="selectedModel.id" ng-disabled="!selectedBrand.id" ng-options="model.id as model.name for model in models | filter: {deviceBrandId : selectedBrand.id} : true" ng-change="resetCurrentPage()">
-                    <option value="" selected/>
-                </select>
-            </div>
-            <div class="col-xs-4 search-control-group">
-                <label class="search-control-label" for="selectKalafcheStore">Магазин:</label>
-                <select class="form-control search-control" name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" ng-change="getAllInStock()">
-                    <option value="" selected/>
-                </select>
-            </div>
-        </div>
-    </form>
-    <div class="row">
+<!--     <div class="row">
         <div class="col-xs-12">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-2 search-control-group">
+                        <label class="search-control-label" for="inputProductCode">Код:</label>           
+                        <input name="inputProductCode" class="form-control search-control-code" ng-model="productCode" maxlength="30" ng-change="resetCurrentPage()" style="width:70%">
+                    </div>
+                    <div class="col-xs-3 search-control-group">
+                        <label class="search-control-label" for="selectBrand">Марка:</label>           
+                        <select class="form-control search-control" name="selectBrand" ng-model="selectedBrand.id" ng-options="brand.id as brand.name for brand in brands" ng-change="resetCurrentPage()">
+                            <option value="" selected/>
+                        </select>
+                    </div>
+
+                    <div class="col-xs-3 search-control-group">
+                        <label class="search-control-label" for="selectModel">Модел:</label>
+                        <select class="form-control search-control" name="selectModel" ng-model="selectedModel.id" ng-disabled="!selectedBrand.id" ng-options="model.id as model.name for model in models | filter: {deviceBrandId : selectedBrand.id} : true" ng-change="resetCurrentPage()">
+                            <option value="" selected/>
+                        </select>
+                    </div>
+                    <div class="col-xs-4 search-control-group">
+                        <label class="search-control-label" for="selectKalafcheStore">Магазин:</label>
+                        <select class="form-control search-control" name="selectKalafcheStore" ng-model="selectedKalafcheStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores" ng-change="getAllInStock()">
+                            <option value="" selected/>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> -->
+
+
+
+    <md-content layout-padding layout="column">
+        <div flex>
+            <form>
+                <div layout="row" layout-xs="column">
+                    <div layout-xs="row" flex="33" flex-xs="100">
+                        <md-input-container flex="70">
+                            <label>Баркод</label>
+                            <input ng-model="barcode">
+                        </md-input-container> 
+                        <md-input-container flex-offset="5" flex="30">
+                            <label>Код</label>
+                            <input ng-model="productCode">
+                        </md-input-container>  
+                    </div>  
+                    <div layout-xs="row" flex="33" flex-xs="100">
+                        <md-input-container flex style="width:48%">
+                            <label>Марка</label>
+                            <md-select ng-model="selectedBrand.id" ng-change="resetCurrentPage()">
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="brand in brands" ng-value="brand.id">
+                                    {{brand.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex style="width:48%">
+                            <label>Модел</label>
+                            <md-select ng-model="selectedModel.id" ng-disabled="!selectedBrand.id" ng-change="resetCurrentPage()">
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="model in models | filter: {deviceBrandId : selectedBrand.id} : true" ng-value="model.id">
+                                    {{model.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout-xs="row" flex="30" flex-offset="5" flex-xs="100">
+                        <md-input-container flex  flex style="width:100%">
+                            <md-select ng-model="selectedKalafcheStore.id" ng-change="getAllInStock()">
+                                <md-option value="0">Всички магазини</md-option>
+                                <md-option ng-repeat="kalafcheStore in kalafcheStores" ng-value="kalafcheStore.id">
+                                    {{kalafcheStore.city}}, {{kalafcheStore.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div flex>
             <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
@@ -43,11 +92,8 @@
                         <th>
                             <label>Продукт</label>
                         </th>
-                        <th ng-if="!selectedKalafcheStore.id">
+                        <th ng-if="selectedKalafcheStore.id == 0">
                             <label>Магазин</label>
-                        </th>
-                        <th>
-                            <label>Kод</label>
                         </th>
                         <th>
                             <label>Цена</label>
@@ -66,10 +112,74 @@
                     <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
                         <td>{{inStock.deviceModelName}}</td>
-                        <td>{{inStock.productName}}</td>
-                        <td ng-if="!selectedKalafcheStore.id">{{inStock.kalafcheStoreName}}</td>
-                        <td>{{inStock.productCode}}</td>
+                        <td>{{inStock.productCode}} {{inStock.productName}}</td>
+                        <td ng-if="selectedKalafcheStore.id == 0">{{inStock.kalafcheStoreName}}</td>
                         <td>{{inStock.productPrice}}</td>
+
+                        <td>{{inStock.quantity}} <span ng-if="selectedKalafcheStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
+                        <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedKalafcheStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
+                        <td>
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openSaleModal(inStock)"><md-icon class="primary-icon">add_shopping_cart</md-icon></a>
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openWasteModal(inStock)"><md-icon class="primary-icon">delete</md-icon></a>
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && !isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openRelocationModal(inStock)"><md-icon class="primary-icon">compare_arrows</md-icon></a>
+                        </td>
+                    </tr>
+                     <tr ng-show="isTotalSumRowVisible()" class="warning total-sum-row item-row">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td ng-if="selectedKalafcheStore.id == 0"></td>
+                        <td></td>
+                        <td><b>{{getTotalSum()}}</b></td>
+                        <td ng-show="!(selectedKalafcheStore.id==4 && isAdmin())"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div layout="row" layout-align="center center" class="centered-pagination">
+                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+            </div>
+        </div>
+    </md-content>
+
+
+
+<!--     <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <label>Модел</label>
+                        </th>
+                        <th>
+                            <label>Продукт</label>
+                        </th>
+                        <th ng-if="!selectedKalafcheStore.id">
+                            <label>Магазин</label>
+                        </th>
+                        <th>
+                            <label>Цена</label>
+                        </th>
+                        <th>
+                            <label>Брой</label>
+                        </th>
+                        <th ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">
+                            <label ng-show="selectedKalafcheStore.id==4">Моят Магазин</label>
+                            <label ng-show="selectedKalafcheStore.id!=4">Склад</label>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>               
+                    <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
+                        <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
+                        <td>{{inStock.deviceModelName}}</td>
+                        <td>{{inStock.productCode}} {{inStock.productName}}</td>
+                        <td ng-if="!selectedKalafcheStore.id">{{inStock.kalafcheStoreName}}</td>
+                        <td>{{inStock.productPrice}}</td>
+
                         <td>{{inStock.quantity}} <span ng-if="selectedKalafcheStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
                         <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedKalafcheStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
                         <td>
@@ -91,71 +201,14 @@
             </table>
             <div class="centered-pagination">
                 <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
-            <div>
+            </div>
         </div>
     </div>
-
-<!--     <sale-modal title="Продажба" discountPercentage="discountPercentage" partnerCode="partnerCode" visibility="showSaleModal">
-    </sale-modal> -->
-
-    <script type="text/ng-template" id="saleModal">
-        <div class="modal-header">
-            <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button> 
-            <label><h4 class="modal-title">Продажба</h4></label><br/>
-            <label>на {{selectedStock.productName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.productPrice}}лв</label>
+    <div class="row" ng-if="currentSale.selectedStocks.length > 0">
+        <div class="col-xs-9">          
         </div>
-        <div class="modal-body">                
-            <form name="saleForm" class="form-horizontal">
-                <div class="form-group">
-                    <label for="inputId" class="col-xs-5">ID на посредник:</label>
-                    <div class="col-xs-7">
-                        <input class="form-control" name="inputId" placeholder="ID" ng-model="partnerCode" ng-blur="onChangePartnerCode()">
-                        <span ng-if="showPartnerCodeErrorText" class="error-message">{{invalidPartnerCodeErrorText}}</span>
-                        <label ng-if="partner">{{partner.name}}, {{partner.partnerStoreName}}, {{partner.phoneNumber}}</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputId" class="col-xs-5">Намалена цена:</label>
-                    <div class="col-xs-7">
-                        <input style="width:60%" class="form-control" type="number" min="0" name="inputDiscount" placeholder=".лв" ng-model="salePrice">
-                        <span class="error-message" ng-if="saleForm.inputDiscount.$error.number || saleForm.inputDiscount.$error.min || saleForm.inputDiscount.$error.max">Невалидна намалена цена!</span>
-                        <span ng-if="showSalePriceErrorText" class="error-message">{{invalidSalePriceErrorText}}</span>
-                    </div>
-                </div>
-            </form>
+        <div class="col-xs-3">
+            <a href="" ng-click="openSaleModal()">Текуща продажба</a>   
         </div>
-        <div class="modal-footer">
-            <button class="btn" type="button" ng-click="closeModal()">Отмени</button>
-            <button class="btn" type="button" ng-disabled="isSubmitButonDisabled" ng-click="submitSale()">Потвърди</button>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="relocationModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> 
-            <label><h4 class="modal-title">Заявка за релокация</h4></label><br/>
-            <label>на {{selectedStock.productName}} за {{selectedStock.deviceBrandName}} {{selectedStock.deviceModelName}}, цена {{selectedStock.productPrice}}лв <b>от магазин {{selectedStock.kalafcheStoreName}}</b></label>
-        </div>
-        <div class="modal-body">                
-            <form name="relocationForm" class="form-horizontal">
-                <div class="form-group">
-                    <div class="col-xs-3"></div>
-                    <div style="text-align: right;">
-                        <label for="inputId" class="col-xs-3">Брой:</label>
-                    </div>
-                    <div class="col-xs-2">
-                        <input class="form-control" type="number" min="1" max="{{selectedStock.quantity}}" name="inputQuantity" ng-class="{'error-form-control': relocationForm.inputQuantity.$error.number || relocationForm.inputQuantity.$error.max || saleForm.inputQuantity.$error.min}" ng-model="quantityForRelocation">
-                    </div>
-                    <div class="col-xs-4">
-                        <span class="error-message" ng-if="relocationForm.inputQuantity.$error.number || relocationForm.inputQuantity.$error.max || saleForm.inputQuantity.$error.min">Невалидно количество!</span>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" type="button" ng-click="closeModal()">Отмени</button>
-            <button class="btn" type="button" ng-click="submitRelocation()">Потвърди</button>
-        </div>
-    </script>
-
+    </div> -->
 </div>

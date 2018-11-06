@@ -6,7 +6,8 @@ angular.module('kalafcheFrontendApp')
             login: login,
             logout: logout,
             isAuthorized: isAuthorized,
-            isAuthenticated: isAuthenticated
+            isAuthenticated: isAuthenticated,
+            isAdmin: isAdmin
         });
 
 
@@ -63,6 +64,22 @@ angular.module('kalafcheFrontendApp')
 
             return false;
         };
+
+        function isAdmin() {
+            var roles = SessionService.currentUser.userRoles;
+
+            if (roles) {
+                for (var i = 0; i < roles.length; i++) {
+                    var role = roles[i];
+
+                    if (role.name === "ROLE_ADMIN" || role.name === "ROLE_SUPERADMIN") {
+                        return true;
+                    }
+                }
+            }
+
+              return false;
+        }   
  
   
     });

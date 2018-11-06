@@ -9,7 +9,7 @@ angular.module('kalafcheFrontendApp')
 		});
 
         function getPartnerByCode(partnerCode) { 
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/partner/getPartnerByCode', {"params" : {"partnerCode" : partnerCode}})
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/partner/' + partnerCode)
                 .then(
                     function(response) {
                         return response.data
@@ -18,7 +18,7 @@ angular.module('kalafcheFrontendApp')
         }
 
         function submitPartner(partner) {   
-            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/partner/insertPartner', partner)
+            return $http.put(Environment.apiEndpoint + '/KalafcheBackend/partner', partner)
                 .then(
                     function(response) {
                         console.log(response);
@@ -27,7 +27,7 @@ angular.module('kalafcheFrontendApp')
         }
 
         function getAllPartners() {  
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/partner/getAllPartners')
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/partner')
                 .then(
                     function(response) {
                         return response.data
