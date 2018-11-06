@@ -1,0 +1,57 @@
+md-content.md-default-theme {
+  background-color: #eee;
+}
+md-card {
+  background-color: #fff;
+}
+md-card h2:first-of-type {
+  margin-top: 0;
+}
+md-toolbar .md-button.md-default-theme {
+  border-radius: 99%; 
+}
+h2 {
+  font-weight: 400;
+}
+md-toolbar:not(.md-hue-1),
+.md-fab {
+  fill: #fff;
+}
+md-sidenav {
+  fill: #737373;
+}
+md-sidenav  ng-md-icon {
+    position: relative;
+    top: 5px; 
+}
+.user-avatar {
+  border-radius: 99%;
+}
+
+a {
+  text-decoration: none !important;
+  color: gray !important;
+}
+
+.primary-icon {
+  color: #9c27b0;
+}
+
+.loginBox {
+  max-width:  90%;
+  width: 500px
+}
+
+md-item-content:hover {
+  background-color: #CACACA;
+  color: white;
+}
+
+.disabled-page
+{
+  pointer-events: none;
+
+  /* for "disabled" effect */
+  opacity: 0.5;
+  background: #CCC;
+}

@@ -1,0 +1,118 @@
+'use strict';
+
+angular.module('kalafcheFrontendApp')
+    .controller('WasteReportController', function ($scope, $rootScope, $mdDialog, ApplicationService, WasteService, AuthService,  KalafcheStoreService, BrandService, ModelService) {
+
+        init();
+
+        function init() {
+            $scope.currentPage = 1;  
+            $scope.wastesPerPage = 15;
+            $scope.wastes = []; 
+            $scope.stores = [];
+            $scope.selectedStore = {};
+            
+            $scope.dateFormat = 'dd-MMMM-yyyy';
+            $scope.startDate = {};
+            $scope.endDate = {};
+            $scope.startDateMilliseconds = {};
+            $scope.endDateMilliseconds = {};
+            $scope.startDatePopup = {opened: false};
+            $scope.endDatePopup = {opened: false};
+
+            getCurrentDate();
+            getAllBrands();
+            getAllModels();  
+            getAllRealStores(); 
+        }
+
+        function getCurrentDate() {
+            $scope.startDate = new Date();
+            $scope.startDate.setHours(0);
+            $scope.startDate.setMinutes(0);
+            $scope.startDateMilliseconds = $scope.startDate.getTime();
+            $scope.endDate = new Date();
+            $scope.endDate.setHours(23);
+            $scope.endDate.setMinutes(59);
+            $scope.endDateMilliseconds = $scope.endDate.getTime();
+
+        };
+
+        function getAllBrands() {
+            BrandService.getAllDeviceBrands().then(function(response) {
+                $scope.brands = response;
+            });
+        };
+
+        function getAllModels() {
+            ModelService.getAllDeviceModels().then(function(response) {
+                $scope.models = response; 
+            });
+        };
+
+        $scope.searchWastes = function() {
+            WasteService.searchWastes($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.identifiers).then(function(response) {
+                $scope.wastes = response.wastes;
+            });        
+        }
+
+        $scope.clear = function() {
+            $scope.startDate = null;
+            $scope.endDate = null;
+        };
+
+        $scope.changeStartDate = function() {
+            $scope.endDateOptions.minDate = $scope.startDate;
+            $scope.startDate.setHours(0);
+            $scope.startDate.setMinutes(1);
+            $scope.startDateMilliseconds = $scope.startDate.getTime();
+        };
+
+        $scope.changeEndDate = function() {
+            $scope.endDate.setHours(23);
+            $scope.endDate.setMinutes(59);
+            $scope.endDateMilliseconds = $scope.endDate.getTime();
+        };
+
+        $scope.changeStore = function() {
+            $scope.searchWastes();
+        };
+
+        function getAllRealStores() {
+            KalafcheStoreService.getAllRealStores().then(function(response) {
+                $scope.stores = response;
+                $scope.selectedStore = KalafcheStoreService.getRealSelectedStore($scope.stores, $scope.isAdmin());
+                $scope.searchWastes();
+            });
+
+        };
+
+        $scope.resetCurrentPage = function() {
+            $scope.currentPage = 1;
+        };
+
+        $scope.expand = function(waste) {
+            waste.expanded = !waste.expanded;
+        };
+
+        $scope.isAdmin = function() {
+            return AuthService.isAdmin();
+        }
+
+        $scope.showImage = function(waste){
+            $mdDialog.show({
+              locals:{imgSrc:"https://drive.google.com/uc?export=view&id=" + waste.fileId},
+              controller: function($scope, imgSrc) { $scope.imgSrc = imgSrc; },
+              templateUrl: 'views/modals/image-modal.html',
+              clickOutsideToClose:true,
+              parent: angular.element(document.body)
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
+        };
+
+    });
+

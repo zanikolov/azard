@@ -1,0 +1,238 @@
+<div ng-controller="RelocationController" layout="column" ng-cloak>
+
+    <md-content layout-padding layout="column">
+        <div flex>
+            <form>
+                <div layout="row">     
+                    <md-input-container flex="30">
+                        <label>Статус</label>
+                        <md-select name="isCompleted" ng-model="isCompleted">
+                            <md-option ng-repeat="status in [{ name: 'Незавършени', value: false }, { name: 'Завършени', value: true }]" ng-value="status.value">
+                                {{status.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex="30">
+                        <label>От</label>
+                        <md-select name="sourceStore" ng-model="sourceStore.id">
+                            <md-option value="" selected></md-option>
+                            <md-option ng-repeat="kalafcheStore in kalafcheStores" ng-value="kalafcheStore.id">
+                                {{kalafcheStore.city}}, {{kalafcheStore.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex="30">
+                        <label>За</label>
+                        <md-select name="destStore" ng-model="destStore.id">
+                            <md-option value="" selected></md-option>
+                            <md-option ng-repeat="kalafcheStore in kalafcheStores" ng-value="kalafcheStore.id">
+                                {{kalafcheStore.city}}, {{kalafcheStore.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-inut-container flex="10">
+                        <md-button ng-click="searchRelocations()" class="md-raised md-primary">Търси</md-button>
+                    </md-inut-container>
+                </div>
+            </form>
+        </div>
+        <div flex>
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <label>Телефон</label>
+                        </th>
+                        <th>
+                            <label>Продукт</label>
+                        </th>
+                        <th>
+                            <label>От</label>
+                        </th>
+                        <th>
+                            <label>За</label>
+                        </th>
+                        <th>
+                            <label>Служител</label>
+                        </th>
+                        <th>
+                            <label>Брой</label>
+                        </th>
+                        <th>
+                            <label>Заявяване</label>
+                        </th>
+                        <th>
+                            <label>Приключване</label>
+                        </th>
+                        <th>
+                            <label>Статус</label>
+                        </th>
+                        <th ng-if="isSuperAdmin()"></th>
+                    </tr>
+                </thead>
+                <tbody>               
+                    <tr ng-repeat="relocation in relocations | filter: {archived: false} track by $index" class="item-row">
+                        <td>{{$index + 1}}</td>
+                        <td>{{relocation.deviceModelName}}</td>
+                        <td>{{relocation.productCode + ' ' + relocation.productName}}</td>
+                        <td>{{relocation.sourceStoreName}}</td>
+                        <td>{{relocation.destStoreName}}</td>
+                        <td>{{relocation.employeeName}}</td>
+                        <td>{{relocation.quantity}}</td>
+                        <td>{{convertEpochToDate(relocation.relocationRequestTimestamp)}}</td>
+                        <td>{{convertEpochToDate(relocation.relocationCompleteTimestamp)}}</td>
+                        <td>
+                            <div ng-if="isAdmin() && relocation.status == 'INITIATED'">
+                                <a href="" ng-click="changeStatus(relocation, 'APPROVED')"><md-icon class="primary-icon">check</md-icon></a>
+                                <a href="" ng-click="changeStatus(relocation, 'REJECTED')"><md-icon class="primary-icon">close</md-icon></span></a>
+                            </div>
+                            <div ng-if="!isAdmin() && relocation.status == 'INITIATED'">
+                                <label>Нова</label>
+                            </div>
+                            <div ng-if="relocation.status == 'REJECTED'">
+                                <md-icon>close</md-icon>
+                            </div>
+                            <div ng-if="relocation.status === 'APPROVED' && (isEmployeeOfSourceStore(relocation) || isAdmin())">
+                                <a href="" ng-click="changeStatus(relocation, 'SENT')"><md-icon class="primary-icon">call_made</md-icon></a>
+                            </div>
+                            <div ng-if="relocation.status === 'APPROVED' && isEmployeeOfDestStore(relocation)">
+                                <md-icon>check</md-icon>
+                            </div>
+                            <div ng-if="relocation.status === 'SENT' && isEmployeeOfDestStore(relocation)">
+                                <a href="" ng-click="changeStatus(relocation, 'DELIVERED')"><md-icon class="primary-icon">call_received</md-icon></a>
+                            </div>
+                            <div ng-if="relocation.status === 'SENT' && !isEmployeeOfDestStore(relocation)">
+                                <md-icon>call_made</md-icon>
+                            </div>
+                            <div ng-if="relocation.status === 'DELIVERED'">
+                                <md-icon>call_received</md-icon>
+                            </div>
+                        </td>
+                        <td ng-if="isSuperAdmin()">
+                            <a ng-if="shouldArchiveButtonBeVisible(relocation)" href="" ng-click="archiveStockRelocation(relocation)" class="menu-panel-header">
+                                <md-icon class="primary-icon">archive</md-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </md-content>
+
+<!--     <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-3 search-control-group">
+                <label class="search-control-label" for="isCompleted">Статус:</label> 
+                <select class="form-control search-control" name="isCompleted" ng-model="isCompleted" ng-options="status.value as status.name for status in [{ name: 'Незавършени', value: false }, { name: 'Завършени', value: true }]">
+                </select>
+            </div>
+            <div class="col-xs-3 search-control-group">
+                <label class="search-control-label" for="sourceStore">От:</label>
+                <select class="form-control search-control" name="sourceStore" ng-model="sourceStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores">
+                    <option value="" selected/>
+                </select>
+            </div>
+            <div class="col-xs-3 search-control-group">
+                <label class="search-control-label" for="destStore">За:</label>
+                <select class="form-control search-control" name="destStore" ng-model="destStore.id" ng-options="kalafcheStore.id as kalafcheStore.city + ', ' + kalafcheStore.name for kalafcheStore in kalafcheStores">
+                    <option value="" selected/>
+                </select>
+            </div>
+            <div class="col-xs-1"></div>
+            <button class="btn submit-new-stock-button" ng-click="searchRelocations()">Търси</button>
+
+        </div>
+    </form> -->
+
+
+ <!--        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <label>Телефон</label>
+                            </th>
+                            <th>
+                                <label>Продукт</label>
+                            </th>
+                            <th>
+                                <label>От</label>
+                            </th>
+                            <th>
+                                <label>За</label>
+                            </th>
+                            <th>
+                                <label>Служител</label>
+                            </th>
+                            <th>
+                                <label>Брой</label>
+                            </th>
+                            <th>
+                                <label>Заявяване</label>
+                            </th>
+                            <th>
+                                <label>Приключване</label>
+                            </th>
+                            <th>
+                                <label>Статус</label>
+                            </th>
+                            <th ng-if="isSuperAdmin()"></th>
+                        </tr>
+                    </thead>
+                    <tbody>               
+                        <tr ng-repeat="relocation in relocations | filter: {archived: false} track by $index" class="item-row">
+                            <td>{{$index + 1}}</td>
+                            <td>{{relocation.deviceModelName}}</td>
+                            <td>{{relocation.productCode + ' ' + relocation.productName}}</td>
+                            <td>{{relocation.sourceStoreName}}</td>
+                            <td>{{relocation.destStoreName}}</td>
+                            <td>{{relocation.employeeName}}</td>
+                            <td>{{relocation.quantity}}</td>
+                            <td>{{convertEpochToDate(relocation.relocationRequestTimestamp)}}</td>
+                            <td>{{convertEpochToDate(relocation.relocationCompleteTimestamp)}}</td>
+                            <td>
+                                <div ng-if="isAdmin() && relocation.status == 'INITIATED'">
+                                    <a href="" ng-click="changeStatus(relocation, 'APPROVED')"><span class="glyphicon glyphicon-ok stock-relocation-icon" title="Одобри"></span></a>
+                                    <a href="" ng-click="changeStatus(relocation, 'REJECTED')"><span class="glyphicon glyphicon-remove stock-relocation-icon" title="Откажи"></span></a>
+                                </div>
+                                <div ng-if="!isAdmin() && relocation.status == 'INITIATED'">
+                                    <label>Нова</label>
+                                </div>
+                                <div ng-if="relocation.status == 'REJECTED'">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </div>
+                                <div ng-if="relocation.status === 'APPROVED' && (isEmployeeOfSourceStore(relocation) || isAdmin())">
+                                    <a href="" ng-click="changeStatus(relocation, 'SENT')"><span class="glyphicon glyphicon-export stock-relocation-icon"  title="Изпрати"></span></a>
+                                </div>
+                                <div ng-if="relocation.status === 'APPROVED' && isEmployeeOfDestStore(relocation)">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </div>
+                                <div ng-if="relocation.status === 'SENT' && isEmployeeOfDestStore(relocation)">
+                                    <a href="" ng-click="changeStatus(relocation, 'DELIVERED')"><span class="glyphicon glyphicon-import stock-relocation-icon"  title="Достави"></span></a>
+                                </div>
+                                <div ng-if="relocation.status === 'SENT' && !isEmployeeOfDestStore(relocation)">
+                                    <span class="glyphicon glyphicon-export"></span>
+                                </div>
+                                <div ng-if="relocation.status === 'DELIVERED'">
+                                    <span class="glyphicon glyphicon-import"></span>
+                                </div>
+                            </td>
+                            <td ng-if="isSuperAdmin()">
+                                <a ng-if="shouldArchiveButtonBeVisible(relocation)" href="" ng-click="archiveStockRelocation(relocation)" class="menu-panel-header">
+                                    <span class="glyphicon glyphicon-folder-close delete-item-icon" title="Архивирай"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-results-found col-xs-12" ng-if="relocations.length === 0">
+                <label>Няма регистрирани релокации</label>
+            </div>
+        </div>       
+    </div> -->
+
+</div>

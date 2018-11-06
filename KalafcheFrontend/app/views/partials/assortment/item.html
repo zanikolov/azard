@@ -1,0 +1,36 @@
+<div layout="column" ng-cloak>
+     <md-content layout-padding>
+        <div flex="50" flex-xs="100">
+            <item-form item="selectedItem"></item-form>
+        </div>
+        <div flex="100">
+            <div class="row item-table">
+                <div class="col-xs-12">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                            	<th><label>Баркод</label></th>
+                            	<th><label>Телефон</label></th>
+                                <th><label>Код</label></th>
+                                <th><label>Продукт</label></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr dir-paginate="item in items | itemsPerPage: itemsPerPage track by $index" current-page="currentPage" class="item-row">
+                                <td>{{item.barcode}}</td>
+                                <td>{{item.deviceModelName}}</td>
+                                <td>{{item.productCode}}</td>
+                                <td>{{item.productName}}</td>
+                                <td><a href="" ng-click="editItem(item)"><md-icon class="primary-icon">edit</md-icon></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div layout="row" layout-align="center center" class="centered-pagination">
+                        <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-content>
+</div>
