@@ -6,9 +6,12 @@
                     <div layout-xs="row" flex="20" flex-xs="100">
                         <md-input-container style="width:95%">
                             <label>Магазин</label>
-                            <md-select name="selectKalafcheStore" ng-model="selectedKalafcheStore.identifiers" ng-change="searchSaleItems()">
-                                <md-option ng-repeat="kalafcheStore in kalafcheStores" ng-value="kalafcheStore.identifiers">
-                                    {{kalafcheStore.displayName}}
+                            <md-select name="selectStore" ng-model="selectedStore.id" ng-change="searchSaleItems()">
+                                <md-option value="0">Всички магазини</md-option>
+                                <md-option value="ANIKO">Анико ЕООД</md-option>
+                                <md-option value="AZARD">Азард ЕООД</md-option>
+                                <md-option ng-repeat="store in stores" ng-value="store.id">
+                                    {{store.city}}, {{store.name}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -28,7 +31,7 @@
                         <md-input-container style="width:48%">
                             <label>Марка</label>
                             <md-select ng-model="selectedBrand.id" ng-change="resetCurrentPage()">
-                                <md-option value="" selected></md-option>
+                                <md-option value="" selected>Всички</md-option>
                                 <md-option ng-repeat="brand in brands" ng-value="brand.id">
                                     {{brand.name}}
                                 </md-option>
@@ -37,7 +40,7 @@
                         <md-input-container style="width:48%">
                             <label>Модел</label>
                             <md-select ng-model="selectedModel.id" ng-disabled="!selectedBrand.id" ng-change="resetCurrentPage()">
-                                <md-option value="" selected></md-option>
+                                <md-option value="" selected>Всички</md-option>
                                 <md-option ng-repeat="model in models | filter: {deviceBrandId : selectedBrand.id} : true" ng-value="model.id">
                                     {{model.name}}
                                 </md-option>
@@ -53,42 +56,70 @@
                             <md-button ng-click="searchSaleItems()" class="md-raised md-primary">Търси</md-button>
                         </md-input-container>
                     </div>
-                    </div>
                 </div>
             </form>
+        </div>
+        <div class="report-summary" flex>
+            <div layout="column">
+                <div layout="row" flex>
+                    {{report.storeName}}
+                </div>
+                <div layout="row" ng-if="report.endDate - report.startDate > 86340000">
+                    от {{getReportDate(report.startDate)}} до {{getReportDate(report.endDate)}}
+                </div>
+                <div layout="row" ng-if="report.endDate - report.startDate <= 86340000">
+                    {{getReportDate(report.startDate)}}
+                </div>
+                <div layout="row" flex>
+                    {{report.deviceBrandName}} {{report.deviceModelName}} {{report.productCode}}
+                </div>
+                <div layout="row" flex>
+                    Брой {{report.count}}
+                </div>
+                <div layout="row" flex>
+                    <b>{{report.totalAmount}}лв</b>
+                </div>
+            </div>
         </div>
         <div flex>
             <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>
+                            <label>Устройство</label>
+                        </th>
+                        <th>
+                            <label>Продукт</label>
                         </th>
                         <th>
                             <label>Магазин</label>
                         </th>
                         <th>
-                            <label>Търговец</label>
+                            <label>Служител</label>
                         </th>
                         <th>
                             <label>Дата</label>
-                        </th>                     
+                        </th>                      
                         <th>
-                            <label>Сума</label>
+                            <label>Цена</label>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="saleItem in saleItems | itemsPerPage:saleItemsPerPage" current-page="currentPage">
-                        <td>{{$index + 1}}</td>
+                    <tr dir-paginate="saleItem in report.saleItems | itemsPerPage:saleItemsPerPage" current-page="currentPage" pagination-id="item">
+                        <td>{{(currentPage - 1) * saleItemsPerPage + $index + 1}}</td>
+                        <td>{{saleItem.deviceModelName}}</td>
+                        <td>{{saleItem.productCode}} {{saleItem.productName}}</td>
                         <td>{{saleItem.storeName}}</td>
                         <td>{{saleItem.employeeName}}</td>
-                        <td>{{getSaleTimestamp(saleItem.saleTimeStamp)}}</td>
-                        <td>{{saleItem.amount}}лв</td>
+                        <td>{{getSaleTimestamp(saleItem.saleTimestamp)}}</td>
+                        <td>{{saleItem.salePrice}}лв</td>
                     </tr>
                 </tbody>
             </table>
-            <div layout="row" layout-align="center center" class="centered-pagination">
-                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+            <div layout="row" layout-align="center center">
+                <dir-pagination-controls pagination-id="item" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
             </div>
         </div>
     </md-content>

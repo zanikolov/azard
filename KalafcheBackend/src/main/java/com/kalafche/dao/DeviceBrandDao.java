@@ -12,4 +12,6 @@ public interface DeviceBrandDao {
 
 	public abstract boolean checkIfDeviceBrandExists(DeviceBrand brand);
 	
+	public abstract DeviceBrand selectDeviceBrand(Integer deviceBrandId);
+	
 }

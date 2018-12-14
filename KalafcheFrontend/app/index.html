@@ -38,7 +38,7 @@
             <md-toolbar class="md-tall md-hue-2">
                 <div layout="column" layout="center center" class="md-toolbar-tools-bottom inset">
                     <div>{{currentUser.employeeName}}</div>
-                    <div flex>{{currentUser.username}} <a href="" ng-click="logout()" flex><md-icon>logout</md-icon></a></div>
+                    <div flex>{{currentUser.username}} <a href="" ng-click="logout()" flex><md-icon md-svg-src="images/icons/exit_to_app.svg" aria-label="Отпиши ме"></md-icon></a></div>
                 </div>
             </md-toolbar>
             <md-list>
@@ -56,8 +56,8 @@
         <div ng-show="sideNavVisible">
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-                        <md-icon md-font-library="material-icons">menu</md-icon>
+                    <md-button ng-click="toggleSidenav('left')" aria-label="Menu">
+                        <md-icon md-svg-src="images/icons/menu.svg" aria-label="menu"></md-icon>
                     </md-button>
 <!--                     <img style="height:65px" src="images/logo_small_transperant.png" class="header-img" />
                     <span flex></span>  -->
@@ -232,7 +232,7 @@
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/about.js"></script>
     <script src="scripts/controllers/ApplicationController.js"></script>
-    <script src="scripts/controllers/NewStockController.js"></script>
+    <script src="scripts/controllers/NewStockImportController.js"></script>
     <script src="scripts/controllers/NewStockValidationController.js"></script>
     <script src="scripts/controllers/InStockController.js"></script>
     <script src="scripts/controllers/BrandController.js"></script>
@@ -250,6 +250,7 @@
     <script src="scripts/controllers/OrderModalController.js"></script>
     <script src="scripts/controllers/RelocationController.js"></script>
     <script src="scripts/controllers/WasteModalController.js"></script>
+    <script src="scripts/controllers/RefundModalController.js"></script>
     <script src="scripts/controllers/PartnerController.js"></script>
     <script src="scripts/controllers/PartnerStoreController.js"></script>
     <script src="scripts/controllers/StockOrderController.js"></script>
@@ -259,6 +260,9 @@
     <script src="scripts/controllers/ItemController.js"></script>
     <script src="scripts/controllers/ItemFormController.js"></script>
     <script src="scripts/controllers/WasteReportController.js"></script>
+    <script src="scripts/controllers/RefundReportController.js"></script>
+    <script src="scripts/controllers/ExpenseFormController.js"></script>
+    <script src="scripts/controllers/ExpenseReportController.js"></script>
 
     <!-- Services -->
     <script src="scripts/services/ApplicationService.js"></script>
@@ -283,6 +287,9 @@
     <script src="scripts/services/ItemService.js"></script>
     <script src="scripts/services/ServerValidationService.js"></script>
     <script src="scripts/services/WasteService.js"></script>
+    <script src="scripts/services/RefundService.js"></script>
+    <script src="scripts/services/ExpenseService.js"></script>
+    
     
     <!-- Directives -->
     <script src="scripts/directives/SaleModalDirective.js"></script>

@@ -6,12 +6,11 @@ angular.module('kalafcheFrontendApp')
             getAllKalafcheStores: getAllKalafcheStores,
             getSelectedKalafcheStore: getSelectedKalafcheStore,
             submitKalafcheStore: submitKalafcheStore,
-            getAllRealStores: getAllRealStores,
             getRealSelectedStore: getRealSelectedStore
 		});
 
         function getAllKalafcheStores() {   
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/kalafcheStore/getAllKalafcheStores')
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/store/getAllKalafcheStores')
                 .then(
                     function(response) {
                         return response.data
@@ -20,7 +19,7 @@ angular.module('kalafcheFrontendApp')
         };
 
         function submitKalafcheStore(kalafcheStore) {
-            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/service/kalafcheStore', kalafcheStore)
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/store', kalafcheStore)
                 .then(
                     function(response) {
                         console.log(response);
@@ -40,15 +39,6 @@ angular.module('kalafcheFrontendApp')
                     }
                 }
             }
-        };
-
-        function getAllRealStores() {
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/kalafcheStore/getStores')
-                .then(
-                    function(response) {
-                        return response.data
-                    }
-                ) ;
         };
 
         function getRealSelectedStore(stores, isAdmin) {

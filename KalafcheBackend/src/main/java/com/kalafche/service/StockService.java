@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kalafche.dao.StockDao;
 import com.kalafche.dao.StockOrderDao;
 import com.kalafche.dao.impl.StockDaoImpl;
 import com.kalafche.exceptions.CommonException;
@@ -23,6 +22,10 @@ public class StockService {
 	
 	public void updateTheQuantitiyOfSoldStock(int itemId, int kalafcheStoreId) {				
 		stockDao.updateTheQuantitiyOfSoldStock(itemId, kalafcheStoreId);
+	}
+	
+	public void updateTheQuantitiyOfRefundStock(Integer saleItemId, int storeId) {				
+		stockDao.updateTheQuantitiyOfRefundStock(saleItemId, storeId);
 	}
 	
 	public List<Stock> generateStockReport() {

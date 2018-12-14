@@ -2,10 +2,11 @@
 
     <md-content layout-padding layout="column">
         <div flex>
-            <form>
+            <form name="fileForm" server-validation novalidate>
                 <div layout="row">
                     <md-input-container flex>
-                        <input type="file" demo-file-model="myFile"  id="myFileField">
+                        <input type="file" file-model="file" ng-model="file" id="file" name="file">
+                        <span ng-message="serverError" class="label label-error">{{serverErrorMessages.file}}</span>
                     </md-input-container> 
                     <md-input-container flex>
                         <md-button ng-click="importFile()" class="md-raised md-primary">Импорт</md-button>
@@ -21,7 +22,7 @@
                         <tr>
                             <th>            
                                 <a href="" ng-if="addNewStockButtonVisible" ng-click="addNewStock()" style="text-decoration:none;">
-                                    <md-icon class="primary-icon" title="Добави">add</md-icon>
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/add.svg"></md-icon>
                                 </a>
                             </th>
                             <th>
@@ -72,15 +73,15 @@
                             </td>
                             <td>
                                 <a href="" ng-click="cancelAdditionOfNewStock()" style="text-decoration:none;">
-                                    <md-icon class="primary-icon" title="Отказ">close</md-icon>
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/close.svg"></md-icon>
                                 </a>
                                 <a href="" ng-show="newStockForm.$valid" ng-click="submitNewAddedStock()" style="text-decoration:none;">
-                                    <md-icon class="primary-icon" title="Запази">save</md-icon>
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/save.svg"></md-icon>
                                 </a>
                             </td>
                         </tr>
-                        <tr ng-repeat="newStock in newStocks track by $index" class="item-row">
-                            <td>{{$index + 1}}</td>
+                        <tr dir-paginate="newStock in newStocks | itemsPerPage: newStocksPerPage track by $index" current-page="currentPage" class="item-row" class="item-row">
+                            <td>{{(currentPage - 1) * newStocksPerPage + $index + 1}}</td>
                             <td>{{newStock.productName}}</td>
                             <td>{{newStock.productCode}}</td>
                             <td>{{newStock.deviceBrandName}}</td>
@@ -89,15 +90,18 @@
                             <td>{{newStock.quantity}}</td>
                             <td>
                                 <a href="" ng-click="approveNewStock(newStock, $index)">
-                                    <md-icon class="primary-icon" title="Одобри">check</md-icon>
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/check.svg"></md-icon>
                                 </a>
                                 <a href="" ng-click="deleteNewStock(newStock.id, $index)">
-                                    <md-icon class="primary-icon" title="Изтрий">delete</md-icon>
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/delete.svg"></md-icon>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div layout="row" layout-align="center center">
+                    <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+                </div>
             </form>
         </div>
 

@@ -22,6 +22,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import com.kalafche.exceptions.ImageUploadException;
 
 @Service
 public class GoogleDriveService implements ImageUploadService {
@@ -35,6 +36,8 @@ public class GoogleDriveService implements ImageUploadService {
     private static final String CLIENT_SECRET_FILE_PATH = "/keysoo-221608-b26a7a8aeedd.json";
     
     private static final String WASTE_FOLDER_ID = "1ij29QyXfzxMlmhqgq1kM3YYOEJNYuSTV";
+
+	private static final String EXPENSE_FOLDER_ID = "1Sm-R_fiYKzLxUM4pbF0_zIuYlV69BVLB";
     
     private static Credential getAPICredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
     	InputStream in = GoogleDriveService.class.getResourceAsStream(CLIENT_SECRET_FILE_PATH);    	
@@ -137,26 +140,40 @@ public class GoogleDriveService implements ImageUploadService {
 	    return convFile;
 	}
 
-	@Override
-	public void uploadWasteImage(Integer wasteId, MultipartFile wasteImage) throws IllegalStateException, IOException, GeneralSecurityException {
+	private String uploadImage(MultipartFile wasteImage, String parentFolder) throws IllegalStateException, IOException, GeneralSecurityException {
 		File fileMetadata = new File();
-		List<String> parents = Lists.newArrayList(WASTE_FOLDER_ID);
+		List<String> parents = Lists.newArrayList(parentFolder);
 		fileMetadata.setParents(parents);
-		
-		//File image = imageResizeService.resizeImage(multipartToFile(wasteImage));
+
 		FileContent mediaContent = new FileContent(wasteImage.getContentType(), imageResizeService.resizeImage(multipartToFile(wasteImage)));
 		
-		fileMetadata.setName(wasteId + "_1");
-		
 		Drive service = createService();
-		service.files().create(fileMetadata, mediaContent).setFields("id").execute();
+		File uploadedFile = service.files().create(fileMetadata, mediaContent).setFields("id").execute();
 		
-		getWasteImages(wasteId + "_");
+		return uploadedFile.getId();
 	}
-
+	
+	private String uploadImageHandleExceptions(MultipartFile image, String parentFolder) {
+		try {
+			if (image.getContentType().startsWith("image/")) {
+				return uploadImage(image, parentFolder);
+			} else {
+				throw new ImageUploadException("image", "Невалиден формат на изображението.");
+			}
+		} catch (IllegalStateException | IOException | GeneralSecurityException e) {
+			e.printStackTrace();
+			throw new ImageUploadException("image", "Възникна проблем при upload на изображение.");
+		}
+	}
+	
 	@Override
-	public void uploadImage(Integer wasteId, MultipartFile wasteImage) {
-		// TODO Auto-generated method stub
-		
+	public String uploadWasteImage(MultipartFile image) {
+		return uploadImageHandleExceptions(image, WASTE_FOLDER_ID);
 	}
+	
+	@Override
+	public String uploadExpenseImage(MultipartFile image) {
+		return uploadImageHandleExceptions(image, EXPENSE_FOLDER_ID);
+	}
+	
 }

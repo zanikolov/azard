@@ -33,7 +33,11 @@
                     <tr dir-paginate="model in models | filter: {deviceBrandId: deviceModel.deviceBrandId}: true | itemsPerPage: modelsPerPage track by $index" current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * modelsPerPage + $index + 1}}</td>
                         <td>{{model.name}}</td>
-                        <td><a href="" ng-click="editDeviceModel(model)"><md-icon class="primary-icon">edit</md-icon></a></td>
+                        <td>
+                            <a href="" ng-click="editDeviceModel(model)">
+                                <md-icon class="primary-icon" md-svg-src="images/icons/edit.svg"></md-icon>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

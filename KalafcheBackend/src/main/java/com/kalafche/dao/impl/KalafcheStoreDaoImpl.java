@@ -10,26 +10,19 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.KalafcheStoreDao;
-import com.kalafche.model.KalafcheStore;
 import com.kalafche.model.StoreDto;
 
 @Service
 public class KalafcheStoreDaoImpl extends JdbcDaoSupport implements KalafcheStoreDao {
 
+	private static final String SELECT_STORE_BY_ID = "select * from kalafche_store where id = ?";
 	private static final String GET_ALL_KALAFCHE_ENTITES = "select * from kalafche_store";
+	private static final String SELECT_STORES = "select * from kalafche_store where is_store is true";
+	private static final String SELECT_STORE_IDS_BY_OWNER = "select GROUP_CONCAT(id) from kalafche_store where own = ?";
+	private static final String SELECT_ALL_STORE_IDS = "select GROUP_CONCAT(id) from kalafche_store";
 	private static final String INSERT_KALAFCHE_STORE = "insert into kalafche_store (name, city) values (?, ?)";
-	private static final String GET_ALL_STORES = "select GROUP_CONCAT(id SEPARATOR ',') as identifiers, 'Всички магазини' as displayName from kalafche_store ks where is_store is true " +
-			"union " +
-			"select GROUP_CONCAT(id SEPARATOR ',') as identifiers, 'Анико ЕООД' as displayName from kalafche_store ks where ks.own = 'ANIKO' " +
-			"union " +
-			"select GROUP_CONCAT(id SEPARATOR ',') as identifiers, 'Азард ЕООД' as displayName from kalafche_store ks where ks.own = 'AZARD' " +
-			"union " +
-			"select id as identifiers, concat(city, ',', name) as displayName from kalafche_store ks " +
-			"where is_store is true; ";
 
-	private BeanPropertyRowMapper<KalafcheStore> rowMapper;
-	
-	private BeanPropertyRowMapper<StoreDto> storeDtoRowMapper;
+	private BeanPropertyRowMapper<StoreDto> rowMapper;
 	
 	@Autowired
 	public KalafcheStoreDaoImpl(DataSource dataSource) {
@@ -37,42 +30,44 @@ public class KalafcheStoreDaoImpl extends JdbcDaoSupport implements KalafcheStor
 		setDataSource(dataSource);
 	}
 	
-	private BeanPropertyRowMapper<KalafcheStore> getRowMapper() {
+	private BeanPropertyRowMapper<StoreDto> getRowMapper() {
 		if (rowMapper == null) {
-			rowMapper = new BeanPropertyRowMapper<KalafcheStore>(KalafcheStore.class);
+			rowMapper = new BeanPropertyRowMapper<StoreDto>(StoreDto.class);
 			rowMapper.setPrimitivesDefaultedForNullValue(true);
 		}
 		
 		return rowMapper;
 	}
 	
-	private BeanPropertyRowMapper<StoreDto> getStoreDtoRowMapper() {
-		if (storeDtoRowMapper == null) {
-			storeDtoRowMapper = new BeanPropertyRowMapper<StoreDto>(StoreDto.class);
-			storeDtoRowMapper.setPrimitivesDefaultedForNullValue(true);
-		}
-		
-		return storeDtoRowMapper;
-	}
-	
 	@Override
-	public List<KalafcheStore> getAllKalafcheEntities() {
-		List<KalafcheStore> kalafcheStores = getJdbcTemplate().query(GET_ALL_KALAFCHE_ENTITES, getRowMapper());
-
-		return kalafcheStores;
-	}
-	
-	
-	@Override
-	public List<StoreDto> getAllStores() {
-		List<StoreDto> storeDtos = getJdbcTemplate().query(GET_ALL_STORES, getStoreDtoRowMapper());
-
-		return storeDtos;
+	public List<StoreDto> getAllKalafcheEntities() {
+		return getJdbcTemplate().query(GET_ALL_KALAFCHE_ENTITES, getRowMapper());
 	}
 
 	@Override
-	public void insertKalafcheStore(KalafcheStore kalafcheStore) {
+	public void insertKalafcheStore(StoreDto kalafcheStore) {
 		getJdbcTemplate().update(INSERT_KALAFCHE_STORE, kalafcheStore.getName(), kalafcheStore.getCity());		
+	}
+
+	@Override
+	public List<StoreDto> selectStores() {
+		return getJdbcTemplate().query(SELECT_STORES, getRowMapper());
+	}
+
+	@Override
+	public String selectStoreIdsByOwner(String owner) {
+		if (owner.equals("0")) {
+			return getJdbcTemplate().queryForObject(SELECT_ALL_STORE_IDS, String.class);
+		} else {
+			return getJdbcTemplate().queryForObject(SELECT_STORE_IDS_BY_OWNER, String.class ,owner);
+		}
+	}
+
+	@Override
+	public StoreDto selectStore(String storeId) {
+		List<StoreDto> store = getJdbcTemplate().query(SELECT_STORE_BY_ID, getRowMapper(), storeId);
+		
+		return store.isEmpty() ? null : store.get(0);
 	}
 
 }

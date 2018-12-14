@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function ItemController ($scope, ItemService, ApplicationService) {
+    function ItemController ($scope, $element, ItemService, BrandService, ModelService, ProductService, ApplicationService) {
 
     	init();
 
@@ -21,8 +21,30 @@ angular.module('kalafcheFrontendApp')
             $scope.itemsPerPage = 20;
             $scope.selectedItem = {};
 
+            getAllBrands();
+            getAllProducts();
+            getAllModels(); 
             getAllItems();
         }
+
+        function getAllBrands() {
+            BrandService.getAllDeviceBrands().then(function(response) {
+                $scope.brands = response;
+            });
+        };
+
+        function getAllProducts() {
+            ProductService.getAllProducts().then(function(response) {
+                $scope.products = response;
+            });
+
+        };
+
+        function getAllModels() {
+            ModelService.getAllDeviceModels().then(function(response) {
+                $scope.models = response; 
+            });
+        };
 
         $scope.resetSelectedItem = function () {
             $scope.selectedItem = {};
@@ -37,6 +59,22 @@ angular.module('kalafcheFrontendApp')
         $scope.editItem = function (item) {
             $scope.selectedItem = angular.copy(item);
         };
+
+        $scope.filterByProductCode = function() {
+            var productCodesString = $scope.productCode;
+            var productCodes = productCodesString.split(" ");
+            return function predicateFunc(inStock) {
+                return productCodes.indexOf(inStock.productCode) !== -1 ;
+            };
+        };
+
+        $scope.clearModelSearchTerm= function() {
+            $scope.modelSearchTerm = "";
+        }
+
+        $element.find('#modelSearchTerm').on('keydown', function(ev) {
+            ev.stopPropagation();
+        });
 
         $scope.$on('cancelEdit', function (event, data) {
             $scope.selectedItem = {};

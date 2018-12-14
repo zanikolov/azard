@@ -1,5 +1,7 @@
 package com.kalafche.config;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,11 @@ public class AppConfig extends WebMvcConfigurerAdapter  {
 	
 	@Bean
 	@Autowired
-	public DataSource getDataSource() {
+	public DataSource getDataSource() throws SQLException {
 		final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
 		dsLookup.setResourceRef(true);
 		DataSource dataSource = dsLookup.getDataSource("jdbc/KalafcheDB");
+		dataSource.getConnection().setAutoCommit(false);
 		
 		return dataSource;
 	}
@@ -37,8 +40,9 @@ public class AppConfig extends WebMvcConfigurerAdapter  {
 	
 	@Bean(name = "transactionManager")
 	@Autowired
-	public DataSourceTransactionManager getTransactionManager(DataSource dataSource) {
+	public DataSourceTransactionManager getTransactionManager(DataSource dataSource) throws SQLException {
 		DataSourceTransactionManager txManager = new DataSourceTransactionManager();
+		dataSource.getConnection().setAutoCommit(false);
 		txManager.setDataSource(dataSource);
 		
 		return txManager;

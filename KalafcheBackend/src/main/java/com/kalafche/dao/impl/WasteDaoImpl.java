@@ -1,10 +1,5 @@
 package com.kalafche.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +16,8 @@ import com.kalafche.model.Waste;
 @Service
 public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 
-	private static final String INSERT_WASTE = "insert into waste (employee_id, store_id, item_id, price, description, create_timestamp)"
-			+ " values (?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_WASTE = "insert into waste (employee_id, store_id, item_id, price, description, create_timestamp, file_id)"
+			+ " values (?, ?, ?, ?, ?, ?, ?)";
 	
 	private static final String GET_WASTES_QUERY = "select " +
 			"w.id, " +
@@ -30,6 +25,7 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 			"w.price, " +
 			"w.description, " +
 			"w.create_timestamp as timestamp, " +
+			"w.file_id, " +
 			"iv.product_id, " +
 			"iv.product_code, " +
 			"iv.product_name, " +
@@ -39,7 +35,7 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 			"e.id as employee_id, " +
 			"e.name as employee_name, " +
 			"ks.id as store_id, " +
-			"ks.name as store_name " +
+			"CONCAT(ks.city, ', ', ks.name) as store_name " +
 			"from waste w " +
 			"join item_vw iv on iv.id = w.item_id " +
 			"join kalafche_store ks on ks.id = w.store_id " +
@@ -47,7 +43,7 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 	
 	private static final String PERIOD_CRITERIA_QUERY = " where create_timestamp between ? and ?";
 	private static final String STORE_CRITERIA_QUERY = " and ks.id in (%s)";
-	private static final String PRODUCT_CODE_QUERY = " and iv.product_code in (?)";
+	private static final String PRODUCT_CODE_QUERY = " and iv.product_code in (%s)";
 	private static final String DEVICE_BRAND_QUERY = " and iv.device_brand_id = ?";
 	private static final String DEVICE_MODEL_QUERY = " and iv.device_model_id = ?";	
 	private static final String ORDER_BY = " order by w.create_timestamp";
@@ -69,6 +65,12 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 
 		return rowMapper;
 	}
+
+	@Override
+	public void insertWaste(Waste waste) {
+		getJdbcTemplate().update(INSERT_WASTE, waste.getEmployeeId(), waste.getStoreId(), waste.getItemId(), 
+				waste.getPrice(), waste.getDescription(), waste.getTimestamp(), waste.getFileId());
+	}
 	
 	@Override
 	public List<Waste> searchWastes(Long startDateMilliseconds,
@@ -88,40 +90,11 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 		return getJdbcTemplate().query(
 				searchQuery, argsArr, getRowMapper());
 	}
-
-	@Override
-	public Integer insertWaste(Waste waste) throws SQLException {
-		try (Connection connection = getDataSource().getConnection();
-				PreparedStatement statement = connection.prepareStatement(
-						INSERT_WASTE, Statement.RETURN_GENERATED_KEYS);) {
-			statement.setInt(1, waste.getEmployeeId());
-			statement.setInt(2, waste.getStoreId());
-			statement.setInt(3, waste.getItemId());
-			statement.setBigDecimal(4, waste.getPrice());
-			statement.setString(5, waste.getDescription());
-			statement.setLong(6, waste.getTimestamp());
-			
-			int affectedRows = statement.executeUpdate();
-
-			if (affectedRows == 0) {
-				throw new SQLException("Creating new waste failed, no rows affected.");
-			}
-
-			try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					return generatedKeys.getInt(1);
-				} else {
-					throw new SQLException("Creating waste failed, no ID obtained.");
-				}
-			}
-		}
-	}
 	
 	private String addDetailedSearch(String productCode, Integer deviceBrandId, Integer deviceModelId, List<Object> args) {
 		String detailedQuery = "";
 		if (productCode != null && productCode != "") {
-			detailedQuery += PRODUCT_CODE_QUERY;
-			args.add(productCode);
+			detailedQuery += String.format(PRODUCT_CODE_QUERY, productCode);
 		}
 		
 		if (deviceBrandId != null) {

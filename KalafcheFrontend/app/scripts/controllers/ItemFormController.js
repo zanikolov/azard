@@ -46,6 +46,7 @@ angular.module('kalafcheFrontendApp')
             $scope.$emit('cancelEdit', '');
             $scope.serverErrorMessages = {};
             $scope.itemForm.$setPristine();
+            $scope.itemForm.$setUntouched();
         };
 
         $scope.submitItem = function() {

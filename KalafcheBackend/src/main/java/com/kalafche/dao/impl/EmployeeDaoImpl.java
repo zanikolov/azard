@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.EmployeeDao;
-import com.kalafche.model.DeviceBrand;
 import com.kalafche.model.Employee;
 
 @Service
@@ -48,6 +47,18 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 	
 	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, kalafche_store_id = ? where id = ?";
 
+	private static final String IS_EMPLOYEE_ADMIN = "select " +
+			"count(*) " +
+			"from user_to_role " +
+			"where auth_role_id in " +
+			"( " +
+			"   select " +
+			"   id " +
+			"   from auth_role " +
+			"   where name in ('ROLE_ADMIN','ROLE_SUPERADMIN') " +
+			") " +
+			"and user_id=(select id from user where username=?) ";
+	
 	private BeanPropertyRowMapper<Employee> rowMapper;
 	
 	@Autowired
@@ -98,6 +109,13 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 	@Override
 	public List<Employee> getAllActiveEmployees() {
 		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES, getRowMapper());
+	}
+	
+	@Override
+	public Boolean getIsEmployeeAdmin(String username) {
+	    Integer result = getJdbcTemplate().queryForObject(IS_EMPLOYEE_ADMIN, Integer.class, username);
+
+	    return result != null && result > 0;
 	}
 
 }

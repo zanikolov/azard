@@ -2,15 +2,18 @@ package com.kalafche.dao;
 
 import java.util.List;
 
-import com.kalafche.model.KalafcheStore;
 import com.kalafche.model.StoreDto;
 
 public interface KalafcheStoreDao {
 
-	public abstract List<KalafcheStore> getAllKalafcheEntities();
+	public abstract List<StoreDto> getAllKalafcheEntities();
 
-	public abstract void insertKalafcheStore(KalafcheStore kalafcheStore);
-	
-	public abstract List<StoreDto> getAllStores();
+	public abstract void insertKalafcheStore(StoreDto kalafcheStore);
+
+	public abstract List<StoreDto> selectStores();
+
+	public abstract String selectStoreIdsByOwner(String owner);
+
+	public abstract StoreDto selectStore(String storeId);
 
 }

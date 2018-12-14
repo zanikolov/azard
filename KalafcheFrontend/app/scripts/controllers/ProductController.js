@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function ProductController ($scope, ProductService, ServerValidationService) {
+    function ProductController ($scope, ProductService, AuthService, ServerValidationService) {
 
         init();
 
@@ -42,7 +42,7 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.resetServerErrorMessages = function() {
-            $scope.serverErrorMessages = false;
+            $scope.serverErrorMessages = {};
         };
 
         $scope.editProduct = function (product) {
@@ -54,22 +54,26 @@ angular.module('kalafcheFrontendApp')
 
         };
 
-        $scope.cancelEditProduct = function() {
+        $scope.resetProductForm = function() {
             $scope.resetProduct();
-            $scope.resetServerErrorMessages
+            $scope.resetServerErrorMessages()
             $scope.productForm.$setPristine();
+            $scope.productForm.$setUntouched();
         };
 
         $scope.submitProduct = function() {
             ProductService.submitProduct($scope.product).then(function(response) {
+                $scope.resetProductForm();
                 getAllProducts();
-                $scope.resetProduct();
-                $scope.productForm.$setPristine();
             },
             function(errorResponse) {
                 ServerValidationService.processServerErrors(errorResponse, $scope.productForm);
                 $scope.serverErrorMessages = errorResponse.data.errors;
             });
         };
+
+        $scope.isSuperAdmin = function() {
+            return AuthService.isSuperAdmin();
+        }
 
     };

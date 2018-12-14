@@ -7,6 +7,6 @@ angular.module('kalafcheFrontendApp')
 		scope: {
 			item: '='
 		},
-		templateUrl: "../views/directives/item/item-form.html"
+		templateUrl: "views/partials/assortment/item-form.html"
 	};
 });

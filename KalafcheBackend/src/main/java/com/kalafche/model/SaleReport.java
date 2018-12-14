@@ -11,6 +11,12 @@ public class SaleReport {
 	private Integer companyQuantity;
 	private BigDecimal totalAmount;
 	private Integer count;
+	private String storeName;
+	private Long startDate;
+	private Long endDate;
+	private String deviceModelName;
+	private String deviceBrandName;
+	private String productCode;
 
 	public SaleReport() {
 	}
@@ -68,6 +74,54 @@ public class SaleReport {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+	public Long getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Long startDate) {
+		this.startDate = startDate;
+	}
+
+	public Long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Long endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getDeviceModelName() {
+		return deviceModelName;
+	}
+
+	public void setDeviceModelName(String deviceModelName) {
+		this.deviceModelName = deviceModelName;
+	}
+
+	public String getDeviceBrandName() {
+		return deviceBrandName;
+	}
+
+	public void setDeviceBrandName(String deviceBrandName) {
+		this.deviceBrandName = deviceBrandName;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 
 }

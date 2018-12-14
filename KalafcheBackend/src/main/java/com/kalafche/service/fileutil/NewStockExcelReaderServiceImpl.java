@@ -8,38 +8,56 @@ import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kalafche.exceptions.ExcelInvalidFormatException;
+
 @Service
 public class NewStockExcelReaderServiceImpl implements NewStockExcelReaderService {
 
 	@Override
-	public List<ExcelItem> parseExcelData(MultipartFile file) throws EncryptedDocumentException, InvalidFormatException, IOException {
+	public List<ExcelItem> parseExcelData(MultipartFile file) {
 		List<ExcelItem> items = new ArrayList<>();
 
-        Workbook workbook = WorkbookFactory.create(file.getInputStream());
-        Sheet worksheet = workbook.getSheetAt(0);
-        
-        worksheet.forEach(row -> {
-        	ExcelItem item=new ExcelItem();
+        Workbook workbook;
+		try {
+			workbook = WorkbookFactory.create(file.getInputStream());
 
-        	row.forEach(cell -> {
-        		printCellValue(cell);
-        	});
-        	System.out.println();
-        	
-            item.setBarcode(new BigDecimal(row.getCell(0).getNumericCellValue()).toPlainString());
-            item.setName(row.getCell(2).getStringCellValue());
-            item.setQuantity((int)row.getCell(8).getNumericCellValue());
-            items.add(item);
-        	
-        });
+	        Sheet worksheet = workbook.getSheetAt(0);
+	        
+	        worksheet.forEach(row -> {
+	        	ExcelItem item=new ExcelItem();
+	
+	        	row.forEach(cell -> {
+	        		printCellValue(cell);
+	        	});
+	        	System.out.println();
+	        	
+	            item.setBarcode(new BigDecimal(row.getCell(0).toString()).toPlainString());
+	            item.setName(getCellValue(row.getCell(2)));
+	            item.setQuantity((int)Double.parseDouble(getCellValue(row.getCell(8))));
+	            items.add(item);
+	        	
+	        });
+		} catch (IllegalStateException | InvalidFormatException | IOException e) {
+			e.printStackTrace();
+			throw new ExcelInvalidFormatException("file", "Невалиден формат на Excel файла.");
+		}
 		
 		return items;
+	}
+	
+	private String getCellValue(Cell cell) {
+	    if(cell.getCellTypeEnum() == CellType.STRING) {
+            return cell.getStringCellValue();
+	    } else {
+            return cell.getNumericCellValue() + "";
+	    }
 	}
 	
 	private static void printCellValue(Cell cell) {

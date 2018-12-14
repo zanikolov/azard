@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .service('ServerValidationService', function() {
+    .service('ServerValidationService', function($mdDialog) {
         angular.extend(this, {
             processServerErrors: processServerErrors
         });
 
         function processServerErrors(errorResponse, formController) {
-            console.log(errorResponse.status);
             if (errorResponse.status == 409 || errorResponse.status == 400 || errorResponse.status == 404) {
                     // if (errorResponse.data.non_field_errors) {
                     //     formController.$setValidity('serverError', false);
@@ -23,8 +22,17 @@ angular.module('kalafcheFrontendApp')
                         console.error('Unknown server error ${field}.');
                     }
                 });
-            } else {
-                console.error('Unknown server error response.');
+            } else {   
+                $mdDialog.show({
+                    controller: function($scope, $mdDialog) { 
+                        $scope.closeModal = function() {
+                            $mdDialog.cancel();
+                        }; 
+                    },
+                    templateUrl: 'views/modals/error-modal.html',
+                    clickOutsideToClose:true,
+                    parent: angular.element(document.body)
+                })
             }
         }
 

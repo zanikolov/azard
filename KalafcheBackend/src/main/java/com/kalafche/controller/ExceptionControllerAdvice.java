@@ -17,6 +17,8 @@ import com.google.common.collect.Maps;
 import com.kalafche.exceptions.DomainObjectNotFoundException;
 import com.kalafche.exceptions.DuplicationException;
 import com.kalafche.exceptions.ErrorResponse;
+import com.kalafche.exceptions.ExcelInvalidFormatException;
+import com.kalafche.exceptions.ImageUploadException;
 
 /**
  * Exception handler controller advice
@@ -40,21 +42,34 @@ public class ExceptionControllerAdvice extends  ResponseEntityExceptionHandler {
 	}
 	
 	/**
-	 * Handles exceptions related to vote duplication.
+	 * Handles exceptions related to entity duplication.
 	 * 
 	 * @param exception vote duplication exception
 	 * @return response with status 409 CONFLICT
 	 * @throws JsonProcessingException 
 	 */
 	@ExceptionHandler(DuplicationException.class)
-	public ResponseEntity<String> handleVoteDuplicationdException(DuplicationException exception) throws JsonProcessingException {
+	public ResponseEntity<String> handleEntityDuplicationdException(DuplicationException exception) throws JsonProcessingException {
 		Map<String, String> errors = Maps.newHashMap();
 		errors.put(exception.getField(), exception.getMessage());
 		ErrorResponse errorResponse = new ErrorResponse(errors);
-		String errorStr = new ObjectMapper().writeValueAsString(errorResponse);
-		System.out.println(">>>>>>> " + errorStr);
-		System.out.println("------- " + exception.getMessage());
 		return new ResponseEntity<>(new ObjectMapper().writeValueAsString(errorResponse), HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(ExcelInvalidFormatException.class)
+	public ResponseEntity<String> handleExcelInvalidFormatException(ExcelInvalidFormatException exception) throws JsonProcessingException {
+		Map<String, String> errors = Maps.newHashMap();
+		errors.put(exception.getField(), exception.getMessage());
+		ErrorResponse errorResponse = new ErrorResponse(errors);
+		return new ResponseEntity<>(new ObjectMapper().writeValueAsString(errorResponse), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(ImageUploadException.class)
+	public ResponseEntity<String> handleExcelInvalidFormatException(ImageUploadException exception) throws JsonProcessingException {
+		Map<String, String> errors = Maps.newHashMap();
+		errors.put(exception.getField(), exception.getMessage());
+		ErrorResponse errorResponse = new ErrorResponse(errors);
+		return new ResponseEntity<>(new ObjectMapper().writeValueAsString(errorResponse), HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

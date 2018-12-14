@@ -7,7 +7,8 @@ angular.module('kalafcheFrontendApp')
             logout: logout,
             isAuthorized: isAuthorized,
             isAuthenticated: isAuthenticated,
-            isAdmin: isAdmin
+            isAdmin: isAdmin,
+            isSuperAdmin: isSuperAdmin
         });
 
 
@@ -79,7 +80,21 @@ angular.module('kalafcheFrontendApp')
             }
 
               return false;
-        }   
+        }  
+
+        function isSuperAdmin() {
+            var roles = SessionService.currentUser.userRoles;
+            if (roles) {
+                for (var i = 0; i < roles.length; i++) {
+                    var role = roles[i];
+                    if (role.name === "ROLE_SUPERADMIN") {
+                        return true;
+                    }
+                }
+            }
+
+              return false;
+        } 
  
   
     });

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * 
  */
 @Configuration
-@ComponentScan("com.kalafche")
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 

@@ -1,14 +1,9 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .directive('demoFileModel', function ($parse) {
+    .directive('fileModel', function ($parse) {
         return {
             restrict: 'A', //the directive can be used as an attribute only
-                  scope: {
-                    fileinput: "=",
-                    filepreview: "="
-                  },
- 
             /*
              link is a function that defines functionality of directive
              scope: scope associated with the element
@@ -16,24 +11,17 @@ angular.module('kalafcheFrontendApp')
              attrs: key value pair of element attributes
              */
             link: function (scope, element, attrs) {
-                var model = $parse(attrs.demoFileModel),
-                    modelSetter = model.assign; //define a setter for demoFileModel
+                var model = $parse(attrs.fileModel),
+                    modelSetter = model.assign; //define a setter for fileModel
  
                 //Bind change event on the element
                 element.bind('change', function () {
                     //Call apply on scope, it checks for value changes and reflect them on UI
                     scope.$apply(function () {
                         //set the model value
+                        scope.serverErrorMessages = {};
                         modelSetter(scope, element[0].files[0]);
                     });
-
-                    var reader = new FileReader();
-                    reader.onload = function(loadEvent) {
-                        scope.$apply(function() {
-                            scope.filepreview = loadEvent.target.result;
-                        });
-                    }
-
                 });
             }
         };

@@ -9,6 +9,25 @@ angular.module('kalafcheFrontendApp')
             $scope.sale = currentSale;
             $scope.partner = null;
             $scope.serverErrorMessages = {};
+            $scope.totalSumReport = 0;
+
+            calculateTotalSum();
+        };
+
+        function calculateTotalSum() {
+            console.log($scope.sale.selectedStocks);
+
+            var discount = null
+            console.log($scope.partner);
+            if ($scope.partner) {
+                discount = 1;
+            }
+
+            SaleService.getTotalSum($scope.sale.selectedStocks, discount).then(
+                function(response){
+                    console.log(response);
+                    $scope.totalSumReport = response;
+                })
         };
 
         $scope.submitSale = function() {
@@ -23,9 +42,8 @@ angular.module('kalafcheFrontendApp')
             });
             SaleService.submitSale(requestBody).then(
                 function(response) {
-                    $scope.sale = {};
                     $scope.sale.selectedStocks = [];
-                    $mdDialog.hide($scope.sale);
+                    $mdDialog.cancel();
                 }
             );
             
@@ -34,6 +52,7 @@ angular.module('kalafcheFrontendApp')
         $scope.removeStock = function(index, stock) {
             $scope.sale.selectedStocks.splice(index, 1);
             stock.quantity += 1;
+            calculateTotalSum();
 
             if ($scope.sale.selectedStocks.length < 1) {
                 $mdDialog.cancel();
@@ -59,15 +78,18 @@ angular.module('kalafcheFrontendApp')
                     function(partner) {
                         $scope.partner = partner;
                         $scope.serverErrorMessages = {};
+                        calculateTotalSum();
                     },
                     function(errorResponse) {
+                        $scope.partner = null
                         ServerValidationService.processServerErrors(errorResponse, $scope.saleForm);
                         $scope.serverErrorMessages = errorResponse.data.errors;
-                    }
-                );
+                        calculateTotalSum();
+                    }                );
             } else {
                 $scope.serverErrorMessages = {};
                 $scope.partner = null;
+                calculateTotalSum();
             }
         }
 

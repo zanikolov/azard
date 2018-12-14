@@ -26,23 +26,17 @@ angular
         $urlRouterProvider.otherwise('/login');
         
         $stateProvider
-            // .state('brand', {
-            //     url: '/brand',
-            //     templateUrl: 'views/partials/partial-brand.html',
-            //     data: {
-            //         authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
-            //         title: "Марки"
-            //     }
+            .state('assortment', {
+                url: '/assortment',
+                templateUrl: 'views/partials/assortment/assortment-tab.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    title: "Асортимент"
+                }
+            })
             .state('device', {
                 url: '/device',
                 templateUrl: 'views/partials/device/device-tab.html',
-                data: {
-                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
-                    title: "Устройства"
-                }
-            }).state('assortment', {
-                url: '/assortment',
-                templateUrl: 'views/partials/assortment/assortment-tab.html',
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
                     title: "Устройства"
@@ -107,8 +101,15 @@ angular
                 url: '/waste-report',
                 templateUrl: 'views/partials/waste-report.html',
                 data: {
-                    authorizedRoles: [ UserRoles.admin, UserRoles.superAdmin],
-                    title: "Брак"
+                    authorizedRoles: [ UserRoles.admin, UserRoles.superAdmin, UserRoles.user],
+                    title: "Бракувана стока"
+                }      
+            }).state('refundReport', {
+                url: '/refund-report',
+                templateUrl: 'views/partials/refund-report.html',
+                data: {
+                    authorizedRoles: [ UserRoles.admin, UserRoles.superAdmin, UserRoles.user],
+                    title: "Върната стока"
                 }      
             }).state('relocation', {
                 url: '/rrelocation',
@@ -130,6 +131,13 @@ angular
                 data: {
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Активности"
+                }      
+            }).state('expense', {
+                url: '/expense',
+                templateUrl: 'views/partials/expense/expense.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    title: "Разходи"
                 }      
             }).state('login',{
                 url: '/login',
@@ -192,7 +200,7 @@ angular
         });
         $rootScope.$on(AuthEvents.loginSuccess, function () {
             $rootScope.sideNavVisible = true;
-            $state.go('inStock');
+            $state.go('assortment');
         })
         $rootScope.$on(AuthEvents.logoutSuccess, function () {
             $state.go('login');

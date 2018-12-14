@@ -2,10 +2,11 @@
 
     <md-content layout-padding layout="column">
         <div flex>
-            <form>
+            <form name="fileForm" server-validation novalidate>
                 <div layout="row">
                     <md-input-container flex>
-                        <input type="file" demo-file-model="myFile"  id="myFileField">
+                        <input type="file" file-model="file" ng-model="file" name="file" id="file">
+                        <span ng-message="serverError" class="label label-error">{{serverErrorMessages.file}}</span>
                     </md-input-container> 
                     <md-input-container flex>
                         <md-button ng-click="validateFile()" class="md-raised md-primary">Валидирай</md-button>
@@ -39,7 +40,9 @@
                             <td>{{item.name}}</td>
                             <td>{{item.quantity}}</td>
                             <td>
-                                <a ng-if="!item.added" href="" ng-click="openCreateItemModal(item)"><md-icon class="primary-icon" title="Добави">playlist_add</md-icon></a>
+                                <a ng-if="!item.added" href="" ng-click="openCreateItemModal(item)">
+                                    <md-icon class="primary-icon" md-svg-src="images/icons/playlist_add.svg"></md-icon>
+                                </a>
                             </td>
                         </tr>
                     </tbody>

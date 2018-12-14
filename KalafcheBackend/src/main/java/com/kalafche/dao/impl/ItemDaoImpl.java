@@ -54,6 +54,7 @@ public class ItemDaoImpl extends JdbcDaoSupport implements ItemDao {
 		
 		return rowMapper;
 	}
+	
 	@Override
 	public Item getItem(Integer productId, Integer deviceModelId) {
 		List<Item> items = getJdbcTemplate().query(GET_ITEM, getRowMapper(), productId, deviceModelId);

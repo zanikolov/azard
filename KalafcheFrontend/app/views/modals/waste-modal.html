@@ -1,11 +1,11 @@
-<md-dialog flex="60">
-  <form name="wasteForm" server-validation novalidate ng-cloak>
+<md-dialog flex="60" ng-cloak>
+  <form name="wasteForm" server-validation novalidate>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>Бракуване</h2>
+        <h2>Бракуване на стока</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="closeModal()" ng-disabled="submitInProcess">
-          <md-icon>close</md-icon>
+          <md-icon md-svg-src="images/icons/close.svg" aria-label="Затвори"></md-icon>
         </md-button>
       </div>
     </md-toolbar>
@@ -20,7 +20,8 @@
             </div>  
             <div layout="row">
                 <md-input-container flex>
-                  <input type="file" imageinput="myFile" accept="image/*" filepreview="filepreview" flex="50"/>
+                  <input type="file" imageinput="image" ng-model="image" id="image" name="image" accept="image/*" filepreview="filepreview" flex="50"/>
+                  <span ng-message="serverError" class="label label-error">{{serverErrorMessages.image}}</span>
                   <img ng-src="{{filepreview}}" ng-show="filepreview" flex-offset="10" flex="25"/>
                 </md-input-container> 
             </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('WasteModalController', function ($scope, $mdDialog, selectedStock, ApplicationService, WasteService) {
+	.controller('WasteModalController', function ($scope, $mdDialog, selectedStock, WasteService) {
 
         init();
 
@@ -13,15 +13,17 @@ angular.module('kalafcheFrontendApp')
 
         $scope.submitWaste = function() {
             $scope.submitInProcess = true;
-            var file = $scope.myFile;
+            var image = $scope.image;
             $scope.waste.itemId = $scope.selectedStock.itemId;
-            WasteService.submitWaste($scope.waste, file).then(
+            WasteService.submitWaste($scope.waste, image).then(
                 function(response) {
                     $scope.submitInProcess = false;
                     $scope.selectedStock.quantity -= 1;
                     $mdDialog.hide($scope.selectedStock);
-                }, function(response) {
+                }, function(errorResponse) {
                     $scope.submitInProcess = false;
+                    ServerValidationService.processServerErrors(errorResponse, $scope.wasteForm);
+                    $scope.serverErrorMessages = errorResponse.data.errors;
                 }
             );
         };

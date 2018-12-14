@@ -2,22 +2,41 @@ package com.kalafche.model;
 
 public class StoreDto {
 
-	private String identifiers;
-	private String displayName;
+	private int id;
+	private String city;
+	private String name;
+	private String code;
 
-	public String getIdentifiers() {
-		return identifiers;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdentifiers(String identifiers) {
-		this.identifiers = identifiers;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public String getDisplayName() {
-		return displayName;
+	public String getCity() {
+		return city;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setCity(String city) {
+		this.city = city;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 }

@@ -109,6 +109,8 @@ public class StockDaoImpl extends JdbcDaoSupport {
 
 	private static final String UPDATE_QUANTITY_OF_SOLD_STOCK = "update stock set quantity = quantity - 1 where item_id = ? and kalafche_store_id = ?";
 
+	private static final String UPDATE_QUANTITY_OF_REFUND_STOCK = "update stock set quantity = quantity + 1 where item_id = (select item_id from sale_item where sale_item_id = ?) and kalafche_store_id = ?";
+	
 	private static final String GET_QUANTITY_OF_STOCK_IN_WH = "select " +
 			"coalesce(( " +
 			"	select quantity " +
@@ -222,6 +224,10 @@ public class StockDaoImpl extends JdbcDaoSupport {
 		List<Stock> stocks = getJdbcTemplate().query(GET_ALL_STOCKS_FOR_REPORT, getRowMapper(), stockOrderId);
 		;
 		return stocks;
+	}
+
+	public void updateTheQuantitiyOfRefundStock(Integer saleItemId, int storeId) {
+		getJdbcTemplate().update(UPDATE_QUANTITY_OF_REFUND_STOCK, saleItemId, storeId);
 	}
 
 }

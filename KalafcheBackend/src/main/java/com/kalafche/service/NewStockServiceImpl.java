@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kalafche.dao.ItemDao;
 import com.kalafche.dao.NewStockDao;
 import com.kalafche.dao.WarehouseDao;
+import com.kalafche.exceptions.DomainObjectNotFoundException;
 import com.kalafche.model.Item;
 import com.kalafche.model.NewStock;
 import com.kalafche.service.fileutil.ExcelItem;
@@ -76,8 +77,12 @@ public class NewStockServiceImpl implements NewStockService {
 		Integer newStockImport = submitNewStockImport(newStockFile);
 		List<ExcelItem> uploadedNewStock = newStockExcelReaderService.parseExcelData(newStockFile);
 		
-		uploadedNewStock.forEach(item -> {
-			newStockDao.insertNewStockFromFile(item.getBarcode(), item.getQuantity(), newStockImport);
+		uploadedNewStock.forEach(excelItem -> {
+			Item item = itemDao.getItem(excelItem.getBarcode());
+			if (item == null) {
+				throw new DomainObjectNotFoundException("file", "Не е намерен артикул с баркод " + excelItem.getBarcode());
+			}
+			newStockDao.insertNewStockFromFile(excelItem.getBarcode(), excelItem.getQuantity(), newStockImport);
 		});
 	}
 

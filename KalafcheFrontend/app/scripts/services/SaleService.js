@@ -6,8 +6,30 @@ angular.module('kalafcheFrontendApp')
 			submitSale: submitSale,
             getSaleItems: getSaleItems,
             searchSales: searchSales,
-            searchSaleItems: searchSaleItems
+            searchSaleItems: searchSaleItems,
+            getTotalSum: getTotalSum
 		});
+
+        function getTotalSum(items, discount) {
+            var prices = [];
+            angular.forEach(items, function(item) {
+                prices.push(item.productPrice);
+            })
+
+            var request = {};
+            request.prices = prices;
+            request.discount = discount
+
+            console.log(request);
+
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/sale/totalSum', request)
+                .then(
+                    function(response) {
+                        console.log(response.data);
+                        return response.data
+                    }
+                );
+        };
 
         function submitSale(sale) { 
             return $http.put(Environment.apiEndpoint + '/KalafcheBackend/sale', sale)
@@ -27,9 +49,9 @@ angular.module('kalafcheFrontendApp')
                 );
         }
 
-        function searchSales(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, selectedBrandId, selectedModelId, productCode) { 
+        function searchSales(startDateMilliseconds, endDateMilliseconds, storeIds, selectedBrandId, selectedModelId, productCode) { 
             var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
-                "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
+                "storeIds": storeIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale', params)
@@ -41,9 +63,9 @@ angular.module('kalafcheFrontendApp')
                 );
         }
 
-        function searchSaleItems(startDateMilliseconds, endDateMilliseconds, kalafcheStoreIds, selectedBrandId, selectedModelId, productCode) { 
+        function searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, selectedBrandId, selectedModelId, productCode) { 
             var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
-                "kalafcheStoreIds": kalafcheStoreIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
+                "storeIds": storeIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale/saleItem', params)

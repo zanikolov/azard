@@ -1,5 +1,6 @@
 package com.kalafche.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +34,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"p.code as partner_code " +
 			"from sale s " +
 			"join sale_item si on si.sale_id = s.id " +
+			//"join sale_item si2 on si2.sale_id = s.id" +
 			"join employee e on s.employee_id = e.id " +
 			"join kalafche_store ks on s.store_id = ks.id " +
 			"left join partner p on p.id = s.partner_id ";
@@ -41,6 +43,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"si.id, " +
 			"si.sale_id, " +
 			"si.item_id, " +
+			"si.is_refunded, " +
 			"s.sale_timestamp, " +
 			"iv.product_id, " +
 			"iv.product_code, " +
@@ -53,7 +56,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"e.id as employee_id, " +
 			"e.name as employee_name, " +
 			"ks.id as store_id, " +
-			"ks.name as store_name " +
+			"CONCAT(ks.city, \", \", ks.name) as store_name " +
 			"from sale_item si " +
 			"join sale s on si.sale_id = s.id " +
 			"join item_vw iv on iv.id = si.item_id " +
@@ -62,6 +65,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String KALAFCHE_STORE_CRITERIA_QUERY = " and ks.id in (%s)";
+	private static final String REFUND_QUERY = " and si.is_refunded <> true";
 	private static final String PRODUCT_CODE_QUERY = " and iv.product_code in (?)";
 	private static final String DEVICE_BRAND_QUERY = " and iv.device_brand_id = ?";
 	private static final String DEVICE_MODEL_QUERY = " and iv.device_model_id = ?";
@@ -73,6 +77,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"si.id, " +
 			"si.sale_id, " +
 			"si.item_id, " +
+			"si.is_refunded, " +
 			"p.id as product_id, " +
 			"p.code as product_code, " +
 			"p.name as product_name, " +
@@ -89,6 +94,10 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"join device_brand db on dm.device_brand_id = db.id " +
 			"where si.sale_id = ?";
 	private static final String INSERT_SALE_ITEM = "insert into sale_item(sale_id, item_id, item_price, sale_price) values (?, ?, ?, ?)";
+	
+	private static final String UPDATE_REFUNDED_SALE_ITEM = "update sale_item set is_refunded = true where id = ?";
+
+	private static final String GET_SALE_ITEM_PRICE = "select sale_price from sale_item where id = ?";
 	
 	private BeanPropertyRowMapper<Sale> rowMapper;
 	private BeanPropertyRowMapper<SaleItem> saleItemRowMapper;
@@ -150,13 +159,11 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	@Override
 	public List<Sale> searchSales(Long startDateMilliseconds,
-			Long endDateMilliseconds, String kalafcheStoreIds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
+			Long endDateMilliseconds, String kalafcheStoreIds) {
 		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY + String.format(KALAFCHE_STORE_CRITERIA_QUERY, kalafcheStoreIds);
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);
-		
-		searchQuery += addDetailedSearch(productCode, deviceBrandId, deviceModelId, argsList);
 		
 		searchQuery += GROUP_BY;
 		searchQuery += ORDER_BY;
@@ -171,7 +178,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	@Override
 	public List<SaleItem> searchSaleItems(Long startDateMilliseconds,
 			Long endDateMilliseconds, String kalafcheStoreIds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
-		String searchQuery = GET_ALL_SALE_ITEMS_QUERY + PERIOD_CRITERIA_QUERY + String.format(KALAFCHE_STORE_CRITERIA_QUERY, kalafcheStoreIds);
+		String searchQuery = GET_ALL_SALE_ITEMS_QUERY + PERIOD_CRITERIA_QUERY + String.format(KALAFCHE_STORE_CRITERIA_QUERY, kalafcheStoreIds) + REFUND_QUERY;
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);
@@ -182,7 +189,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		
 		Object[] argsArr = new Object[argsList.size()];
 		argsArr = argsList.toArray(argsArr);
-		
+				
 		return getJdbcTemplate().query(
 				searchQuery, argsArr, getSaleItemRowMapper());
 	}
@@ -216,6 +223,16 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	public void insertSaleItem(SaleItem saleItem) {
 		getJdbcTemplate().update(INSERT_SALE_ITEM, saleItem.getSaleId(), saleItem.getItemId(), saleItem.getItemPrice(),
 				saleItem.getSalePrice());
+	}
+	
+	@Override
+	public void updateRefundedSaleItem(Integer saleItemId) {
+		getJdbcTemplate().update(UPDATE_REFUNDED_SALE_ITEM, saleItemId);
+	}
+	
+	@Override
+	public BigDecimal getSaleItemPrice(Integer saleItemId) {
+		return getJdbcTemplate().queryForObject(GET_SALE_ITEM_PRICE, BigDecimal.class, saleItemId);
 	}
 	
 }

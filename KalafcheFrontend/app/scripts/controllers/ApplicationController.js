@@ -96,6 +96,11 @@ angular.module('kalafcheFrontendApp')
 
       $scope.menu = [
         {
+          link : 'assortment',
+          title: 'Асортимент',
+          icon: 'dashboard'
+        }
+        ,{
           link : 'inStock',
           title: 'Търсене',
           icon: 'dashboard'
@@ -110,11 +115,6 @@ angular.module('kalafcheFrontendApp')
           title: 'Устройства',
           icon: 'dashboard'
         },    
-        {
-          link : 'assortment',
-          title: 'Асортимент',
-          icon: 'dashboard'
-        },
         {
           link : 'employee',
           title: 'Служители',
@@ -144,6 +144,11 @@ angular.module('kalafcheFrontendApp')
           link : 'wasteReport',
           title: 'Брак',
           icon: 'dashboard'
+        },        
+        {
+          link : 'refundReport',
+          title: 'Рекламации',
+          icon: 'dashboard'
         },
         {
           link : 'relocation',
@@ -153,6 +158,11 @@ angular.module('kalafcheFrontendApp')
         {
           link : 'activityReport',
           title: 'Активности',
+          icon: 'dashboard'
+        },
+        {
+          link : 'expense',
+          title: 'Разходи',
           icon: 'dashboard'
         }
       ];

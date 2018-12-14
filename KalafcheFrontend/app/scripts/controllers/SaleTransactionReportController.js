@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function SaleTransactionReportController($scope, $rootScope, ApplicationService, SaleService, AuthService,  KalafcheStoreService, BrandService, ModelService) {
+    function SaleTransactionReportController($scope, $rootScope, $mdDialog, ApplicationService, SaleService, AuthService,  KalafcheStoreService, BrandService, ModelService, SessionService) {
 
         init();
 
@@ -18,8 +18,8 @@ angular.module('kalafcheFrontendApp')
             $scope.currentPage = 1;  
             $scope.salesPerPage = 15;
             $scope.sales = []; 
-            $scope.kalafcheStores = [];
-            $scope.selectedKalafcheStore = {};
+            $scope.stores = [];
+            $scope.selectedStore = {};
             
             $scope.dateFormat = 'dd-MMMM-yyyy';
             $scope.startDate = {};
@@ -45,7 +45,7 @@ angular.module('kalafcheFrontendApp')
                 showWeeks: false
             };
 
-            getAllRealStores(); 
+            getAllStores(); 
         }
 
         function getCurrentDate() {
@@ -65,8 +65,8 @@ angular.module('kalafcheFrontendApp')
         }
 
         function getSales() {
-            SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.identifiers).then(function(response) {
-                $scope.sales = response.sales;
+            SaleService.searchSales($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.id).then(function(response) {
+                $scope.report = response;
             });           
         }
 
@@ -82,7 +82,6 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.changeStartDate = function() {
-            $scope.endDateOptions.minDate = $scope.startDate;
             $scope.startDate.setHours(0);
             $scope.startDate.setMinutes(1);
             $scope.startDateMilliseconds = $scope.startDate.getTime();
@@ -94,42 +93,25 @@ angular.module('kalafcheFrontendApp')
             $scope.endDateMilliseconds = $scope.endDate.getTime();
         };
 
-        $scope.changeKalafcheStore = function() {
+        $scope.changeStore = function() {
             $scope.searchSales();
         };
 
-        function getAllRealStores() {
-            KalafcheStoreService.getAllRealStores().then(function(response) {
-                $scope.kalafcheStores = response;
-                $scope.selectedKalafcheStore = KalafcheStoreService.getRealSelectedStore($scope.kalafcheStores, $scope.isAdmin());
+        function getAllStores() {
+            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+                $scope.stores = response;
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
                 getSales();
             });
 
         };
 
-        $scope.getSaleTimestamp = function(sale) {
-            return ApplicationService.convertEpochToDate(sale.saleTimestamp)
+        $scope.getSaleTimestamp = function(saleTimestamp) {
+            return ApplicationService.convertEpochToTimestamp(saleTimestamp);
         };
 
-        $scope.getTotalSum = function() {
-            var totalSum = 0;
-
-            for (var i = 0; i < $scope.sales.length; i++) {
-                var currSale = $scope.sales[i];
-                if ((!$scope.selectedKalafcheStore.id || currSale.kalafcheStoreId === $scope.selectedKalafcheStore.id) && currSale.saleTimestamp >= $scope.startDateMilliseconds && currSale.saleTimestamp <= $scope.endDateMilliseconds) {
-                    totalSum += currSale.salePrice;
-                }
-            }
-
-            return Math.round(totalSum * 100) / 100;
-        };
-
-        $scope.isTotalSumRowVisible = function() {
-            if ($scope.salesPerPage * $scope.currentPage >= $scope.sales.length) {
-                return true;
-            } else {
-                return false;
-            }
+        $scope.getReportDate = function(reportTimestamp) {
+            return ApplicationService.convertEpochToDate(reportTimestamp);
         };
 
         $scope.resetCurrentPage = function() {
@@ -144,6 +126,21 @@ angular.module('kalafcheFrontendApp')
         $scope.isAdmin = function() {
             return AuthService.isAdmin();
         }
+
+        $scope.openRefundModal = function(saleItem) {
+            $scope.selectedSaleItem = saleItem;
+            $mdDialog.show({
+              locals:{selectedSaleItem: $scope.selectedSaleItem},
+              controller: 'RefundModalController',
+              templateUrl: 'views/modals/refund-modal.html',
+              parent: angular.element(document.body)
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
+        };
 
     };
 

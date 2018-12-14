@@ -22,9 +22,15 @@ angular.module('kalafcheFrontendApp')
             })
         }
 
-        function searchWastes(startDateMilliseconds, endDateMilliseconds, storeIds, selectedBrandId, selectedModelId, productCode) { 
-            var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
-                "storeIds": storeIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
+        function searchWastes(startDateMilliseconds, endDateMilliseconds, storeIds,
+        	selectedBrandId, selectedModelId, productCode) { 
+            var params = {"params" : 
+            	{"startDateMilliseconds": startDateMilliseconds, 
+            	"endDateMilliseconds": endDateMilliseconds, 
+                "storeIds": storeIds, 
+                "deviceBrandId": selectedBrandId, 
+                "deviceModelId": selectedModelId, 
+                "productCode": productCode}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/waste', params)

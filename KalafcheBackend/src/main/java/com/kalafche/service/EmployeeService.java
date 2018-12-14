@@ -77,4 +77,11 @@ public class EmployeeService {
 		
 		return employeeDao.getEmployee(username);
 	}
+	
+	public Boolean isLoggedInEmployeeAdmin() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		return employeeDao.getIsEmployeeAdmin(username);
+	}
+	
 }

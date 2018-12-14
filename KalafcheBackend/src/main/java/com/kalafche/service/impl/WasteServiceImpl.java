@@ -1,16 +1,16 @@
 package com.kalafche.service.impl;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kalafche.dao.ItemDao;
+import com.kalafche.dao.KalafcheStoreDao;
 import com.kalafche.dao.WasteDao;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Waste;
@@ -42,58 +42,54 @@ public class WasteServiceImpl implements WasteService {
 	@Autowired
 	ImageUploadService imageUploadService;
 	
+	@Autowired
+	KalafcheStoreDao storeDao;
+	
 	@Override
 	public WasteReport searchWastes(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
 			String productCode, Integer deviceBrandId, Integer deviceModelId) {
 		WasteReport wasteReport = new WasteReport();
+		
+		if (storeIds.equals("0") || storeIds.equals("ANIKO") || storeIds.equals("AZARD")) {
+			storeIds = storeDao.selectStoreIdsByOwner(storeIds);
+		}
+		
 		List<Waste> wastes = wasteDao.searchWastes(startDateMilliseconds,
 				endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId);
 		
 		if (wastes != null && !wastes.isEmpty()) {
 			calculateTotalAmountAndCount(wastes, wasteReport);
-			getWasteImages(wastes);
 		} else {
 			wasteReport.setCount(0);
-			wasteReport.setTotalAmount(new BigDecimal(0));
+			wasteReport.setTotalAmount(BigDecimal.ZERO);
 		}	
 		wasteReport.setWastes(wastes);
 		
 		return wasteReport;
 	}
 
-	private void getWasteImages(List<Waste> wastes) {
-		wastes.forEach(waste -> {
-			try {
-				waste.setFileId(imageUploadService.getWasteImageId(waste.getId()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (GeneralSecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});	
-	}
-
 	private void calculateTotalAmountAndCount(List<Waste> wastes, WasteReport wasteReport) {
-		BigDecimal totalAmount = new BigDecimal(0);
-		wastes.forEach(waste -> totalAmount.add(waste.getPrice()));
+		BigDecimal totalAmount = wastes.stream()
+		        .map(waste -> waste.getPrice())
+		        .reduce(BigDecimal.ZERO, BigDecimal::add);
 		
 		wasteReport.setCount(wastes.size());
 		wasteReport.setTotalAmount(totalAmount);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void submitWaste(Waste waste, MultipartFile wasteImage) throws SQLException, IllegalStateException, IOException, GeneralSecurityException {
+	public void submitWaste(Waste waste, MultipartFile wasteImage) throws SQLException {
+		String fileId = imageUploadService.uploadWasteImage(wasteImage);
 		Employee loggedInEmployee = employeeService.getLoggedInEmployee();
 		waste.setEmployeeId(loggedInEmployee.getId());
 		waste.setStoreId(loggedInEmployee.getKalafcheStoreId());
 		waste.setTimestamp(dateService.getCurrentMillisBGTimezone());
-		waste.setPrice(itemDao.getItemPriceByStoreId(waste.getItemId(), waste.getStoreId()));	
+		waste.setPrice(itemDao.getItemPriceByStoreId(waste.getItemId(), waste.getStoreId()));
+		waste.setFileId(fileId);
 		
-		Integer wasteId = wasteDao.insertWaste(waste);
+		wasteDao.insertWaste(waste);
 		stockService.updateTheQuantitiyOfSoldStock(waste.getItemId(), loggedInEmployee.getKalafcheStoreId());
-		imageUploadService.uploadWasteImage(wasteId, wasteImage);
 	}
 
 }

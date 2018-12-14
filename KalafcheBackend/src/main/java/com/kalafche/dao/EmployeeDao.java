@@ -16,4 +16,6 @@ public interface EmployeeDao {
 
 	public abstract List<Employee> getAllActiveEmployees();
 
+	public abstract Boolean getIsEmployeeAdmin(String username);
+
 }

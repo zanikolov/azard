@@ -17,6 +17,7 @@ public class DeviceModelDaoImpl extends JdbcDaoSupport implements
 		DeviceModelDao {
 	private static final String GET_ALL_MODELS_BY_BRAND_QUERY = "select * from device_model where device_brand_id = ?";
 	private static final String GET_ALL_MODELS = "select * from device_model";
+	private static final String SELECT_DEVICE_MODEL = "select * from device_model where id = ?";
 	private static final String INSERT_MODEL = "insert into device_model (name, device_brand_id) values (?, ?)";
 	private static final String UPDATE_MODEL = "update device_model set name = ? where id = ?";
 	private static final String CHECK_IF_MODEL_EXISTS = "select count(*) from device_model where name = ? and device_brand_id = ?";
@@ -69,5 +70,12 @@ public class DeviceModelDaoImpl extends JdbcDaoSupport implements
 		}
 			
 		return exists != null && exists > 0 ;
+	}
+	
+	@Override
+	public DeviceModel selectDeviceModel(Integer deviceModelId) {
+		List<DeviceModel> deviceModel = getJdbcTemplate().query(SELECT_DEVICE_MODEL, getRowMapper(), deviceModelId);
+		
+		return deviceModel.isEmpty() ? null : deviceModel.get(0);
 	}
 }

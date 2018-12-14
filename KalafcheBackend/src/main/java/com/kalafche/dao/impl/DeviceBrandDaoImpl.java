@@ -18,6 +18,7 @@ public class DeviceBrandDaoImpl extends JdbcDaoSupport implements
 	private static final String GET_ALL_BRANDS_QUERY = "select * from device_brand";
 	private static final String INSERT_BRAND = "insert into device_brand (name) values (?)";
 	private static final String CHECK_IF_BRAND_EXISTS = "select count(*) from device_brand where name = ?";
+	private static final String SELECT_DEVICE_BRAND = "select * from device_brand where id = ?";
 
 	private BeanPropertyRowMapper<DeviceBrand> rowMapper;
 	
@@ -52,5 +53,12 @@ public class DeviceBrandDaoImpl extends JdbcDaoSupport implements
 		Integer exists = getJdbcTemplate().queryForObject(CHECK_IF_BRAND_EXISTS, Integer.class, brand.getName());
 		
 		return exists != null && exists > 0 ;
+	}
+
+	@Override
+	public DeviceBrand selectDeviceBrand(Integer deviceBrandId) {
+		List<DeviceBrand> deviceBrand = getJdbcTemplate().query(SELECT_DEVICE_BRAND, getRowMapper(), deviceBrandId);
+		
+		return deviceBrand.isEmpty() ? null : deviceBrand.get(0);
 	}
 }

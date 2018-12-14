@@ -1,7 +1,7 @@
 package com.kalafche.exceptions;
 
 /**
- * Exception related to vote duplication.
+ * Exception related to entity duplication.
  */
 public class DuplicationException extends RuntimeException {
 

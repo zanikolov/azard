@@ -10,20 +10,20 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, KalafcheStoreService, BrandService, ModelService) {
+    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, KalafcheStoreService, BrandService, ModelService, SessionService) {
 
         init();
 
         function init() {
             $scope.currentPage = 1;  
-            $scope.salesPerPage = 15;
+            $scope.saleItemsPerPage = 15;
             $scope.saleItems = []; 
-            $scope.kalafcheStores = [];
+            $scope.stores = [];
             $scope.brands = [];
             $scope.models = [];
             $scope.selectedBrand = {};
             $scope.selectedModel = {};
-            $scope.selectedKalafcheStore = {};
+            $scope.selectedStore = {};
             $scope.productCode = "";
             
             $scope.dateFormat = 'dd-MMMM-yyyy';
@@ -54,7 +54,7 @@ angular.module('kalafcheFrontendApp')
                 showWeeks: false
             };
 
-            getAllRealStores();
+            getAllStores();
             getAllBrands();
             getAllDeviceModels();   
         }
@@ -89,11 +89,9 @@ angular.module('kalafcheFrontendApp')
         }
 
         function getSaleItems() {
-            SaleService.searchSaleItems($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedKalafcheStore.identifiers,
+            SaleService.searchSaleItems($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.id,
                 $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode).then(function(response) {
-                $scope.saleItems = response.saleItems;
-                $scope.warehouseQuantity = response.warehouseQuantity;
-                $scope.companyQuantity = response.companyQuantity;
+                $scope.report = response;
 
                 if ($scope.selectedModel.id && $scope.productCode) {
                     $scope.isQuantitiesVisible = true;
@@ -121,10 +119,6 @@ angular.module('kalafcheFrontendApp')
             $scope.endDateMilliseconds = $scope.endDate.getTime();
         };
 
-        $scope.changeKalafcheStore = function() {
-            $scope.searchSaleItems();
-        };
-
         $scope.openStartDatePopup = function() {
             $scope.startDatePopup.opened = true;
         };
@@ -139,34 +133,21 @@ angular.module('kalafcheFrontendApp')
             };
         };
 
-        function getAllRealStores() {
-            KalafcheStoreService.getAllRealStores().then(function(response) {
-                $scope.kalafcheStores = response;
-                $scope.selectedKalafcheStore = KalafcheStoreService.getRealSelectedStore($scope.kalafcheStores, $scope.isAdmin());
+        function getAllStores() {
+            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+                $scope.stores = response;
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
                 getSaleItems();
             });
 
         };
 
-        $scope.getSaleTimestamp = function(sale) {
-            var timeStamp = new Date(sale.saleTimestamp);
-
-            var minutes = ApplicationService.getTwoDigitNumber(timeStamp.getMinutes());
-            var hh = ApplicationService.getTwoDigitNumber(timeStamp.getHours())
-            var dd = ApplicationService.getTwoDigitNumber(timeStamp.getDate());
-            var mm = ApplicationService.getTwoDigitNumber(timeStamp.getMonth() + 1); //January is 0!
-            var yyyy = timeStamp.getFullYear();
-
-            return dd + "-" + mm + "-" + yyyy + " " + hh + ":" + minutes;
+        $scope.getSaleTimestamp = function(saleTimestamp) {
+            return ApplicationService.convertEpochToTimestamp(saleTimestamp)
         };
 
-
-        $scope.isTotalSumRowVisible = function() {
-            if ($scope.saleItemsPerPage * $scope.currentPage >= $scope.saleItems.length) {
-                return true;
-            } else {
-                return false;
-            }
+        $scope.getReportDate = function(reportTimestamp) {
+            return ApplicationService.convertEpochToDate(reportTimestamp)
         };
 
         $scope.filterByProductCode = function() {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('WasteReportController', function ($scope, $rootScope, $mdDialog, ApplicationService, WasteService, AuthService,  KalafcheStoreService, BrandService, ModelService) {
+    .controller('WasteReportController', function ($scope, $rootScope, $mdDialog, ApplicationService, WasteService, AuthService, SessionService, KalafcheStoreService, BrandService, ModelService) {
 
         init();
 
@@ -23,7 +23,7 @@ angular.module('kalafcheFrontendApp')
             getCurrentDate();
             getAllBrands();
             getAllModels();  
-            getAllRealStores(); 
+            getAllStores(); 
         }
 
         function getCurrentDate() {
@@ -51,7 +51,7 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.searchWastes = function() {
-            WasteService.searchWastes($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.identifiers).then(function(response) {
+            WasteService.searchWastes($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.id, $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode).then(function(response) {
                 $scope.wastes = response.wastes;
             });        
         }
@@ -78,10 +78,10 @@ angular.module('kalafcheFrontendApp')
             $scope.searchWastes();
         };
 
-        function getAllRealStores() {
-            KalafcheStoreService.getAllRealStores().then(function(response) {
+        function getAllStores() {
+            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore = KalafcheStoreService.getRealSelectedStore($scope.stores, $scope.isAdmin());
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
                 $scope.searchWastes();
             });
 
@@ -101,16 +101,16 @@ angular.module('kalafcheFrontendApp')
 
         $scope.showImage = function(waste){
             $mdDialog.show({
-              locals:{imgSrc:"https://drive.google.com/uc?export=view&id=" + waste.fileId},
-              controller: function($scope, imgSrc) { $scope.imgSrc = imgSrc; },
-              templateUrl: 'views/modals/image-modal.html',
-              clickOutsideToClose:true,
-              parent: angular.element(document.body)
+                locals:{imgSrc:"https://drive.google.com/uc?export=view&id=" + waste.fileId},
+                controller: function($scope, imgSrc) { $scope.imgSrc = imgSrc; },
+                templateUrl: 'views/modals/image-modal.html',
+                clickOutsideToClose:true,
+                parent: angular.element(document.body)
             })
             .then(function(answer) {
-              $scope.status = 'You said the information was "".';
+                $scope.status = 'You said the information was "".';
             }, function() {
-              $scope.status = 'You cancelled the dialog.';
+                $scope.status = 'You cancelled the dialog.';
             });
         };
 

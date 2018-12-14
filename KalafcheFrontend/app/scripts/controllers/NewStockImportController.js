@@ -6,11 +6,11 @@ angular.module('kalafcheFrontendApp')
             restrict: 'E',
             scope: {},
             templateUrl: 'views/partials/new-stock/import.html',
-            controller: NewStockController
+            controller: NewStockImportController
         }
     });
 
-    function NewStockController($http, Environment, $scope, ModelService, BrandService, ProductService, ColorService, NewStockService, SessionService, KalafcheStoreService) {
+    function NewStockImportController($http, $scope, ModelService, BrandService, ProductService, NewStockService, KalafcheStoreService, ServerValidationService) {
 
         init();
 
@@ -25,6 +25,9 @@ angular.module('kalafcheFrontendApp')
             $scope.products = [];
             $scope.models = [];
             $scope.unexistingItems = [];
+
+            $scope.newStocksPerPage = 20;
+            $scope.currentPage = 1;
 
             getAllBrands();
             getAllProducts();
@@ -151,9 +154,13 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.importFile = function () {
-            var file = $scope.myFile;
+            var file = $scope.file;
             NewStockService.importFile(file).then(function(response) {
                 getAllNewStocks(); 
+            },
+            function(errorResponse) {
+                ServerValidationService.processServerErrors(errorResponse, $scope.fileForm);
+                $scope.serverErrorMessages = errorResponse.data.errors;
             });
         };
   };

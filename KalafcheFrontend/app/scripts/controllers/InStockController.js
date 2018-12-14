@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('InStockController', function ($scope, $mdDialog, $uibModal, ModelService, BrandService, ProductService, InStockService, SessionService, KalafcheStoreService) {
+	.controller('InStockController', function ($scope, $element, $mdDialog, ModelService, BrandService, ProductService, InStockService, SessionService, KalafcheStoreService) {
 
 		init();
 
@@ -96,29 +96,6 @@ angular.module('kalafcheFrontendApp')
 
 	    $scope.openRelocationModal = function(stock){
             $scope.selectedStock = stock;
-
-            // var modalInstance = $uibModal.open({
-            //     animation: true,
-            //     templateUrl: 'views/modals/relocation-modal.html',
-            //     controller: 'RelocationModalController',
-            //     size: "md",
-            //     resolve: {
-            //         selectedStock: function () {
-            //                 return $scope.selectedStock;
-            //             },
-            //         selectedStore: function() {
-            //                 return $scope.selectedKalafcheStore;
-            //             }
-            //         }
-            //     });
-
-            // modalInstance.result.then(function (selectedStock) {
-            //         $scope.selectedStock = selectedStock;
-            //     }, function () {
-            //         console.log('Modal dismissed at: ' + new Date());
-            //     }
-            // );
-
             $mdDialog.show({
               locals:{selectedStock: $scope.selectedStock, selectedStore: $scope.selectedKalafcheStore},
               controller: 'RelocationModalController',
@@ -138,25 +115,6 @@ angular.module('kalafcheFrontendApp')
                 stock.quantity -= 1;
             }
 
-            // var modalInstance = $uibModal.open({
-            //     animation: true,
-            //     templateUrl: 'views/modals/sale-modal.html',
-            //     controller: 'SaleModalController',
-            //     size: "md",
-            //     resolve: {
-            //         currentSale: function() {
-            //                 return $scope.currentSale;
-            //             }
-            //         }
-            //     });
-
-            // modalInstance.result.then(function (currentSale) {
-            //         $scope.currentSale = currentSale;
-            //     }, function () {
-            //         console.log('Modal dismissed at: ' + new Date());
-            //     }
-            // );
-
             $mdDialog.show({
               locals:{currentSale: $scope.currentSale},
               controller: 'SaleModalController',
@@ -164,38 +122,15 @@ angular.module('kalafcheFrontendApp')
               parent: angular.element(document.body)
             })
             .then(function(answer) {
-              $scope.status = 'You said the information was "".';
+              console.log('>>> first function');
             }, function() {
-              $scope.status = 'You cancelled the dialog.';
+              console.log('>>> second function');
             });
 
         };
 
         $scope.openWasteModal = function(stock){
             $scope.selectedStock = stock;
-
-            // var modalInstance = $uibModal.open({
-            //     animation: true,
-            //     templateUrl: 'views/modals/relocation-modal.html',
-            //     controller: 'RelocationModalController',
-            //     size: "md",
-            //     resolve: {
-            //         selectedStock: function () {
-            //                 return $scope.selectedStock;
-            //             },
-            //         selectedStore: function() {
-            //                 return $scope.selectedKalafcheStore;
-            //             }
-            //         }
-            //     });
-
-            // modalInstance.result.then(function (selectedStock) {
-            //         $scope.selectedStock = selectedStock;
-            //     }, function () {
-            //         console.log('Modal dismissed at: ' + new Date());
-            //     }
-            // );
-
             $mdDialog.show({
               locals:{selectedStock: $scope.selectedStock},
               controller: 'WasteModalController',
@@ -217,6 +152,15 @@ angular.module('kalafcheFrontendApp')
         $scope.isEmployeeKalafcheStoreSelected = function(stock) { 
             return stock.kalafcheStoreId === SessionService.currentUser.employeeKalafcheStoreId;
         };
+
+
+        $scope.clearModelSearchTerm= function() {
+            $scope.modelSearchTerm = "";
+        }
+
+        $element.find('#modelSearchTerm').on('keydown', function(ev) {
+            ev.stopPropagation();
+        });
 
         $scope.isTotalSumRowVisible = function() {
             if ($scope.isAdmin() && $scope.inStockPerPage * $scope.currentPage >= $scope.inStockList.length) {

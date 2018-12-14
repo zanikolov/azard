@@ -7,7 +7,8 @@ angular.module('kalafcheFrontendApp')
             validateProductCodeDuplication: validateProductCodeDuplication,
             getCurrentTimestamp: getCurrentTimestamp,
             getTwoDigitNumber: getTwoDigitNumber,
-            convertEpochToDate: convertEpochToDate
+            convertEpochToDate: convertEpochToDate,
+            convertEpochToTimestamp: convertEpochToTimestamp
 		});
 
         function validateDuplication(valueForValidation, list) {  
@@ -48,7 +49,7 @@ angular.module('kalafcheFrontendApp')
             return number;      
         };
 
-        function convertEpochToDate(epochTime) {
+        function convertEpochToTimestamp(epochTime) {
 
           if(epochTime != 0) {
               var timeStamp = new Date(epochTime);
@@ -60,6 +61,21 @@ angular.module('kalafcheFrontendApp')
               var yyyy = timeStamp.getFullYear();
 
               return dd + '-' + mm + '-' + yyyy + ' ' + hh + ':' + minutes;
+          } else {
+              return '';
+          }
+      };
+
+      function convertEpochToDate(epochTime) {
+
+          if(epochTime != 0) {
+              var timeStamp = new Date(epochTime);
+
+              var dd = getTwoDigitNumber(timeStamp.getDate());
+              var mm = getTwoDigitNumber(timeStamp.getMonth() + 1);
+              var yyyy = timeStamp.getFullYear();
+
+              return dd + '-' + mm + '-' + yyyy;
           } else {
               return '';
           }

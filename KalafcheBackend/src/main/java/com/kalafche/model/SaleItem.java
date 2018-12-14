@@ -17,10 +17,11 @@ public class SaleItem {
 	private String deviceBrandName;
 	private BigDecimal itemPrice;
 	private BigDecimal salePrice;
-	private Integer kalafcheStoreId;
-	private String kalafcheStoreName;
+	private Integer storeId;
+	private String storeName;
 	private Integer employeeId;
 	private String employeeName;
+	private Boolean isRefunded;
 
 	public Integer getId() {
 		return id;
@@ -118,20 +119,20 @@ public class SaleItem {
 		this.salePrice = salePrice;
 	}
 
-	public Integer getKalafcheStoreId() {
-		return kalafcheStoreId;
+	public Integer getStoreId() {
+		return storeId;
 	}
 
-	public void setKalafcheStoreId(Integer kalafcheStoreId) {
-		this.kalafcheStoreId = kalafcheStoreId;
+	public void setStoreId(Integer storeId) {
+		this.storeId = storeId;
 	}
 
-	public String getKalafcheStoreName() {
-		return kalafcheStoreName;
+	public String getStoreName() {
+		return storeName;
 	}
 
-	public void setKalafcheStoreName(String kalafcheStoreName) {
-		this.kalafcheStoreName = kalafcheStoreName;
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 
 	public Integer getEmployeeId() {
@@ -156,6 +157,14 @@ public class SaleItem {
 
 	public void setSaleTimestamp(Long saleTimestamp) {
 		this.saleTimestamp = saleTimestamp;
+	}
+
+	public Boolean getIsRefunded() {
+		return isRefunded;
+	}
+
+	public void setIsRefunded(Boolean isRefunded) {
+		this.isRefunded = isRefunded;
 	}
 
 }

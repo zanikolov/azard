@@ -14,4 +14,7 @@ public interface DeviceModelDao {
 	public abstract void updateModel(DeviceModel model);
 	
 	public abstract Boolean checkIfDeviceModelExists(DeviceModel model);
+	
+	public abstract DeviceModel selectDeviceModel(Integer deviceModelId);
+	
 }
