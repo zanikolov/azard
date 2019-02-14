@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.service('SaleService', function($http, Environment) {
+	.service('SaleService', function($http, Environment, FileSaver) {
 		angular.extend(this, {
 			submitSale: submitSale,
             getSaleItems: getSaleItems,
             searchSales: searchSales,
             searchSaleItems: searchSaleItems,
-            getTotalSum: getTotalSum
+            getTotalSum: getTotalSum,
+            generateExcel: generateExcel
 		});
 
         function getTotalSum(items, discount) {
@@ -63,9 +64,9 @@ angular.module('kalafcheFrontendApp')
                 );
         }
 
-        function searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, selectedBrandId, selectedModelId, productCode) { 
+        function searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, selectedBrandId, selectedModelId, productCode, productTypeId) { 
             var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds, 
-                "storeIds": storeIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode}};
+                "storeIds": storeIds, "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode, "productTypeId": productTypeId}};
             console.log(params);
 
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale/saleItem', params)
@@ -73,6 +74,23 @@ angular.module('kalafcheFrontendApp')
                     function(response) {
                         console.log(response.data);
                         return response.data
+                    }
+                );
+        }
+
+        function generateExcel(saleItems, startDateMilliseconds, endDateMilliseconds) { 
+            var request = {};
+            request.saleItems = saleItems;
+            request.startDate = startDateMilliseconds;
+            request.endDate = endDateMilliseconds;
+
+            console.log(request);
+
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/sale/excel', request, {responseType: "arraybuffer"})
+                .then(
+                    function(response) {
+                        var blob = new Blob([response.data], {type: "application/vnd.openxmlformat-officedocument.spreadsheetml.sheet;"});
+                        FileSaver.saveAs(blob, 'Справка продажби артикули.xlsx')
                     }
                 );
         }

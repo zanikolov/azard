@@ -1,5 +1,7 @@
 package com.kalafche.model;
 
+import java.math.BigDecimal;
+
 public class Item {
 
 	private int id;
@@ -9,8 +11,10 @@ public class Item {
 	private int productId;
 	private String productCode;
 	private String productName;
-	private String productPrice;
+	private BigDecimal productPrice;
 	private String productPurchasePrice;
+	private Integer productTypeId;
+	private String productTypeName;
 	private String barcode;
 
 	public int getId() {
@@ -69,11 +73,11 @@ public class Item {
 		this.productName = productName;
 	}
 
-	public String getProductPrice() {
+	public BigDecimal getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(String productPrice) {
+	public void setProductPrice(BigDecimal productPrice) {
 		this.productPrice = productPrice;
 	}
 
@@ -83,6 +87,22 @@ public class Item {
 
 	public void setProductPurchasePrice(String productPurchasePrice) {
 		this.productPurchasePrice = productPurchasePrice;
+	}
+
+	public Integer getProductTypeId() {
+		return productTypeId;
+	}
+
+	public void setProductTypeId(Integer productTypeId) {
+		this.productTypeId = productTypeId;
+	}
+
+	public String getProductTypeName() {
+		return productTypeName;
+	}
+
+	public void setProductTypeName(String productTypeName) {
+		this.productTypeName = productTypeName;
 	}
 
 	public String getBarcode() {

@@ -22,11 +22,18 @@ angular.module('kalafcheFrontendApp')
             $scope.productsPerPage = 20;
             $scope.serverErrorMessages = {};
 
+            getAllTypes();
             getAllProducts();
         }
 
         $scope.resetProduct = function () {
             $scope.product = null;
+        };
+
+        function getAllTypes() {
+            ProductService.getAllTypes().then(function(response) {
+                $scope.types = response;
+            });
         };
 
         function getAllProducts() {

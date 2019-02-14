@@ -10,6 +10,7 @@ import com.kalafche.dao.ProductDao;
 import com.kalafche.exceptions.DuplicationException;
 import com.kalafche.model.Product;
 import com.kalafche.model.ProductSpecificPrice;
+import com.kalafche.model.ProductType;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -63,6 +64,36 @@ public class ProductServiceImpl implements ProductService {
 		if (productDao.checkIfProductNameExists(product)) {
 			throw new DuplicationException("name", "Name duplication.");
 		}
+	}
+
+	@Override
+	public List<ProductType> getProductTypes() {
+		return productDao.getAllProductTypes();
+	}
+
+	@Override
+	@Transactional
+	public void submitProductType(ProductType productType) {
+		validateProductTypeName(productType);
+		productDao.insertProductType(productType);
+	}
+
+	@Override
+	@Transactional
+	public void updateProductType(ProductType productType) {
+		validateProductTypeName(productType);
+		productDao.updateProductType(productType);
+	}
+	
+	private void validateProductTypeName(ProductType productType) {
+		if (productDao.checkIfProductTypeNameExists(productType)) {
+			throw new DuplicationException("name", "Name duplication.");
+		}
+	}
+	
+	@Override
+	public ProductSpecificPrice getProductSpecificPrice(Integer productId, Integer storeId) {
+		return productDao.getProductSpecificPrice(productId, storeId);
 	}
 
 }

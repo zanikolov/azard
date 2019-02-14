@@ -18,4 +18,6 @@ public interface EmployeeDao {
 
 	public abstract Boolean getIsEmployeeAdmin(String username);
 
+	public abstract List<Employee> getEmployeesByIds(List<Integer> employeeIds);
+
 }

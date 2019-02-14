@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Sale {
+	
 	private Integer id;
 	private Integer itemId;
 	private Integer stockId;

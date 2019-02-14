@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kalafche.BaseController;
 import com.kalafche.model.Product;
 import com.kalafche.model.ProductSpecificPrice;
+import com.kalafche.model.ProductType;
 import com.kalafche.service.ProductService;
 
 @CrossOrigin
@@ -50,6 +51,21 @@ public class ProductController extends BaseController {
 	@GetMapping("/specificPrice/{productId}")
 	public List<ProductSpecificPrice> getProductSpecificPrice(@PathVariable(value = "productId", required = false) Integer productId) {
 		return productService.getProductSpecificPrice(productId);
+	}
+
+	@GetMapping("/type")
+	public List<ProductType> getProductTypes(@PathVariable(value = "productId", required = false) Integer productId) {
+		return productService.getProductTypes();
+	}
+	
+	@PutMapping("/type")
+	public void insertProductType(@RequestBody ProductType productType) {
+		productService.submitProductType(productType);
+	}
+	
+	@PostMapping("/type")
+	public void updateProductType(@RequestBody ProductType productType) {
+		this.productService.updateProductType(productType);
 	}
 	
 }

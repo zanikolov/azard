@@ -223,6 +223,9 @@
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
     <script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+    <script src="bower_components/blob-polyfill/Blob.js"></script>
+    <script src="bower_components/file-saver.js/FileSaver.js"></script>
+    <script src="bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -239,6 +242,7 @@
     <script src="scripts/controllers/ModelController.js"></script>
     <script src="scripts/controllers/DeviceTypeController.js"></script>
     <script src="scripts/controllers/ProductController.js"></script>
+    <script src="scripts/controllers/ProductTypeController.js"></script>
     <script src="scripts/controllers/ProductModalController.js"></script>
     <script src="scripts/controllers/SaleTransactionReportController.js"></script>
     <script src="scripts/controllers/SaleItemReportController.js"></script>
@@ -263,6 +267,8 @@
     <script src="scripts/controllers/RefundReportController.js"></script>
     <script src="scripts/controllers/ExpenseFormController.js"></script>
     <script src="scripts/controllers/ExpenseReportController.js"></script>
+    <script src="scripts/controllers/RevisionReportController.js"></script>
+    <script src="scripts/controllers/CurrentRevisionController.js"></script>
 
     <!-- Services -->
     <script src="scripts/services/ApplicationService.js"></script>
@@ -289,6 +295,7 @@
     <script src="scripts/services/WasteService.js"></script>
     <script src="scripts/services/RefundService.js"></script>
     <script src="scripts/services/ExpenseService.js"></script>
+    <script src="scripts/services/RevisionService.js"></script>
     
     
     <!-- Directives -->
@@ -299,6 +306,7 @@
     <script src="scripts/directives/ExpandAllSalesDirective.js"></script>
     <script src="scripts/directives/ImageInputDirective.js"></script>
     <script src="scripts/directives/item/ItemForm.js"></script>
+    <script src="scripts/directives/BarcodeScannerDirective.js"></script>
 
     <!-- Interceptors -->
     <script src="scripts/interceptors/AuthInterceptor.js"></script>

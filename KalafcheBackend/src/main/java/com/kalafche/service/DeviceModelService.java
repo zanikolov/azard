@@ -14,4 +14,10 @@ public interface DeviceModelService {
 
 	void updateModel(DeviceModel model);
 
+	List<Integer> getDeviceModelIdsForDailyRevision(Integer lastRevisedDevieModelId, Integer count);
+
+	List<Integer> getDeviceModelIdsForFullRevision();
+
+	List<DeviceModel> getDeviceModelsByIds(List<Integer> deviceModelIds);
+
 }

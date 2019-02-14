@@ -13,6 +13,8 @@ public class Product extends BaseModel {
 	private String code;
 	private String description;
 	private String fabric;
+	private Integer typeId;
+	private String typeName;
 	private float price;
 	private float purchasePrice;
 	private List<ProductSpecificPrice> specificPrices;
@@ -40,6 +42,22 @@ public class Product extends BaseModel {
 
 	public void setFabric(String fabric) {
 		this.fabric = fabric;
+	}
+
+	public Integer getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public float getPrice() {

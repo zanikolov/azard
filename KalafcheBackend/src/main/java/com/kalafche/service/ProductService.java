@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kalafche.model.Product;
 import com.kalafche.model.ProductSpecificPrice;
+import com.kalafche.model.ProductType;
 
 public interface ProductService {
 
@@ -17,5 +18,13 @@ public interface ProductService {
 	Product getProduct(String code);
 
 	List<ProductSpecificPrice> getProductSpecificPrice(Integer productId);
+
+	List<ProductType> getProductTypes();
+
+	void submitProductType(ProductType productType);
+
+	void updateProductType(ProductType productType);
+
+	ProductSpecificPrice getProductSpecificPrice(Integer productId, Integer storeId);
 
 }

@@ -84,4 +84,8 @@ public class EmployeeService {
 		return employeeDao.getIsEmployeeAdmin(username);
 	}
 	
+	public List<Employee> getEmployeesByIds(List<Integer> employeeIds) {
+		return employeeDao.getEmployeesByIds(employeeIds);
+	}
+	
 }

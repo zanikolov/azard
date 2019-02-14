@@ -64,7 +64,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <tr dir-paginate="item in items | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!barcode || undefined) && {barcode: barcode} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: itemsPerPage track by $index" current-page="currentPage" class="item-row">
+                        <tr dir-paginate="item in items | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!barcode || undefined) && {barcode: barcode} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: itemsPerPage track by $index" current-page="currentPage" pagination-id="item" class="item-row">
                                 <td>{{item.barcode}}</td>
                                 <td>{{item.deviceModelName}}</td>
                                 <td>{{item.productCode}}</td>
@@ -78,7 +78,7 @@
                         </tbody>
                     </table>
                     <div layout="row" layout-align="center center" class="centered-pagination">
-                        <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+                        <dir-pagination-controls pagination-id="item" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
                     </div>
                 </div>
             </div>

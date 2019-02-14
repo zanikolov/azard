@@ -18,7 +18,7 @@ public class ItemDaoImpl extends JdbcDaoSupport implements ItemDao {
 	
 	private static final String GET_ALL_ITEMS = "select * from item_vw";
 	private static final String GET_ITEM = "select * from item where product_id = ? and device_model_id = ?";
-	private static final String GET_ITEM_BY_BARCODE = "select * from item where barcode = ?";
+	private static final String GET_ITEM_BY_BARCODE = "select * from item_vw where barcode = ?";
 	private static final String GET_ITEM_BY_ID = "select * from item where id = ?";
 	private static final String INSERT_ITEM = "insert into item(product_id, device_model_id, barcode) values (?, ?, ?)";
 	private static final String UPDATE_ITEM = "update item set barcode = ?  where id = ?";

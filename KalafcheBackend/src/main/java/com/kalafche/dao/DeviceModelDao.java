@@ -16,5 +16,11 @@ public interface DeviceModelDao {
 	public abstract Boolean checkIfDeviceModelExists(DeviceModel model);
 	
 	public abstract DeviceModel selectDeviceModel(Integer deviceModelId);
+
+	public abstract List<Integer> getDeviceModelIdsForDailyRevision(Integer start, Integer count);
+
+	public abstract List<Integer> getDeviceModelIdsForFullRevision();
+
+	public abstract List<DeviceModel> getDeviceModelsByIds(List<Integer> deviceModelIds);
 	
 }

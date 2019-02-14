@@ -43,5 +43,20 @@ public class DeviceModelServiceImpl implements DeviceModelService {
 			throw new DuplicationException("name", "Name duplication.");
 		}
 	}
+
+	@Override
+	public List<Integer> getDeviceModelIdsForDailyRevision(Integer lastRevisedDevieModelId, Integer count) {
+		return deviceModelDao.getDeviceModelIdsForDailyRevision(lastRevisedDevieModelId, count);
+	}
+
+	@Override
+	public List<Integer> getDeviceModelIdsForFullRevision() {
+		return deviceModelDao.getDeviceModelIdsForFullRevision();
+	}
+
+	@Override
+	public List<DeviceModel> getDeviceModelsByIds(List<Integer> deviceModelIds) {
+		return deviceModelDao.getDeviceModelsByIds(deviceModelIds);
+	}
 	
 }

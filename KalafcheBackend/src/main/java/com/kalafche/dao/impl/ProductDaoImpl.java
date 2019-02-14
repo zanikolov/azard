@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import com.kalafche.dao.ProductDao;
 import com.kalafche.model.Product;
 import com.kalafche.model.ProductSpecificPrice;
+import com.kalafche.model.ProductType;
 
 @Service
 public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 	
-	private static final String GET_ALL_PRODUCTS_QUERY = "select id, name, code, price, fabric from product order by code desc";
-	private static final String INSERT_PRODUCT = "insert into product(name, code, description, price, fabric) values (?, ?, ?, ?, ?)";
-	private static final String UPDATE_PRODUCT = "update product set name = ?, description = ?, fabric = ?, price = ? where id = ?";
+	private static final String GET_ALL_PRODUCTS_QUERY = "select p.id, p.name, p.code, p.price, p.fabric, p.type_id, pt.name as type_name from product p left join product_type pt on p.type_id = pt.id order by code desc";
+	private static final String INSERT_PRODUCT = "insert into product(name, code, description, price, fabric, type_id) values (?, ?, ?, ?, ?, ?)";
+	private static final String UPDATE_PRODUCT = "update product set name = ?, description = ?, fabric = ?, price = ?, type_id = ? where id = ?";
 	private static final String GET_PRODUCT_BY_CODE_QUERY = "select * from product where code = ?";
 	private static final String CHECK_IF_PRODUCT_NAME_EXISTS = "select count(*) from product where name = ?";
 	private static final String CHECK_IF_PRODUCT_CODE_EXISTS = "select count(*) from product where code = ?";
@@ -32,6 +33,7 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 			"left join product_specific_price psp on psp.store_id = ks.id " +
 			"and psp.product_id = ? " +
 			"where ks.is_store is true ";
+	private static final String STORE_ID_CLAUSE = "and ks.id = ? ";
 	private static final String UPSERT_PRODUCT_SPECIFIC_PRICE = "insert into product_specific_price "
 			+ "(product_id, store_id, specific_price) values "
 			+ "(?, ?, ?) "
@@ -39,9 +41,15 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 	
 	private static final String DELETE_PRODUCT_SPECIFIC_PRICE = "delete from product_specific_price "
 			+ " where product_id = ? ";
-
-	private BeanPropertyRowMapper<Product> rowMapper;
+	
+	private static final String GET_ALL_PRODUCT_TYPES = "select * from product_type order by id asc";
+	private static final String CHECK_IF_PRODUCT_TYPE_NAME_EXISTS = "select count(*) from product_type where name = ?";
+	private static final String INSERT_PRODUCT_TYPE = "insert into product_type(name) values (?)";
+	private static final String UPDATE_PRODUCT_TYPE = "update product_type set name = ? where id = ?";
+	
+	private BeanPropertyRowMapper<Product> productRowMapper;
 	private BeanPropertyRowMapper<ProductSpecificPrice> specificPriceRowMapper;
+	private BeanPropertyRowMapper<ProductType> productTypeRowMapper;
 	
 	@Autowired
 	public ProductDaoImpl(DataSource dataSource) {
@@ -49,13 +57,13 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 		setDataSource(dataSource);
 	}
 	
-	private BeanPropertyRowMapper<Product> getRowMapper() {
-		if (rowMapper == null) {
-			rowMapper = new BeanPropertyRowMapper<Product>(Product.class);
-			rowMapper.setPrimitivesDefaultedForNullValue(true);
+	private BeanPropertyRowMapper<Product> getProductRowMapper() {
+		if (productRowMapper == null) {
+			productRowMapper = new BeanPropertyRowMapper<Product>(Product.class);
+			productRowMapper.setPrimitivesDefaultedForNullValue(true);
 		}
 		
-		return rowMapper;
+		return productRowMapper;
 	}
 
 	private BeanPropertyRowMapper<ProductSpecificPrice> getSpecificPriceRowMapper() {
@@ -67,24 +75,33 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 		return specificPriceRowMapper;
 	}
 	
+	private BeanPropertyRowMapper<ProductType> getProductTypeRowMapper() {
+		if (productTypeRowMapper == null) {
+			productTypeRowMapper = new BeanPropertyRowMapper<ProductType>(ProductType.class);
+			productTypeRowMapper.setPrimitivesDefaultedForNullValue(true);
+		}
+
+		return productTypeRowMapper;
+	}
+	
 	@Override
 	public List<Product> getAllProducts() {
-		return getJdbcTemplate().query(GET_ALL_PRODUCTS_QUERY, getRowMapper());
+		return getJdbcTemplate().query(GET_ALL_PRODUCTS_QUERY, getProductRowMapper());
 	}
 
 	@Override
 	public void insertProduct(Product product) {
-		getJdbcTemplate().update(INSERT_PRODUCT, product.getName(), product.getCode(), product.getDescription(), product.getPrice(), product.getFabric());	
+		getJdbcTemplate().update(INSERT_PRODUCT, product.getName(), product.getCode(), product.getDescription(), product.getPrice(), product.getFabric(), product.getTypeId());	
 	}
 	
 	@Override
 	public void updateProduct(Product product) {
-		getJdbcTemplate().update(UPDATE_PRODUCT, product.getName(), product.getDescription(), product.getFabric(), product.getPrice(), product.getId());
+		getJdbcTemplate().update(UPDATE_PRODUCT, product.getName(), product.getDescription(), product.getFabric(), product.getPrice(), product.getTypeId(), product.getId());
 	}
 
 	@Override
 	public Product getProduct(String code) {
-		List<Product> products = getJdbcTemplate().query(GET_PRODUCT_BY_CODE_QUERY, getRowMapper(), code);
+		List<Product> products = getJdbcTemplate().query(GET_PRODUCT_BY_CODE_QUERY, getProductRowMapper(), code);
 		return products.isEmpty() ? null : products.get(0);
 	}
 
@@ -127,4 +144,39 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 	public void deleteProductSpecificPrices(Integer productId) {
 		getJdbcTemplate().update(DELETE_PRODUCT_SPECIFIC_PRICE, productId);
 	}
+
+	@Override
+	public List<ProductType> getAllProductTypes() {
+		return getJdbcTemplate().query(GET_ALL_PRODUCT_TYPES, getProductTypeRowMapper());
+	}
+
+	@Override
+	public boolean checkIfProductTypeNameExists(ProductType productType) {
+		Integer exists = null;
+		if (productType.getId() == null) {
+			exists = getJdbcTemplate().queryForObject(CHECK_IF_PRODUCT_TYPE_NAME_EXISTS, Integer.class, productType.getName());
+		} else {
+			exists = getJdbcTemplate().queryForObject(CHECK_IF_PRODUCT_TYPE_NAME_EXISTS + ID_CLAUSE, Integer.class, productType.getName(), productType.getId());
+		}
+		
+		return exists != null && exists > 0 ;
+	}
+
+	@Override
+	public void insertProductType(ProductType productType) {
+		getJdbcTemplate().update(INSERT_PRODUCT_TYPE, productType.getName());	
+	}
+
+	@Override
+	public void updateProductType(ProductType productType) {
+		getJdbcTemplate().update(UPDATE_PRODUCT_TYPE, productType.getName(), productType.getId());
+	}
+
+	@Override
+	public ProductSpecificPrice getProductSpecificPrice(Integer productId, Integer storeId) {
+		List<ProductSpecificPrice> result = getJdbcTemplate().query(GET_PRODUCT_SPECIFIC_PRICE + STORE_ID_CLAUSE, getSpecificPriceRowMapper(), productId, productId, storeId);
+		
+		return result.isEmpty() ? null : result.get(0);
+	}
+	
 }

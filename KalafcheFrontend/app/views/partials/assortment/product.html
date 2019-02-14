@@ -13,6 +13,15 @@
                     <span ng-message="serverError" class="label label-error">{{serverErrorMessages.name}}</span>
                 </md-input-container>
                 <md-input-container class="md-block">
+                    <label>Тип</label>
+                    <md-select name="typeId" ng-model="product.typeId" required>
+                        <md-option value="" selected></md-option>
+                        <md-option ng-repeat="type in types" ng-value="type.id">
+                            {{type.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block">
                     <label>Описание</label>
                     <input ng-model="product.description" name="description">
                 </md-input-container>
@@ -49,16 +58,18 @@
                     <tr>
                         <th><label>Код</label></th>
                         <th><label>Име</label></th>
+                        <th><label>Тип</label></th>
                         <th><label>Цена</label></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                <tr dir-paginate="product in products | itemsPerPage: productsPerPage track by $index" current-page="currentPage" class="item-row">
+                <tr dir-paginate="product in products | itemsPerPage: productsPerPage track by $index" current-page="currentPage" pagination-id="product" class="item-row">
                         <td>{{product.code}}</td>
                         <td>{{product.name}}</td>
+                        <td>{{product.typeName}}</td>
                         <td>{{product.price}}</td>
-                        <td ng-if="isSuperAdmin()">
+                        <td>
                             <a href="" ng-click="editProduct(product)">
                                 <md-icon class="primary-icon" md-svg-src="images/icons/edit.svg"></md-icon>
                             </a>
@@ -67,7 +78,7 @@
                 </tbody>
             </table>
             <div layout="row" layout-align="center center" class="centered-pagination">
-                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+                <dir-pagination-controls pagination-id="product" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
             </div>
         </div>
     </md-content>

@@ -20,7 +20,8 @@ angular
         'config',
         'angularUtils.directives.dirPagination',
         'ui.bootstrap',
-        'ngMaterial'])
+        'ngMaterial',
+        'ngFileSaver'])
     .config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $httpProvider, UserRoles) {
         $httpProvider.defaults.withCredentials = true;
         $urlRouterProvider.otherwise('/login');
@@ -139,6 +140,13 @@ angular
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
                     title: "Разходи"
                 }      
+            }).state('revision', {
+                url: '/revision',
+                templateUrl: 'views/partials/revision/revision-tab.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    title: "Ревизии"
+                }      
             }).state('login',{
                 url: '/login',
                 templateUrl: 'views/partials/partial-login.html',
@@ -200,7 +208,7 @@ angular
         });
         $rootScope.$on(AuthEvents.loginSuccess, function () {
             $rootScope.sideNavVisible = true;
-            $state.go('assortment');
+            $state.go('revision');
         })
         $rootScope.$on(AuthEvents.logoutSuccess, function () {
             $state.go('login');

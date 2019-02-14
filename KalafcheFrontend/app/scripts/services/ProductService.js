@@ -6,7 +6,9 @@ angular.module('kalafcheFrontendApp')
 			submitProduct: submitProduct,
             getAllProducts: getAllProducts,
             getProductByCode: getProductByCode,
-            getProductSpecificPrice: getProductSpecificPrice
+            getProductSpecificPrice: getProductSpecificPrice,
+            getAllTypes: getAllTypes,
+            submitProductType: submitProductType
 		});
 
         function submitProduct(product) { 
@@ -19,6 +21,24 @@ angular.module('kalafcheFrontendApp')
                     )
             } else {
                 return $http.put(Environment.apiEndpoint + '/KalafcheBackend/product', product)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            }
+        }
+
+        function submitProductType(productType) { 
+            if (productType.id) {
+                return $http.post(Environment.apiEndpoint + '/KalafcheBackend/product/type', productType)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            } else {
+                return $http.put(Environment.apiEndpoint + '/KalafcheBackend/product/type', productType)
                     .then(
                         function(response) {
                             return response.data;
@@ -52,6 +72,15 @@ angular.module('kalafcheFrontendApp')
                         return response.data
                     }
                 );
+        }
+
+        function getAllTypes() {
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/product/type')
+                .then(
+                    function(response) {
+                        return response.data;
+                    }
+                ) ;
         }
 
 	});

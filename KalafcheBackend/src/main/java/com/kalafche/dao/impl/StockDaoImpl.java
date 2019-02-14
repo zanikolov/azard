@@ -5,10 +5,12 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
+import com.kalafche.dao.StockDao;
 import com.kalafche.model.Stock;
 
 @Service
@@ -27,6 +29,7 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"iv.product_id, " +
 			"iv.product_code, " +
 			"iv.product_name, " +
+			"iv.barcode, " +
 			"coalesce(psp.specific_price, iv.product_price) as product_price, " +
 			"ks.ID as kalafche_store_id, " +
 			"CONCAT(ks.CITY,',',ks.NAME) as kalafche_store_name, " +
@@ -71,7 +74,8 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"iv.device_model_name, " + 
 			"iv.product_id, " + 
 			"iv.product_code, " + 
-			"iv.product_name, " + 
+			"iv.product_name, " +
+			"iv.barcode, " +
 			"coalesce(psp.specific_price, iv.product_price) as product_price, " +
 			"ks.ID as kalafche_store_id, " + 
 			"CONCAT(ks.CITY,\",\",ks.NAME) as kalafche_store_name, " + 

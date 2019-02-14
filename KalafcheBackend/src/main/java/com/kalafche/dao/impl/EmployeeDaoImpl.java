@@ -1,6 +1,7 @@
 package com.kalafche.dao.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -41,8 +42,9 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 			"from user u " +
 			"join employee e on u.id = e.user_id " +
 			"join kalafche_store ks on e.kalafche_store_id = ks.id " +
-			"where u.enabled is true " +
-			"order by e.id ";
+			"where u.enabled is true ";
+	private static final String IN_CLAUSE = "and e.id in (%s) ";
+	private static final String ORDER_BY_ID_CLAUSE = "order by e.id ";
 	private static final String INSERT_EMPLOYEE = "insert into employee (name, kalafche_store_id, job_responsibility_id, user_id) values (?, ?, ?, ?)";
 	
 	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, kalafche_store_id = ? where id = ?";
@@ -108,7 +110,14 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 
 	@Override
 	public List<Employee> getAllActiveEmployees() {
-		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES, getRowMapper());
+		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES + ORDER_BY_ID_CLAUSE, getRowMapper());
+	}
+	
+	@Override
+	public List<Employee> getEmployeesByIds(List<Integer> employeeIds) {
+		String commaSeparatedEmployeeIds = employeeIds.stream().map(id -> id.toString())
+				.collect(Collectors.joining(","));
+		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES + String.format(IN_CLAUSE, commaSeparatedEmployeeIds) + ORDER_BY_ID_CLAUSE, getRowMapper());
 	}
 	
 	@Override

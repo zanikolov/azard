@@ -144,14 +144,14 @@ public class SaleServiceImpl implements SaleService {
 
 	@Override
 	public SaleReport searchSaleItems(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
-			String productCode, Integer deviceBrandId, Integer deviceModelId) {
+			String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
 		SaleReport saleReport = generateReport(storeIds, startDateMilliseconds, endDateMilliseconds, productCode, deviceBrandId, deviceModelId);
 		
 		if (storeIds.equals("0") || storeIds.equals("ANIKO") || storeIds.equals("AZARD")) {
 			storeIds = storeDao.selectStoreIdsByOwner(storeIds);
 		}
 		
-		List<SaleItem> saleItems = saleDao.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId);
+		List<SaleItem> saleItems = saleDao.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId, productTypeId);
 		
 		if (deviceModelId != null && productCode != null && productCode != "") {
 			saleReport.setWarehouseQuantity(stockService.getQuantitiyOfStockInWH(productCode, deviceModelId));

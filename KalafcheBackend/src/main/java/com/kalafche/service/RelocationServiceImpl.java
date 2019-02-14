@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kalafche.dao.RelocationDao;
-import com.kalafche.dao.StockDao;
 import com.kalafche.dao.impl.StockDaoImpl;
 import com.kalafche.enums.RelocationStatus;
 import com.kalafche.model.Relocation;

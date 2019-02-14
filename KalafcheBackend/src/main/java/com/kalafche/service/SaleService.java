@@ -18,7 +18,7 @@ public interface SaleService {
 	public List<SaleItem> getSaleItems(Integer saleId);
 
 	public SaleReport searchSaleItems(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
-			String productCode, Integer deviceBrandId, Integer deviceModelId);
+			String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId);
 
 	public TotalSumReport calculateTotalSum(TotalSumRequest totalSumRequest);
 

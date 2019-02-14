@@ -11,6 +11,7 @@ public class Stock {
 	private int productId;
 	private String productCode;
 	private String productName;
+	private String barcode;
 	private String productDescription;
 	private BigDecimal productPrice;
 	private int kalafcheStoreId;
@@ -125,6 +126,14 @@ public class Stock {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 
 	public String getProductDescription() {

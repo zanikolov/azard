@@ -61,6 +61,11 @@ angular.module('kalafcheFrontendApp')
 
         };
 
+        $scope.barcodeScanned = function(barcode) {                             
+            $scope.selectedBarcode = barcode;  
+            //findByBarcode();      
+        }
+
         $scope.filterByProductCode = function() {
             var productCodesString = $scope.productCode;
             var productCodes = productCodesString.split(" ");
@@ -68,6 +73,13 @@ angular.module('kalafcheFrontendApp')
                 return productCodes.indexOf(inStock.productCode) !== -1 ;
             };
         };
+
+        // $scope.filterByBarcode = function() {
+        //     console.log("<><><>");
+        //     return function predicateFunc(inStock) {
+        //         return inStock.barcode == $scope.barcode;
+        //     };
+        // };
 
         $scope.getNameById = function(list, id) {
             if (list) {

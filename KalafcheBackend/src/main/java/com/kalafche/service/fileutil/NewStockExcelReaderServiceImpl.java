@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -31,7 +30,7 @@ public class NewStockExcelReaderServiceImpl implements NewStockExcelReaderServic
 	        Sheet worksheet = workbook.getSheetAt(0);
 	        
 	        worksheet.forEach(row -> {
-	        	ExcelItem item=new ExcelItem();
+	        	ExcelItem item = new ExcelItem();
 	
 	        	row.forEach(cell -> {
 	        		printCellValue(cell);
@@ -46,7 +45,7 @@ public class NewStockExcelReaderServiceImpl implements NewStockExcelReaderServic
 	        });
 		} catch (IllegalStateException | InvalidFormatException | IOException e) {
 			e.printStackTrace();
-			throw new ExcelInvalidFormatException("file", "Невалиден формат на Excel файла.");
+			throw new ExcelInvalidFormatException("file", "Невалиден формат на Excel документ.");
 		}
 		
 		return items;

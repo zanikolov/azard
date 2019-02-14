@@ -1,6 +1,7 @@
 package com.kalafche.dao.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -22,6 +23,9 @@ public class DeviceModelDaoImpl extends JdbcDaoSupport implements
 	private static final String UPDATE_MODEL = "update device_model set name = ? where id = ?";
 	private static final String CHECK_IF_MODEL_EXISTS = "select count(*) from device_model where name = ? and device_brand_id = ?";
 	private static final String ID_CLAUSE = " and id <> ?";
+	private static final String SELECT_DEVICE_MODEL_IDS_FOR_FULL_REVISION = "select id from device_model"; 
+	private static final String WHERE_CLAUSE_FOR_DAILY_REVISION = " where id > ? order by id asc limit ?;";
+	private static final String SELECT_DEVICE_MODELS_BY_IDS = "select dm.id, db.id as device_brand_id, concat(db.name, ' ', dm.name) as name from device_model dm join device_brand db on dm.device_brand_id = db.id where dm.id in (%s);";
 
 	private BeanPropertyRowMapper<DeviceModel> rowMapper;
 	
@@ -78,4 +82,22 @@ public class DeviceModelDaoImpl extends JdbcDaoSupport implements
 		
 		return deviceModel.isEmpty() ? null : deviceModel.get(0);
 	}
+
+	@Override
+	public List<Integer> getDeviceModelIdsForDailyRevision(Integer start, Integer count) {
+		return getJdbcTemplate().queryForList(SELECT_DEVICE_MODEL_IDS_FOR_FULL_REVISION + WHERE_CLAUSE_FOR_DAILY_REVISION, Integer.class, start, count);
+	}
+	
+	@Override
+	public List<Integer> getDeviceModelIdsForFullRevision() {
+		return getJdbcTemplate().queryForList(SELECT_DEVICE_MODEL_IDS_FOR_FULL_REVISION, Integer.class);
+	}
+
+	@Override
+	public List<DeviceModel> getDeviceModelsByIds(List<Integer> deviceModelIds) {
+		String commaSeparatedEmployeeIds = deviceModelIds.stream().map(id -> id.toString())
+				.collect(Collectors.joining(","));
+		return getJdbcTemplate().query(String.format(SELECT_DEVICE_MODELS_BY_IDS, commaSeparatedEmployeeIds), getRowMapper());
+	}
+	
 }

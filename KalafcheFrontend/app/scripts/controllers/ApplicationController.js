@@ -164,6 +164,11 @@ angular.module('kalafcheFrontendApp')
           link : 'expense',
           title: 'Разходи',
           icon: 'dashboard'
+        },
+        {
+          link : 'revision',
+          title: 'Ревизии',
+          icon: 'dashboard'
         }
       ];
 	});

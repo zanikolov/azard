@@ -47,15 +47,43 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div layout-xs="row" flex-offset="5" flex="50" flex-xs="100">
-                        <md-input-container flex="25">
+<!--                     <div layout-xs="row" flex-offset="5" flex="50" flex-xs="100">
+                        <md-input-container style="width:48%">
+                            <label>Тип</label>
+                            <md-select name="typeId" ng-model="productTypeId" required>
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="productType in productTypes" ng-value="productType.id">
+                                    {{productType.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container style="width:48%">
                             <label>Код</label>
                             <input ng-model="productCode" name="productCode">
                         </md-input-container> 
-                        <md-input-container flex-offset="15">
-                            <md-button ng-click="searchSaleItems()" class="md-raised md-primary">Търси</md-button>
+                    </div> -->
+                    <div layout-xs="row" flex-offset="5" flex="25" flex-xs="100">
+                        <md-input-container style="width:100%">
+                            <label>Тип</label>
+                            <md-select name="typeId" ng-model="selectedProductType.id">
+                                <md-option value="" selected>Всички</md-option>
+                                <md-option ng-repeat="productType in productTypes" ng-value="productType.id">
+                                    {{productType.name}}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
                     </div>
+                    <div layout-xs="row" flex-offset="5" flex="15" flex-xs="50">
+                        <md-input-container>
+                            <label>Код</label>
+                            <input ng-model="productCode" name="productCode">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row" layout-xs="column" class="md-inline-form">
+                    <md-input-container>
+                        <md-button ng-click="searchSaleItems()" class="md-raised md-primary">Търси</md-button>
+                    </md-input-container>
                 </div>
             </form>
         </div>
@@ -121,6 +149,9 @@
             <div layout="row" layout-align="center center">
                 <dir-pagination-controls pagination-id="item" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
             </div>
+        </div>
+        <div flex ng-if="report.saleItems.length > 0">
+            <md-button ng-click="generateExcel()" class="md-raised md-primary">Excel</md-button>
         </div>
     </md-content>
 

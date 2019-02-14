@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, KalafcheStoreService, BrandService, ModelService, SessionService) {
+    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, KalafcheStoreService, BrandService, ModelService, ProductService, SessionService) {
 
         init();
 
@@ -24,6 +24,7 @@ angular.module('kalafcheFrontendApp')
             $scope.selectedBrand = {};
             $scope.selectedModel = {};
             $scope.selectedStore = {};
+            $scope.selectedProductType = {};
             $scope.productCode = "";
             
             $scope.dateFormat = 'dd-MMMM-yyyy';
@@ -56,7 +57,8 @@ angular.module('kalafcheFrontendApp')
 
             getAllStores();
             getAllBrands();
-            getAllDeviceModels();   
+            getAllDeviceModels();
+            getAllProductTypes()
         }
 
         function getCurrentDate() {
@@ -83,6 +85,11 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
+        function getAllProductTypes() {
+            ProductService.getAllTypes().then(function(response) {
+                $scope.productTypes = response;
+            });
+        };
 
         $scope.searchSaleItems = function() {
             getSaleItems();         
@@ -90,7 +97,7 @@ angular.module('kalafcheFrontendApp')
 
         function getSaleItems() {
             SaleService.searchSaleItems($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.id,
-                $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode).then(function(response) {
+                $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode, $scope.selectedProductType.id).then(function(response) {
                 $scope.report = response;
 
                 if ($scope.selectedModel.id && $scope.productCode) {
@@ -176,6 +183,12 @@ angular.module('kalafcheFrontendApp')
         
         $scope.isAdmin = function() {
             return AuthService.isAdmin();
+        }
+
+        $scope.generateExcel = function() {
+            SaleService.generateExcel($scope.report.saleItems, $scope.startDateMilliseconds, $scope.endDateMilliseconds).then(function(response) {
+                console.log(">>> Success!");
+            });   
         }
 
     };
