@@ -24,13 +24,19 @@
                         </md-input-container>
                         <md-input-container flex-offset="5">
                             <label>Код</label>
-                            <input name="partnerCode" ng-model="partnerCode" ng-blur="onChangePartnerCode()">
+                            <input name="code" ng-model="code" ng-blur="onChangeDiscountCode()">
                         </md-input-container>
                         <md-input-container>
-                            <span ng-message="serverError" class="label label-error">{{serverErrorMessages.partnerCode}}</span>
+                            <span ng-message="serverError" class="label label-error">{{serverErrorMessages.code}}</span>
                         </md-input-container>
-                        <md-input-container>
-                            <span>{{partner.name}} {{partner.partnerStoreName}}</span>
+                        <md-input-container ng-if="discountCode.discountCampaignCode == 'PARTNER'">
+                            <span>{{discountCode.discountCampaignName}} {{discountCode.discountValue}}{{discountCode.discountTypeSign}} - {{discountCode.partnerName}} {{discountCode.partnerStoreName}}</span>
+                        </md-input-container>
+                        <md-input-container ng-if="discountCode.discountCampaignCode == 'LOYAL'">
+                            <span>{{discountCode.discountCampaignName}} {{discountCode.discountValue}}{{discountCode.discountTypeSign}} - {{discountCode.loyalCustomerName}}</span>
+                        </md-input-container>
+                        <md-input-container ng-if="discountCode.discountCampaignCode != 'LOYAL' && discountCode.discountCampaignCode != 'PARTNER'">
+                            <span>{{discountCode.discountCampaignName}} {{discountCode.discountValue}}{{discountCode.discountTypeSign}}</span>
                         </md-input-container>
                     </div>   
             </div>
@@ -113,7 +119,7 @@
                     </div>
                     <div class="col-xs-4 search-control-group">
                         <label class="search-control-label" for="partnerCode">Код:</label>
-                        <input class="form-control" name="partnerCode" placeholder="ID" ng-model="partnerCode" ng-blur="onChangePartnerCode()">
+                        <input class="form-control" name="partnerCode" placeholder="ID" ng-model="partnerCode" ng-blur="onChangeDiscountCode()">
                         <span ng-message="serverError" class="label label-error">{{serverErrorMessages.partnerCode}}</span>
                     </div>
                     <label ng-if="partner">{{partner.name}}, {{partner.partnerStoreName}}, {{partner.phoneNumber}}</label>

@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
             generateExcel: generateExcel
 		});
 
-        function getTotalSum(items, discount) {
+        function getTotalSum(items, code) {
             var prices = [];
             angular.forEach(items, function(item) {
                 prices.push(item.productPrice);
@@ -19,7 +19,7 @@ angular.module('kalafcheFrontendApp')
 
             var request = {};
             request.prices = prices;
-            request.discount = discount
+            request.discountCode = code
 
             console.log(request);
 

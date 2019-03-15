@@ -147,6 +147,13 @@ angular
                     authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
                     title: "Ревизии"
                 }      
+            }).state('discount', {
+                url: '/discount',
+                templateUrl: 'views/partials/discount/discount-tab.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    title: "Промоции"
+                }      
             }).state('login',{
                 url: '/login',
                 templateUrl: 'views/partials/partial-login.html',
@@ -208,7 +215,7 @@ angular
         });
         $rootScope.$on(AuthEvents.loginSuccess, function () {
             $rootScope.sideNavVisible = true;
-            $state.go('revision');
+            $state.go('discount');
         })
         $rootScope.$on(AuthEvents.logoutSuccess, function () {
             $state.go('login');

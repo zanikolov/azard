@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.RevisionDao;
-import com.kalafche.dao.StockDao;
 import com.kalafche.model.DeviceModel;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Revision;

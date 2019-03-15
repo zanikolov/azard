@@ -48,8 +48,8 @@
         </div>
     </md-content>
     <md-content layout="row">
-        <md-button ng-if="product.id" class="md-raised md-primary" ng-click="resetProductForm()">Отмени</md-button>
         <md-button ng-disabled="productForm.$invalid" ng-click="submitProduct()" class="md-raised md-primary">Запази</md-button>
+        <md-button ng-if="product.id" class="md-raised md-primary" ng-click="resetProductForm()">Отмени</md-button>
     </md-content>
     <md-content layout-padding layout="row" layout-xs="column">
         <div flex="100">

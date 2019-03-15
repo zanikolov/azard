@@ -169,6 +169,11 @@ angular.module('kalafcheFrontendApp')
           link : 'revision',
           title: 'Ревизии',
           icon: 'dashboard'
+        },
+        {
+          link : 'discount',
+          title: 'Промоции',
+          icon: 'dashboard'
         }
       ];
 	});

@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kalafche.dao.DeviceBrandDao;
 import com.kalafche.dao.DeviceModelDao;
+import com.kalafche.dao.DiscountDao;
 import com.kalafche.dao.ItemDao;
 import com.kalafche.dao.KalafcheStoreDao;
 import com.kalafche.dao.SaleDao;
+import com.kalafche.model.DiscountCode;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Sale;
 import com.kalafche.model.SaleItem;
@@ -53,28 +55,82 @@ public class SaleServiceImpl implements SaleService {
 	@Autowired
 	DeviceModelDao deviceModelDao;
 	
+	@Autowired
+	DiscountDao discountDao;
+	
 	@Transactional
 	@Override
 	public void submitSale(Sale sale) throws SQLException {
 		Employee loggedInEmployee = employeeService.getLoggedInEmployee();
+		DiscountCode discountCode = null;
+		if (sale.getDiscountCodeCode() != null) {
+			discountCode = discountDao.selectDiscountCode(sale.getDiscountCodeCode());
+		}
+		
 		sale.setEmployeeId(loggedInEmployee.getId());
 		sale.setStoreId(loggedInEmployee.getKalafcheStoreId());
 		sale.setSaleTimestamp(dateService.getCurrentMillisBGTimezone());
 		
 		Integer saleId = saleDao.insertSale(sale);
 		
-		sale.getSaleItems().forEach(saleItem -> {
+		saveSaleItems(sale, loggedInEmployee, discountCode, saleId);
+		
+	}
+
+	private void saveSaleItems(Sale sale, Employee loggedInEmployee, DiscountCode discountCode, Integer saleId) {
+		BigDecimal discountValueAmount = BigDecimal.ZERO;
+		if (discountCode != null) {
+			discountValueAmount = discountCode.getDiscountValue();
+		}
+		for(SaleItem saleItem : sale.getSaleItems()) {
 			saleItem.setSaleId(saleId);
 			BigDecimal itemPrice = itemDao.getItemPriceByStoreId(saleItem.getItemId(), sale.getStoreId());
 			saleItem.setItemPrice(itemPrice);
-			if (sale.getPartnerId() != null) {
-				saleItem.setSalePrice(itemPrice.multiply(new BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP));
-			} else {
+			
+			if (discountCode != null) {
+				String discountTypeCode = discountCode.getDiscountTypeCode();
+				if ("PERCENTAGE".equals(discountTypeCode)) {						
+					BigDecimal salePrice = calculcatePercentageDiscountValuePrice(itemPrice, discountValueAmount);
+					saleItem.setSalePrice(salePrice);
+				} else if ("AMOUNT".equals(discountTypeCode)) {
+					BigDecimal salePrice = calculcateAmountDiscountValuePrice(itemPrice, discountValueAmount);
+					discountValueAmount = discountValueAmount.subtract(itemPrice);
+					if (discountValueAmount.compareTo(BigDecimal.ZERO) < 0) {
+						discountValueAmount = BigDecimal.ZERO;
+					}
+					saleItem.setSalePrice(salePrice);
+				}
+			} else {					
 				saleItem.setSalePrice(itemPrice);
 			}
+			
 			saleDao.insertSaleItem(saleItem);
 			stockService.updateTheQuantitiyOfSoldStock(saleItem.getItemId(), loggedInEmployee.getKalafcheStoreId());
-		});
+		}
+	}
+
+	private BigDecimal calculcateAmountDiscountValuePrice(BigDecimal priceBeforeDiscount, BigDecimal discountValueAmount) {
+		BigDecimal salePrice;
+		if (discountValueAmount.compareTo(BigDecimal.ZERO) > 0) {
+			if (discountValueAmount.compareTo(priceBeforeDiscount) >= 0) {
+				salePrice = BigDecimal.ZERO;			
+			} else {
+				salePrice = priceBeforeDiscount.subtract(discountValueAmount);
+				discountValueAmount = BigDecimal.ZERO;
+			}
+		} else {
+			salePrice = priceBeforeDiscount;
+		}
+		
+		return salePrice;
+	}
+
+	private BigDecimal calculcatePercentageDiscountValuePrice(BigDecimal priceBeforeDiscount, BigDecimal discountValueAmount) {
+		BigDecimal ONE_HUNDRED = new BigDecimal(100);
+		BigDecimal salePrice = priceBeforeDiscount.multiply(ONE_HUNDRED.subtract(discountValueAmount))
+				.divide(ONE_HUNDRED);
+		salePrice = salePrice.setScale(2, RoundingMode.HALF_UP);
+		return salePrice;
 	}
 
 	@Override
@@ -202,10 +258,18 @@ public class SaleServiceImpl implements SaleService {
 		totalSumReport.setTotalSum(totalSum);
 		totalSumReport.setTotalSumAfterDiscount(totalSum);
 		
-		if (totalSumRequest.getDiscount() != null) {
-			BigDecimal discount = totalSum.multiply(new BigDecimal("0.2")).setScale(2, RoundingMode.HALF_UP);
-			totalSumReport.setDiscount(discount);
-			totalSumReport.setTotalSumAfterDiscount(totalSum.subtract(discount));
+		if (totalSumRequest.getDiscountCode() != null) {
+			DiscountCode discountCode = discountDao.selectDiscountCode(totalSumRequest.getDiscountCode());
+			
+			BigDecimal totalSumAfterDiscount = BigDecimal.ZERO;
+			if ("PERCENTAGE".equals(discountCode.getDiscountTypeCode())) {
+				totalSumAfterDiscount = calculcatePercentageDiscountValuePrice(totalSum, discountCode.getDiscountValue()); 
+			} else if ("AMOUNT".equals(discountCode.getDiscountTypeCode())) {
+				totalSumAfterDiscount = calculcateAmountDiscountValuePrice(totalSum, discountCode.getDiscountValue());
+			}
+
+			totalSumReport.setDiscount(totalSum.subtract(totalSumAfterDiscount));
+			totalSumReport.setTotalSumAfterDiscount(totalSumAfterDiscount);
 		}
 		
 		return totalSumReport;

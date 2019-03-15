@@ -67,7 +67,6 @@ public class SaleController {
 		return saleService.calculateTotalSum(totalSumRequest);
 	}
 	
-	
 	@PostMapping("/excel")
 	public ResponseEntity<byte[]> getTotalSum(@RequestBody SaleItemExcelReportRequest saleItemExcelReportRequest) {
 		byte[] contents = saleItemExcelReportService.generateExcel(saleItemExcelReportRequest);

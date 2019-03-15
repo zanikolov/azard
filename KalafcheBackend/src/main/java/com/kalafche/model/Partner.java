@@ -7,6 +7,7 @@ public class Partner {
 	private Integer partnerStoreId;
 	private String partnerStoreName;
 	private String phoneNumber;
+	private Integer discountCodeId;
 
 	public Integer getId() {
 		return this.id;
@@ -54,6 +55,14 @@ public class Partner {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Integer getDiscountCodeId() {
+		return discountCodeId;
+	}
+
+	public void setDiscountCodeId(Integer discountCodeId) {
+		this.discountCodeId = discountCodeId;
 	}
 
 }

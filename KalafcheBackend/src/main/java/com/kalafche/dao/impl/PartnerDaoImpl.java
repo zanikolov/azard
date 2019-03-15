@@ -16,8 +16,8 @@ import com.kalafche.model.Partner;
 public class PartnerDaoImpl extends JdbcDaoSupport implements PartnerDao {
 	private static final String GET_ALL_PARTNERS_QUERY = "select p.*, CONCAT(ps.name, ', ', ps.city) as partner_store_name from partner p join partner_store ps on p.partner_store_id = ps.id";
 	private static final String GET_PARTNER_BY_CODE_QUERY = "select p.*, CONCAT(ps.name, ' - ', ps.city) as partner_store_name from partner p join partner_store ps on p.partner_store_id = ps.id where p.code = ? ";
-	private static final String INSERT_PARTNER = "insert into partner (code, name, partner_store_id, phone_number)"
-			+ " values (?, ?, ?, ?)";
+	private static final String INSERT_PARTNER = "insert into partner (code, name, partner_store_id, phone_number, discount_code_id)"
+			+ " values (?, ?, ?, ?, ?)";
 
 	private BeanPropertyRowMapper<Partner> rowMapper;
 	
@@ -54,6 +54,6 @@ public class PartnerDaoImpl extends JdbcDaoSupport implements PartnerDao {
 	
 	@Override
 	public void insertPartner(Partner partner) {
-		getJdbcTemplate().update(INSERT_PARTNER, partner.getCode(), partner.getName(), partner.getPartnerStoreId(), partner.getPhoneNumber());
+		getJdbcTemplate().update(INSERT_PARTNER, partner.getCode(), partner.getName(), partner.getPartnerStoreId(), partner.getPhoneNumber(), partner.getDiscountCodeId());
 	}
 }

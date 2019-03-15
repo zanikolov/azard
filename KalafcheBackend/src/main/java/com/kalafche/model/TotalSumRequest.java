@@ -6,7 +6,7 @@ import java.util.List;
 public class TotalSumRequest {
 
 	private List<BigDecimal> prices;
-	private Integer discount;
+	private Integer discountCode;
 
 	public List<BigDecimal> getPrices() {
 		return prices;
@@ -16,12 +16,12 @@ public class TotalSumRequest {
 		this.prices = prices;
 	}
 
-	public Integer getDiscount() {
-		return discount;
+	public Integer getDiscountCode() {
+		return discountCode;
 	}
 
-	public void setDiscount(Integer discount) {
-		this.discount = discount;
+	public void setDiscountCode(Integer discountCode) {
+		this.discountCode = discountCode;
 	}
 
 }

@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('SaleModalController', function ($scope, currentSale, $mdDialog, PartnerService, SaleService, ServerValidationService) {
+	.controller('SaleModalController', function ($scope, currentSale, $mdDialog, DiscountService, SaleService, ServerValidationService) {
 
         init();
 
         function init() {
             $scope.sale = currentSale;
-            $scope.partner = null;
+            $scope.discountCode = null;
             $scope.serverErrorMessages = {};
             $scope.totalSumReport = 0;
 
@@ -16,14 +16,9 @@ angular.module('kalafcheFrontendApp')
 
         function calculateTotalSum() {
             console.log($scope.sale.selectedStocks);
+            console.log($scope.code);
 
-            var discount = null
-            console.log($scope.partner);
-            if ($scope.partner) {
-                discount = 1;
-            }
-
-            SaleService.getTotalSum($scope.sale.selectedStocks, discount).then(
+            SaleService.getTotalSum($scope.sale.selectedStocks, $scope.code).then(
                 function(response){
                     console.log(response);
                     $scope.totalSumReport = response;
@@ -32,8 +27,8 @@ angular.module('kalafcheFrontendApp')
 
         $scope.submitSale = function() {
             var requestBody = {};
-            if ($scope.partner) {
-                requestBody.partnerId = $scope.partner.id;
+            if ($scope.discountCode) {
+                requestBody.discountCodeCode = $scope.code;
             }
             requestBody.isCashPayment = $scope.sale.isCashPayment;
             requestBody.saleItems = [];
@@ -72,23 +67,23 @@ angular.module('kalafcheFrontendApp')
             $mdDialog.cancel();
         }
 
-        $scope.onChangePartnerCode = function () {
-            if ($scope.partnerCode) {
-                PartnerService.getPartnerByCode($scope.partnerCode).then(
-                    function(partner) {
-                        $scope.partner = partner;
+        $scope.onChangeDiscountCode = function () {
+            if ($scope.code) {
+                DiscountService.getDiscountCode($scope.code).then(
+                    function(discountCode) {
+                        $scope.discountCode = discountCode;
                         $scope.serverErrorMessages = {};
                         calculateTotalSum();
                     },
                     function(errorResponse) {
-                        $scope.partner = null
+                        $scope.discountCode = null
                         ServerValidationService.processServerErrors(errorResponse, $scope.saleForm);
                         $scope.serverErrorMessages = errorResponse.data.errors;
                         calculateTotalSum();
                     }                );
             } else {
                 $scope.serverErrorMessages = {};
-                $scope.partner = null;
+                $scope.discountCode = null;
                 calculateTotalSum();
             }
         }

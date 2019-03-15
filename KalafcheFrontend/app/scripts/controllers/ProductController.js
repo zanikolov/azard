@@ -63,7 +63,7 @@ angular.module('kalafcheFrontendApp')
 
         $scope.resetProductForm = function() {
             $scope.resetProduct();
-            $scope.resetServerErrorMessages()
+            $scope.resetServerErrorMessages();
             $scope.productForm.$setPristine();
             $scope.productForm.$setUntouched();
         };
