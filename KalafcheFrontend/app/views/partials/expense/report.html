@@ -3,7 +3,7 @@
         <form>    
             <div layout="row" layout-xs="column" class="md-inline-form">
                 <div layout-xs="row" flex="20" flex-xs="100">
-                    <md-input-container style="width:95%">
+                    <md-input-container style="width:95%" ng-if="isAdmin()">
                         <label>Магазин</label>
                         <md-select name="selectStore" ng-model="selectedStore.id" ng-change="searchExpenses()">
                             <md-option value="0">Всички магазини</md-option>

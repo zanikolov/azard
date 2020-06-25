@@ -29,4 +29,8 @@ public interface DiscountDao {
 
 	List<DiscountCode> selectAllDiscountCodes();
 
+	List<DiscountCode> selectAvailableDiscountCodesForPartnerCampaign();
+
+	List<DiscountCode> selectAvailableDiscountCodesForLoyalCampaign();
+
 }

@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function CurrentRevisionController($scope, $rootScope, AuthService, RevisionService, KalafcheStoreService, ApplicationService, EmployeeService) {
+    function CurrentRevisionController($scope, $rootScope, AuthService, RevisionService, StoreService, ApplicationService, EmployeeService) {
 
         init();
 
@@ -24,7 +24,7 @@ angular.module('kalafcheFrontendApp')
             if (!AuthService.isAdmin()) {
                 getCurrentRevision();
             } else {
-                getAllKalafcheStores();
+                getAllStores();
             }
             getRevisionTypes();
             getAllActiveEmployees();
@@ -64,8 +64,8 @@ angular.module('kalafcheFrontendApp')
             });
         }
 
-        function getAllKalafcheStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+        function getAllStores() {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
             });
 

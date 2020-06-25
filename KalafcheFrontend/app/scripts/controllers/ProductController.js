@@ -58,7 +58,6 @@ angular.module('kalafcheFrontendApp')
                 $scope.product.specificPrices = response;
                 console.log($scope.product);
             });
-
         };
 
         $scope.resetProductForm = function() {
@@ -82,5 +81,13 @@ angular.module('kalafcheFrontendApp')
         $scope.isSuperAdmin = function() {
             return AuthService.isSuperAdmin();
         }
+
+        $scope.filterByProductCode = function() {
+            var productCodesString = $scope.productCode;
+            var productCodes = productCodesString.split(" ");
+            return function predicateFunc(product) {
+                return productCodes.indexOf(product.code) !== -1 ;
+            };
+        };
 
     };

@@ -38,7 +38,7 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 			"CONCAT(ks.city, ', ', ks.name) as store_name " +
 			"from waste w " +
 			"join item_vw iv on iv.id = w.item_id " +
-			"join kalafche_store ks on ks.id = w.store_id " +
+			"join store ks on ks.id = w.store_id " +
 			"join employee e on e.id = w.employee_id ";
 	
 	private static final String PERIOD_CRITERIA_QUERY = " where create_timestamp between ? and ?";
@@ -74,8 +74,8 @@ public class WasteDaoImpl extends JdbcDaoSupport implements WasteDao {
 	
 	@Override
 	public List<Waste> searchWastes(Long startDateMilliseconds,
-			Long endDateMilliseconds, String kalafcheStoreIds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
-		String searchQuery = GET_WASTES_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, kalafcheStoreIds);
+			Long endDateMilliseconds, String storeIds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
+		String searchQuery = GET_WASTES_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, storeIds);
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);

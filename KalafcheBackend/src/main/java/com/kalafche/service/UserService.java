@@ -11,35 +11,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kalafche.dao.AuthRoleDao;
-import com.kalafche.dao.UserDao;
 import com.kalafche.model.AuthRole;
-import com.kalafche.model.User;
+import com.kalafche.model.Employee;
 
 @Service
 public class UserService implements UserDetailsService {
-
-	@Autowired
-	AuthRoleDao authRoleDao;
 	
 	@Autowired
-	UserDao userDao;
+	EmployeeService employeeService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		User user = userDao.getUserByUsername(username);
-//		User user = new User();
-//		user.setEnabled(true);
-//		user.setId(1);
-//		user.setPassword("test");
-//		user.setUsername("test");
-//		if (user == null) {
-//			throw new UsernameNotFoundException("User with name " + username + " cannot be found!");
-//		}
-		
-		//List<AuthRole> roles = authRoleDao.getAllRolesForUser(user.getId());
-		
+		Employee employee = employeeService.getEmployeeByUsername(username);
+
 		List<AuthRole> roles = new ArrayList<AuthRole>();
 		AuthRole role = new AuthRole();
 		role.setId(1);
@@ -55,7 +40,7 @@ public class UserService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(test.getName()));
 		}
 		
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(username, employee.getPassword(), authorities);
 
 		return userDetails;
 	}

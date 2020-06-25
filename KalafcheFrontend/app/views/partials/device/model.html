@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="model in models | filter: {deviceBrandId: deviceModel.deviceBrandId}: true | itemsPerPage: modelsPerPage track by $index" current-page="currentPage" class="item-row">
+                    <tr dir-paginate="model in models | filter: {deviceBrandId: deviceModel.deviceBrandId}: true | itemsPerPage: modelsPerPage track by $index" current-page="currentPage" pagination-id="model" class="item-row">
                         <td>{{(currentPage - 1) * modelsPerPage + $index + 1}}</td>
                         <td>{{model.name}}</td>
                         <td>
@@ -41,7 +41,7 @@
                     </tr>
                 </tbody>
             </table>
-            <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+            <dir-pagination-controls pagination-id="model" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
         </div>
     </md-content>
 </div>

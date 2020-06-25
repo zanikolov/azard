@@ -22,6 +22,7 @@ public class ItemDaoImpl extends JdbcDaoSupport implements ItemDao {
 	private static final String GET_ITEM_BY_ID = "select * from item where id = ?";
 	private static final String INSERT_ITEM = "insert into item(product_id, device_model_id, barcode) values (?, ?, ?)";
 	private static final String UPDATE_ITEM = "update item set barcode = ?  where id = ?";
+	private static final String UPDATE_ITEM_BY_PRODUCT_ID_AND_DEVICE_MODEL_ID = "update item set barcode = ?  where product_id = ? and device_model_id = ?";
 	private static final String GET_ITEM_PRICE_BY_STORE = "select " +
 			"coalesce " +
 			"( " +
@@ -94,6 +95,11 @@ public class ItemDaoImpl extends JdbcDaoSupport implements ItemDao {
 	@Override
 	public BigDecimal getItemPriceByStoreId(Integer itemId, Integer storeId) {
 		return getJdbcTemplate().queryForObject(GET_ITEM_PRICE_BY_STORE, BigDecimal.class, storeId, itemId, itemId);
+	}
+
+	@Override
+	public void updateItemBarcode(Integer productId, Integer deviceModelId, String barcode) {
+		getJdbcTemplate().update(UPDATE_ITEM_BY_PRODUCT_ID_AND_DEVICE_MODEL_ID, barcode, productId, deviceModelId);	
 	}
 
 }

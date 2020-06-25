@@ -19,6 +19,8 @@ angular.module('kalafcheFrontendApp')
                     //Call apply on scope, it checks for value changes and reflect them on UI
                     scope.$apply(function () {
                         //set the model value
+                        console.log(">>>>");
+                        console.log(element[0].files[0]);
                         scope.serverErrorMessages = {};
                         modelSetter(scope, element[0].files[0]);
                     });

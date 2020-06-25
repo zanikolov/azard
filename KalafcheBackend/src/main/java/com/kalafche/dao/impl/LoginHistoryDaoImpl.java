@@ -21,7 +21,7 @@ public class LoginHistoryDaoImpl extends JdbcDaoSupport implements LoginHistoryD
 			"lh.id, e.id as employee_id,e.name as employee_name,concat(ks.city,' ,',ks.name) as employee_store_name,min(lh.login_timestamp) as login_timestamp " +
 			"from login_history lh " +
 			"join employee e on lh.employee_id=e.id " +
-			"join kalafche_store ks on ks.id=e.kalafche_store_id " +
+			"join store ks on ks.id=e.store_id " +
 			"where lh.login_timestamp between ? and ? + 24*60*60*1000 " +
 			"group by e.id,e.name " + 
 			"order by lh.login_timestamp ";

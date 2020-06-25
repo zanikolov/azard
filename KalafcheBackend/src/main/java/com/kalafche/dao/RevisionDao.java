@@ -48,5 +48,7 @@ public interface RevisionDao {
 	List<Revision> selectRevisions(Long startDateMilliseconds, Long endDateMilliseconds, Integer storeId);
 
 	void syncRevisionItemsActualWithStockQuantities(Integer storeId, List<RevisionItem> mismatchedRevisionItems);
+
+	RevisionItem getRevisionItemById(Integer revisionItemId);
 	
 }

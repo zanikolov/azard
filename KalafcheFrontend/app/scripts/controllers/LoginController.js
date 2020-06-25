@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
                 $scope.currentUser = SessionService.currentUser;
                 $rootScope.currentUser = SessionService.currentUser;
             }, function (response) {
-                if (response.status === 401) {
+                if (response.status != 200) {
                     $scope.loginForm.username.$invalid = true;
                     $scope.loginForm.password.$invalid = true;
                 };

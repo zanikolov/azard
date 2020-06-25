@@ -1,15 +1,22 @@
 <div layout="column" ng-cloak>
 
     <md-content layout-padding layout="column">
-        <div flex>
+        <div flex ng-if="isAdmin()">
             <form name="fileForm" server-validation novalidate>
                 <div layout="row">
+                     <md-input-container flex>
+                        <md-select ng-model="selectedStore.id" ng-change="getNewStocks()">
+                            <md-option ng-repeat="store in stores" ng-value="store.id">
+                                {{store.city}}, {{store.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                     <md-input-container flex>
-                        <input type="file" file-model="file" ng-model="file" id="file" name="file">
+                        <input type="file" file-model="file" ng-model="file" name="file" id="file">
                         <span ng-message="serverError" class="label label-error">{{serverErrorMessages.file}}</span>
                     </md-input-container> 
                     <md-input-container flex>
-                        <md-button ng-click="importFile()" class="md-raised md-primary">Импорт</md-button>
+                        <md-button ng-click="importFile(file)" ng-disabled="!(selectedStore && selectedStore.id != 0 && file)" class="md-raised md-primary">Импорт</md-button>
                     </md-input-container>
                 </div>
             </form>
@@ -51,7 +58,7 @@
                             <td>0</td>
                             <td>{{newNewStock.productName}}</td>
                             <td>
-                                <input name="newStockProductCode" ng-model="newNewStock.productCode" ng-blur="getProductProperties(newNewStock)" ng-focus="resetProductProperties(newNewStock)" ng-maxlength="4" required>
+                                <input name="newStockProductCode" ng-model="newNewStock.productCode" ng-blur="getProductProperties(newNewStock)" ng-focus="resetProductProperties(newNewStock)" ng-maxlength="6" required>
                             </td>
                             <td>
                                 <md-select name="selectBrand" ng-model="newNewStock.deviceBrandId" ng-change="resetCurrentPage()" style="margin:0" required>
@@ -75,7 +82,7 @@
                                 <a href="" ng-click="cancelAdditionOfNewStock()" style="text-decoration:none;">
                                     <md-icon class="primary-icon" md-svg-src="images/icons/close.svg"></md-icon>
                                 </a>
-                                <a href="" ng-show="newStockForm.$valid" ng-click="submitNewAddedStock()" style="text-decoration:none;">
+                                <a href="" ng-show="newStockForm.$valid && selectedStore" ng-click="submitNewAddedStock()" style="text-decoration:none;">
                                     <md-icon class="primary-icon" md-svg-src="images/icons/save.svg"></md-icon>
                                 </a>
                             </td>
@@ -89,10 +96,10 @@
                             <td>{{newStock.importFileName}}</td>
                             <td>{{newStock.quantity}}</td>
                             <td>
-                                <a href="" ng-click="approveNewStock(newStock, $index)">
+                                <a href="" ng-click="approveNewStock(newStock, $index)" ng-if="!isAdmin()">
                                     <md-icon class="primary-icon" md-svg-src="images/icons/check.svg"></md-icon>
                                 </a>
-                                <a href="" ng-click="deleteNewStock(newStock.id, $index)">
+                                <a href="" ng-click="deleteNewStock(newStock.id, $index)" ng-if="isAdmin()">
                                     <md-icon class="primary-icon" md-svg-src="images/icons/delete.svg"></md-icon>
                                 </a>
                             </td>
@@ -105,8 +112,8 @@
             </form>
         </div>
 
-        <div flex>
-            <md-button type="submit" class="md-raised md-primary" ng-click="approveAllNewStocks()">Одобри всички</md-button>
+        <div flex ng-if="isAdmin()">
+            <!-- <md-button type="submit" class="md-raised md-primary" ng-click="approveAllNewStocks()">Одобри всички</md-button> -->
             <md-button type="submit" class="md-raised md-primary" ng-click="printStickersForNewStocks()">Принтирай</md-button>
         </div>
     </md-content>

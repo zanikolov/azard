@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('StockReportController', function ($scope, $uibModal, ModelService, BrandService, ProductService, ColorService, InStockService, SessionService, KalafcheStoreService, SaleService, PartnerService, ApplicationService, StockOrderService, OrderedStockService) {
+	.controller('StockReportController', function ($scope, $uibModal, ModelService, BrandService, ProductService, ColorService, InStockService, SessionService, StoreService, SaleService, PartnerService, ApplicationService, StockOrderService, OrderedStockService) {
 
 		init();
 

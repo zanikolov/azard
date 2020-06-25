@@ -60,7 +60,7 @@ angular.module('kalafcheFrontendApp')
         $scope.submitRelocation = function() {
                 var itemId = $scope.selectedStock.itemId;
                 var sourceStoreId = $scope.selectedStore.id
-                var relocation = {"itemId": itemId, "sourceStoreId": sourceStoreId, "destStoreId": SessionService.currentUser.employeeKalafcheStoreId, "quantity": $scope.quantityForRelocation};
+                var relocation = {"itemId": itemId, "sourceStoreId": sourceStoreId, "destStoreId": SessionService.currentUser.employeeStoreId, "quantity": $scope.quantityForRelocation};
                 RelocationService.submitRelocation(relocation).then(
                     function(response) {
                         $scope.selectedStock.quantity -= $scope.quantityForRelocation;

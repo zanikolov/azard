@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('RefundReportController', function ($scope, $rootScope, ApplicationService, RefundService, AuthService,  KalafcheStoreService, BrandService, ModelService, SessionService) {
+    .controller('RefundReportController', function ($scope, $rootScope, ApplicationService, RefundService, AuthService,  StoreService, BrandService, ModelService, SessionService) {
 
         init();
 
@@ -78,9 +78,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
                 $scope.searchRefunds();
             });
 

@@ -67,6 +67,10 @@ public class DiscountDaoImpl extends JdbcDaoSupport implements DiscountDao {
 	
 	private static final String UPDATE_DISCOUNT_CODE = "update discount_code set active = ? where id = ?";
 	
+	private static final String SELECT_AVAILABLE_PARTNER_CODES = "select * from discount_code where id not in (select discount_code_id from partner) and discount_campaign_id = (select id from discount_campaign where code = 'PARTNER') ";		
+	
+	private static final String SELECT_AVAILABLE_LOYAL_CODES = "select * from discount_code where id not in (select discount_code_id from loyal_customer) and discount_campaign_id = (select id from discount_campaign where code = 'LOYAL') ";	
+	
 	private BeanPropertyRowMapper<DiscountCampaign> discountCampaignRowMapper;
 	
 	private BeanPropertyRowMapper<DiscountCode> discountCodeRowMapper;
@@ -212,6 +216,16 @@ public class DiscountDaoImpl extends JdbcDaoSupport implements DiscountDao {
 	@Override
 	public List<DiscountCode> selectAllDiscountCodes() {
 		return getJdbcTemplate().query(SELECT_DISCOUNT_CODE, getDiscountCodeRowMapper());
+	}
+
+	@Override
+	public List<DiscountCode> selectAvailableDiscountCodesForPartnerCampaign() {
+		return getJdbcTemplate().query(SELECT_AVAILABLE_PARTNER_CODES, getDiscountCodeRowMapper());
+	}
+
+	@Override
+	public List<DiscountCode> selectAvailableDiscountCodesForLoyalCampaign() {
+		return getJdbcTemplate().query(SELECT_AVAILABLE_LOYAL_CODES, getDiscountCodeRowMapper());
 	}
 
 }

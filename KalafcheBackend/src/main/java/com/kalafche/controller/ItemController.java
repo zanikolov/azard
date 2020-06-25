@@ -35,13 +35,18 @@ public class ItemController  extends BaseController {
 	}
 	
 	@PutMapping
-	public void insertProduct(@RequestBody Item item) {
+	public void insertItem(@RequestBody Item item) {
 		itemService.submitItem(item);
 	}
 	
 	@PostMapping
-	public void updateProduct(@RequestBody Item item) {
+	public void updateItem(@RequestBody Item item) {
 		itemService.updateItem(item);
+	}
+	
+	@PutMapping("/upsert")
+	public void insertItemOrUpdateBarcode(@RequestBody Item item) {
+		itemService.insertItemOrUpdateBarcode(item);
 	}
 
 }

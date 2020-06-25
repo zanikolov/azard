@@ -158,11 +158,11 @@ public class GoogleDriveService implements ImageUploadService {
 			if (image.getContentType().startsWith("image/")) {
 				return uploadImage(image, parentFolder);
 			} else {
-				throw new ImageUploadException("image", "Невалиден формат на изображението.");
+				throw new ImageUploadException("image", "Incorrect file type.");
 			}
 		} catch (IllegalStateException | IOException | GeneralSecurityException e) {
 			e.printStackTrace();
-			throw new ImageUploadException("image", "Възникна проблем при upload на изображение.");
+			throw new ImageUploadException("image", "Error during image upload.");
 		}
 	}
 	

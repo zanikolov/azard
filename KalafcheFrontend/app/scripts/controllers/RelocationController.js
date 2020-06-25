@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('RelocationController', function ($scope, KalafcheStoreService, RelocationService, SessionService, ApplicationService) {       
+    .controller('RelocationController', function ($scope, StoreService, RelocationService, SessionService, ApplicationService) {       
 
         init();
 
@@ -10,11 +10,11 @@ angular.module('kalafcheFrontendApp')
             $scope.outgoingStockRelocations = [];
             $scope.incomingStockRelocations = [];
             $scope.sourceStore = {"id": 4};
-            $scope.destStore = {"id": SessionService.currentUser.employeeKalafcheStoreId};
-            $scope.selectedKalafcheStore = {};
+            $scope.destStore = {"id": SessionService.currentUser.employeeStoreId};
+            $scope.selectedStore = {};
 
             $scope.isCompleted = false;
-            getAllKalafcheStores();
+            getAllStores();
 
         };
 
@@ -25,9 +25,9 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        function getAllKalafcheStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
-                $scope.kalafcheStores = response;
+        function getAllStores() {
+            StoreService.getAllStores().then(function(response) {
+                $scope.stores = response;
                 $scope.searchRelocations();
             });
 
@@ -57,10 +57,14 @@ angular.module('kalafcheFrontendApp')
         }
 
         $scope.isEmployeeOfSourceStore = function(relocation) {
-            return SessionService.currentUser.employeeKalafcheStoreId == relocation.sourceStoreId;
+            return SessionService.currentUser.employeeStoreId == relocation.sourceStoreId;
         }
 
         $scope.isEmployeeOfDestStore = function(relocation) {
-            return SessionService.currentUser.employeeKalafcheStoreId == relocation.destStoreId;
+            return SessionService.currentUser.employeeStoreId == relocation.destStoreId;
         };
+
+        $scope.isSourceStoreWarehouse = function(relocation) {
+            return relocation.sourceStoreCode == 'RU_WH';
+        }
   });

@@ -10,6 +10,8 @@ public interface PartnerService {
 
 	List<Partner> getAllPartners();
 
-	void submitPartner(Partner partner);
+	void createPartner(Partner partner);
+
+	void updatePartner(Partner partner);
 
 }

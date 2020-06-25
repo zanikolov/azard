@@ -8,8 +8,8 @@ angular.module('kalafcheFrontendApp')
             getAllPartners: getAllPartners
 		});
 
-        function getPartnerByCode(partnerCode) { 
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/partner/' + partnerCode)
+        function getPartnerByCode(discountCode) { 
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/partner/' + discountCode)
                 .then(
                     function(response) {
                         return response.data
@@ -17,13 +17,22 @@ angular.module('kalafcheFrontendApp')
                 );
         }
 
-        function submitPartner(partner) {   
-            return $http.put(Environment.apiEndpoint + '/KalafcheBackend/partner', partner)
-                .then(
-                    function(response) {
-                        console.log(response);
-                    }
-                )
+        function submitPartner(partner) { 
+            if (partner.id) {
+                return $http.post(Environment.apiEndpoint + '/KalafcheBackend/partner', partner)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            } else {
+                return $http.put(Environment.apiEndpoint + '/KalafcheBackend/partner', partner)
+                    .then(
+                        function(response) {
+                            return response.data;
+                        }
+                    )
+            }
         }
 
         function getAllPartners() {  

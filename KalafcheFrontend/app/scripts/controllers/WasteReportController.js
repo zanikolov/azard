@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .controller('WasteReportController', function ($scope, $rootScope, $mdDialog, ApplicationService, WasteService, AuthService, SessionService, KalafcheStoreService, BrandService, ModelService) {
+    .controller('WasteReportController', function ($scope, $rootScope, $mdDialog, ApplicationService, WasteService, AuthService, SessionService, StoreService, BrandService, ModelService) {
 
         init();
 
@@ -79,9 +79,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
                 $scope.searchWastes();
             });
 

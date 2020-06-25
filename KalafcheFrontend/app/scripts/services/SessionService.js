@@ -17,7 +17,7 @@ angular.module('kalafcheFrontendApp')
             this.currentUser.userId = employee.userId;
             this.currentUser.employeeName = employee.name;
             this.currentUser.username = employee.username;
-            this.currentUser.employeeKalafcheStoreId = employee.kalafcheStoreId;
+            this.currentUser.employeeStoreId = employee.storeId;
             this.currentUser.employeeJobResponsibilityId = employee.jobResponsibilityId;
             this.currentUser.userRoles = employee.roles;
 

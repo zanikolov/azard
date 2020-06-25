@@ -98,7 +98,8 @@ angular.module('kalafcheFrontendApp')
         {
           link : 'assortment',
           title: 'Асортимент',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         }
         ,{
           link : 'inStock',
@@ -113,27 +114,37 @@ angular.module('kalafcheFrontendApp')
         {
           link : 'device',
           title: 'Устройства',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },    
         {
           link : 'employee',
           title: 'Служители',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },
         {
-          link : 'kalafcheStore',
+          link : 'store',
           title: 'Обекти',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },
         {
+          link : 'loyalCustomer',
+          title: 'Лоялни клиенти',
+          icon: 'dashboard',
+          onlyAdmin: true
+        },        {
           link : 'partner',
           title: 'Партньори',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },
         {
           link : 'partnerStore',
           title: 'Обекти партньори',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },
         {
           link : 'saleReport',
@@ -158,7 +169,8 @@ angular.module('kalafcheFrontendApp')
         {
           link : 'activityReport',
           title: 'Активности',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
         },
         {
           link : 'expense',
@@ -173,7 +185,14 @@ angular.module('kalafcheFrontendApp')
         {
           link : 'discount',
           title: 'Промоции',
-          icon: 'dashboard'
+          icon: 'dashboard',
+          onlyAdmin: true
+        },
+        {
+          link : 'rawItem',
+          title: 'Баркодове',
+          icon: 'dashboard',
+          onlyAdmin: true
         }
       ];
 	});

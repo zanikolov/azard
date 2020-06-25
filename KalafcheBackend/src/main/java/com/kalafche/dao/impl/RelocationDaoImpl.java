@@ -39,19 +39,21 @@ public class RelocationDaoImpl extends JdbcDaoSupport implements
 			"iv.product_code, " +
 			"CONCAT(ks.city, \", \", ks.name) as source_store_name, " +
 			"ks.id as source_store_id, " +
+			"ks.code as source_store_code, " +
 			"CONCAT(ks2.city, \", \", ks2.name) as dest_store_name, " +
 			"ks2.id as dest_store_id, " +
+			"ks2.code as dest_store_code, " +
 			"iv.device_model_id, " +
 			"iv.device_model_name, " +
 			"iv.device_brand_id " +
 			"from relocation r " +
 			"join employee e on r.employee_id = e.id " +
 			"join item_vw iv on r.item_id = iv.id " +
-			"join kalafche_store ks on r.SOURCE_STORE_ID = ks.ID " +
-			"join kalafche_store ks2 on r.DEST_STORE_ID = ks2.ID " +
+			"join store ks on r.SOURCE_STORE_ID = ks.ID " +
+			"join store ks2 on r.DEST_STORE_ID = ks2.ID " +
 			"where archived = false ";
 	
-	private static final String ORDER_BY_CLAUSE = "order by iv.device_model_name, iv.product_id, ks.id ";
+	private static final String ORDER_BY_CLAUSE = "order by r.relocation_request_timestamp desc ";
 	
 	private static final String BY_DEST_STORE_ID = " and r.dest_store_id = ? ";
 	

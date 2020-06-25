@@ -8,7 +8,9 @@ angular.module('kalafcheFrontendApp')
             submitCampaign: submitCampaign,
             getAllDiscountCodes: getAllDiscountCodes,
             submitDiscountCode: submitDiscountCode,
-            getDiscountCode: getDiscountCode
+            getDiscountCode: getDiscountCode,
+            getAvailablePartnerDiscountCodes: getAvailablePartnerDiscountCodes,
+            getAvailableLoyalDiscountCodes: getAvailableLoyalDiscountCodes
 		});
 
         function getAllDiscountTypes() {
@@ -49,6 +51,24 @@ angular.module('kalafcheFrontendApp')
 
         function getAllDiscountCodes() {
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/discount/code')
+                .then(
+                    function(response) {
+                        return response.data
+                    }
+                );
+        }
+
+        function getAvailablePartnerDiscountCodes() {
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/discount/code/partner')
+                .then(
+                    function(response) {
+                        return response.data
+                    }
+                );
+        }
+
+        function getAvailableLoyalDiscountCodes() {
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/discount/code/loyal')
                 .then(
                     function(response) {
                         return response.data

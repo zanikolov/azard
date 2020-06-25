@@ -19,7 +19,11 @@ import com.kalafche.model.NewStock;
 
 @Service
 public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
-	private static final String GET_ALL_NEW_STOCK_QUERY = "select * from new_stock_vw order by id asc";
+	private static final String GET_ALL_NEW_STOCK_QUERY = "select * from new_stock_vw ";
+	
+	private static final String BY_STORE_ID_CLAUSE = "where store_id = ? ";
+	
+	private static final String ORDER_BY_ID_CLAUSE = "order by id asc ";
 	
 	private static final String UPSERT_NEW_STOCK = "insert into new_stock "
 			+ "(item_id, quantity, printed) values "
@@ -28,11 +32,11 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 
 	private static final String DELETE_NEW_STOCK = "delete from new_stock where id = ?";
 
-	private static final String INSERT_NEW_STOCK = "insert into new_stock(item_id, quantity) "
-			+ " values ((select id from item where product_id = ? and device_model_id = ?), ?);";
+	private static final String INSERT_NEW_STOCK = "insert into new_stock(item_id, quantity, store_id) "
+			+ " values ((select id from item where product_id = ? and device_model_id = ?), ?, ?);";
 	
-	private static final String INSERT_NEW_STOCK_FROM_FILE = "insert into new_stock(item_id, quantity, import_id) "
-			+ " values ((select id from item where barcode = ?), ?, ?);";
+	private static final String INSERT_NEW_STOCK_FROM_FILE = "insert into new_stock(item_id, quantity, import_id, store_id) "
+			+ " values ((select id from item where barcode = ?), ?, ?, ?);";
 
 	private static final String UPDATE_NEW_STOCK = "update new_stock set quantity = quantity + ? "
 			+ " where item_id = (select id from item where product_id = ? and device_model_id = ?)";
@@ -59,7 +63,7 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 
 	@Override
 	public List<NewStock> getAllNewStocks() {
-		List<NewStock> newStocks = getJdbcTemplate().query(GET_ALL_NEW_STOCK_QUERY,
+		List<NewStock> newStocks = getJdbcTemplate().query(GET_ALL_NEW_STOCK_QUERY + ORDER_BY_ID_CLAUSE,
 				getRowMapper());
 
 		return newStocks;
@@ -77,9 +81,9 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 	}
 	
 	@Override
-	public void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity) {
+	public void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId) {
 		getJdbcTemplate().update(INSERT_NEW_STOCK, 
-				productId, deviceModelId, quantity);	
+				productId, deviceModelId, quantity, storeId);	
 	}
 	
 	@Override
@@ -89,9 +93,9 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 	}
 
 	@Override
-	public void insertNewStockFromFile(String barcode, Integer quantity, Integer importId) {
+	public void insertNewStockFromFile(String barcode, Integer quantity, Integer importId, Integer storeId) {
 		getJdbcTemplate().update(INSERT_NEW_STOCK_FROM_FILE, 
-				barcode, quantity, importId);			
+				barcode, quantity, importId, storeId);			
 	}
 		
 	@Override
@@ -119,6 +123,14 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<NewStock> getNewStockByStoreId(Integer storeId) {
+		List<NewStock> newStocks = getJdbcTemplate().query(GET_ALL_NEW_STOCK_QUERY + BY_STORE_ID_CLAUSE + ORDER_BY_ID_CLAUSE,
+				getRowMapper(), storeId);
+
+		return newStocks;
 	}
 
 }

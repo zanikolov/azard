@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,12 @@ public class PartnerController {
 	
 	@PutMapping
 	public void insertPartner(@RequestBody Partner partner) {
-		partnerService.submitPartner(partner);
+		partnerService.createPartner(partner);
+	}
+	
+	@PostMapping
+	public void updatePartner(@RequestBody Partner partner) {
+		partnerService.updatePartner(partner);
 	}
 	
 }

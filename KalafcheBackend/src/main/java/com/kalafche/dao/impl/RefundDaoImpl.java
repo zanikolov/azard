@@ -40,7 +40,7 @@ public class RefundDaoImpl extends JdbcDaoSupport implements RefundDao {
 			"join sale_item si on si.id = r.sale_item_id " +
 			"join sale s on s.id = si.sale_id " +
 			"join item_vw iv on iv.id = si.item_id " +
-			"join kalafche_store ks on ks.id = s.store_id " +
+			"join store ks on ks.id = s.store_id " +
 			"join employee e on e.id = r.employee_id ";
 	
 	private static final String PERIOD_CRITERIA_QUERY = " where r.create_timestamp between ? and ?";

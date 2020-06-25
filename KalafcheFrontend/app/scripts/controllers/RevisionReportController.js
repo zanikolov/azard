@@ -10,13 +10,15 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function RevisionReportController($scope, $rootScope, ApplicationService, RevisionService, AuthService,  KalafcheStoreService, SessionService) {
+    function RevisionReportController($scope, $rootScope, ApplicationService, RevisionService, AuthService,  StoreService, SessionService) {
 
        init();
 
         function init() {
             $scope.currentPage = 1;  
             $scope.revisionsPerPage = 15;
+            $scope.itemsCurrentPage = 1;
+            $scope.revisionItemsPerPage = 15;
             $scope.revisions = []; 
             $scope.stores = [];
             $scope.selectedStore = {};
@@ -104,9 +106,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
                 getRevisions();
             });
 
@@ -127,7 +129,13 @@ angular.module('kalafcheFrontendApp')
 
         $scope.isAdmin = function() {
             return AuthService.isAdmin();
-        }
+        };
+
+        // $scope.syncRevisionItem = function(revisionItem) {
+        //      RevisionService.syncRevisionItem(revisionItem).then(function(response) {
+        //         revisionItem.synced = true;
+        //     });
+        // }
 
     };
 

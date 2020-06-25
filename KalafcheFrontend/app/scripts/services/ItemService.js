@@ -5,7 +5,8 @@ angular.module('kalafcheFrontendApp')
 		angular.extend(this, {
 			submitItem: submitItem,
             updateItem: updateItem,
-            getAllItems: getAllItems
+            getAllItems: getAllItems,
+            insertItemOrUpdateBarcode: insertItemOrUpdateBarcode
 		});
 
     	function submitItem(item) {	
@@ -17,7 +18,7 @@ angular.module('kalafcheFrontendApp')
                         }
                     )
             } else {
-    			return $http.put(Environment.apiEndpoint + '/KalafcheBackend/item', item)
+    			return $http.put(Environment.apiEndpoint + '/KalafcheBackend/item/upsert', item)
                 	.then(
                     	function(response) {
                         	return response.data;
@@ -42,6 +43,15 @@ angular.module('kalafcheFrontendApp')
                         return response.data;
                     }
                 ) ;
+        }
+
+        function insertItemOrUpdateBarcode(item) { 
+            return $http.put(Environment.apiEndpoint + '/KalafcheBackend/item/upsert', item)
+                .then(
+                    function(response) {
+                        console.log(response);
+                    }
+                ) 
         }
 
 	});

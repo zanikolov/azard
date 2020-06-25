@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kalafche.dao.KalafcheStoreDao;
 import com.kalafche.dao.RefundDao;
 import com.kalafche.dao.SaleDao;
+import com.kalafche.dao.StoreDao;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Refund;
 import com.kalafche.service.DateService;
@@ -37,7 +37,7 @@ public class RefundServiceImpl implements RefundService {
 	SaleDao saleDao;
 	
 	@Autowired
-	KalafcheStoreDao storeDao;
+	StoreDao storeDao;
 	
 	@Autowired
 	ExpenseService expenseService;
@@ -64,14 +64,14 @@ public class RefundServiceImpl implements RefundService {
 		refund.setTimestamp(dateService.getCurrentMillisBGTimezone());
 		
 		refundDao.insertRefund(refund);
-		stockService.updateTheQuantitiyOfSoldStock(refund.getSaleItemId(), loggedInEmployee.getKalafcheStoreId());
+		stockService.updateTheQuantitiyOfRefundStock(refund.getSaleItemId(), loggedInEmployee.getStoreId());
 		saleDao.updateRefundedSaleItem(refund.getSaleItemId());
 		registerExpense(refund.getSaleItemId());
 	}
 
 	private void registerExpense(Integer saleItemId) {
 		BigDecimal saleItemPrice = saleDao.getSaleItemPrice(saleItemId);
-		expenseService.createExpense("REFUND", "Върнати пари при рекламация", saleItemPrice, null, null);
+		expenseService.createExpense("REFUND", "Върнати пари на клиент", saleItemPrice, null, null);
 	}
 
 }

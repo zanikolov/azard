@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('InStockController', function ($scope, $element, $mdDialog, ModelService, BrandService, ProductService, InStockService, SessionService, KalafcheStoreService) {
+	.controller('InStockController', function ($scope, $element, $mdDialog, ModelService, BrandService, ProductService, InStockService, SessionService, StoreService) {
 
 		init();
 
@@ -12,9 +12,9 @@ angular.module('kalafcheFrontendApp')
             $scope.brands = [];
             $scope.products = [];
             $scope.models = [];
-            $scope.kalafcheStores = [];
+            $scope.stores = [];
             $scope.productCode = "";
-            $scope.selectedKalafcheStore = null;
+            $scope.selectedStore = null;
 
             $scope.currentSale = {};
             $scope.currentSale.selectedStocks = [];
@@ -22,7 +22,7 @@ angular.module('kalafcheFrontendApp')
             getAllBrands();
             getAllProducts();
             getAllDeviceModels();         
-            getAllKalafcheStores();
+            getAllStores();
 		}
 
         function getAllBrands() {
@@ -44,19 +44,20 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        $scope.getAllInStock = function() {
-            var userKalafcheStoreId = SessionService.currentUser.employeeKalafcheStoreId ? SessionService.currentUser.employeeKalafcheStoreId : 0;
-            InStockService.getAllInStock(userKalafcheStoreId, $scope.selectedKalafcheStore.id).then(function(response) {
+        $scope.getInStock = function() {
+            var userStoreId = SessionService.currentUser.employeeStoreId ? SessionService.currentUser.employeeStoreId : 0;
+            InStockService.getInStock(userStoreId, $scope.selectedStore.id, $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode, $scope.selectedBarcode).then(function(response) {
                 $scope.inStockList = response;
                 $scope.resetCurrentPage();
             });
         }
 
-        function getAllKalafcheStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
-                $scope.kalafcheStores = response;
-                $scope.selectedKalafcheStore = {"id": SessionService.currentUser.employeeKalafcheStoreId};
-                $scope.getAllInStock();
+        function getAllStores() {
+            StoreService.getAllStores().then(function(response) {
+                $scope.stores = response;
+                $scope.selectedStore = {"id": SessionService.currentUser.employeeStoreId};
+                console.log(">>>> ");
+                console.log($scope.selectedStore);
             });
 
         };
@@ -94,22 +95,10 @@ angular.module('kalafcheFrontendApp')
             return null;
         };
 
-        $scope.getKalafcheStoreById = function(kalafcheStoreId) {
-            var stores = $scope.kalafcheStores;
-            for (var i = 0; i < stores.length; i++) {
-                var currentStore = stores[i];
-                if (currentStore.id === kalafcheStoreId) {
-                    return currentStore.id;
-                }
-            }
-
-            return null;
-        };
-
 	    $scope.openRelocationModal = function(stock){
             $scope.selectedStock = stock;
             $mdDialog.show({
-              locals:{selectedStock: $scope.selectedStock, selectedStore: $scope.selectedKalafcheStore},
+              locals:{selectedStock: $scope.selectedStock, selectedStore: $scope.selectedStore},
               controller: 'RelocationModalController',
               templateUrl: 'views/modals/relocation-modal.html',
               parent: angular.element(document.body)
@@ -161,8 +150,13 @@ angular.module('kalafcheFrontendApp')
             $scope.currentPage = 1;
         };
 
-        $scope.isEmployeeKalafcheStoreSelected = function(stock) { 
-            return stock.kalafcheStoreId === SessionService.currentUser.employeeKalafcheStoreId;
+        $scope.resetDeviceModel = function() {
+            $scope.currentPage = 1;
+            $scope.selectedModel = {};
+        }
+
+        $scope.isEmployeeStoreSelected = function(stock) { 
+            return stock.storeId === SessionService.currentUser.employeeStoreId;
         };
 
 
@@ -190,6 +184,13 @@ angular.module('kalafcheFrontendApp')
             }
 
             return Math.round(totalSum * 100) / 100;
-        };      
+        }; 
+
+        $scope.printStickersStocks = function() {
+            InStockService.printStickersForStocks($scope.selectedStore.id).then(
+                    function(response) {
+                    }
+                );     
+        };     
         
 	});

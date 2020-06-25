@@ -10,4 +10,10 @@ public abstract interface PartnerDao {
 	public abstract Partner getPartnerByCode(String partnerCode);
 
 	public abstract void insertPartner(Partner partner);
+
+	public abstract void updatePartner(Partner partner);
+
+	public abstract boolean checkIfPartnerNameExists(Partner partner);
+
+	public abstract boolean checkIfPartnerDiscountCodeExists(Partner partner);
 }

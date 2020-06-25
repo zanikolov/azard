@@ -2,10 +2,10 @@ package com.kalafche.service.fileutil;
 
 import java.util.List;
 
-import com.kalafche.model.NewStock;
+import com.kalafche.model.BaseStock;
 
 public interface PDFGeneratorService {
 
-	void generatePdf(List<NewStock> newStocks);
+	byte[] generatePdf(List<? extends BaseStock> newStocks);
 
 }

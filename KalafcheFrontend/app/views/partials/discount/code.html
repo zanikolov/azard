@@ -45,7 +45,14 @@
                         <td>{{(currentPage - 1) * discountCodesPerPage + $index + 1}}</td>
                         <td>{{discountCode.code}}</td>
                         <td>{{discountCode.discountCampaignName}}</td>
-                        <td>{{discountCode.active}}</td>
+                        <td>
+                            <div ng-if="!discountCode.active">
+                                <md-icon md-svg-src="images/icons/close.svg"></md-icon>
+                            </div>
+                            <div ng-if="discountCode.active">
+                                <md-icon md-svg-src="images/icons/check.svg"></md-icon>
+                            </div>
+                        </td>
                         <td>
                             <a href="" ng-click="editDiscountCode(discountCode)">
                                 <md-icon class="primary-icon" md-svg-src="images/icons/edit.svg"></md-icon>

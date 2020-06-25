@@ -22,14 +22,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="brand in brands | itemsPerPage: brandsPerPage track by $index"  current-page="currentPage" class="item-row">
+                    <tr dir-paginate="brand in brands | itemsPerPage: brandsPerPage track by $index" pagination-id="brand" current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * brandsPerPage + $index + 1}}</td>
                         <td>{{brand.name}}</td>
                     </tr>
                 </tbody>
             </table>
             <div class="centered-pagination">
-                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
+                <dir-pagination-controls pagination-id="brand" template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
             <div>
         </div>
     </md-content>

@@ -57,6 +57,11 @@ public class RevisionController {
 		return revisionService.findRevisionItem(revisionItem);
 	}
 	
+	@PostMapping("/sync")
+	public Integer correctionOfItemQuantityAfterRevision(@RequestBody RevisionItem revisionItem) throws SQLException {
+		return revisionService.correctionOfItemQuantityAfterRevision(revisionItem);
+	}
+	
 	@PostMapping
 	public Revision submitRevision(@RequestBody Revision revision) throws SQLException {
 		return revisionService.submitRevision(revision);

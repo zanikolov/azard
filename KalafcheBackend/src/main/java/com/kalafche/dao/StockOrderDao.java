@@ -9,6 +9,6 @@ public interface StockOrderDao {
 
 	public abstract void insertStockOrder();
 	
-	public abstract void updateStockOrderUpdateTimestamp(int orderId, int updater, long updateTimestamp);
+	public abstract void updateStockOrderUpdateTimestamp(Integer orderId, Integer updater, Long updateTimestamp);
 	
 }

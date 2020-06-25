@@ -20,6 +20,7 @@ angular.module('kalafcheFrontendApp')
 
         $scope.validateFile = function () {
             var file = $scope.file;
+            console.log(file);
             NewStockService.validateFile(file).then(function(response) {
                 $scope.unexistingItems = response;
             },

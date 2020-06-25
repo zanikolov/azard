@@ -20,5 +20,7 @@ public interface ItemDao {
 	public abstract Item getItem(Integer id);
 
 	public abstract BigDecimal getItemPriceByStoreId(Integer itemId, Integer storeId);
+
+	public abstract void updateItemBarcode(Integer productId, Integer deviceModelId, String barcode);
 	
 }

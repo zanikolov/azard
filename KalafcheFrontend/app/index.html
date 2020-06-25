@@ -43,7 +43,7 @@
             </md-toolbar>
             <md-list>
                 <md-item ng-repeat="item in menu">
-                    <a ui-sref="{{item.link}}">
+                    <a ui-sref="{{item.link}}" ng-if="(isAdmin() && item.onlyAdmin) || !item.onlyAdmin">
                         <md-item-content ng-click="toggleSidenav('left')" md-ink-ripple layout="row" layout-align="start center">
                             <div class="inset">{{item.title}}</div>
                         </md-item-content>
@@ -131,7 +131,7 @@
                                             <li class="list-group-item submenu-panel" ui-sref="product">Продукти</li>
                                             <li class="list-group-item submenu-panel" ui-sref="item">Артикули</li>
                                             <li ng-if="isSuperAdmin()" class="list-group-item submenu-panel" ui-sref="employee">Служители</li>
-                                            <li ng-if="isSuperAdmin()" class="list-group-item submenu-panel" ui-sref="kalafcheStore">Магазини</li>
+                                            <li ng-if="isSuperAdmin()" class="list-group-item submenu-panel" ui-sref="store">Магазини</li>
                                             <li ng-if="isAdmin()" class="list-group-item submenu-panel" ui-sref="partner">Партньори</li>
                                             <li class="list-group-item submenu-panel" ui-sref="partnerStore">Обекти партньори</li>
                                         </ul>
@@ -257,9 +257,10 @@
     <script src="scripts/controllers/RefundModalController.js"></script>
     <script src="scripts/controllers/PartnerController.js"></script>
     <script src="scripts/controllers/PartnerStoreController.js"></script>
+    <script src="scripts/controllers/LoyalCustomerController.js"></script>
     <script src="scripts/controllers/StockOrderController.js"></script>
     <script src="scripts/controllers/EmployeeController.js"></script>
-    <script src="scripts/controllers/KalafcheStoreController.js"></script>
+    <script src="scripts/controllers/StoreController.js"></script>
     <script src="scripts/controllers/ActivityReportController.js"></script>
     <script src="scripts/controllers/ItemController.js"></script>
     <script src="scripts/controllers/ItemFormController.js"></script>
@@ -271,6 +272,7 @@
     <script src="scripts/controllers/CurrentRevisionController.js"></script>
     <script src="scripts/controllers/DiscountCampaignController.js"></script>
     <script src="scripts/controllers/DiscountCodeController.js"></script>
+    <script src="scripts/controllers/ImportBarcodesController.js"></script>
 
     <!-- Services -->
     <script src="scripts/services/ApplicationService.js"></script>
@@ -280,12 +282,12 @@
     <script src="scripts/services/ProductService.js"></script>
     <script src="scripts/services/NewStockService.js"></script>
     <script src="scripts/services/InStockService.js"></script>
-    <script src="scripts/services/ColorService.js"></script>
     <script src="scripts/services/AuthService.js"></script>
     <script src="scripts/services/SessionService.js"></script>
-    <script src="scripts/services/KalafcheStoreService.js"></script>
+    <script src="scripts/services/StoreService.js"></script>
     <script src="scripts/services/SaleService.js"></script>
     <script src="scripts/services/PartnerService.js"></script>
+    <script src="scripts/services/LoyalCustomerService.js"></script>
     <script src="scripts/services/PartnerStoreService.js"></script>
     <script src="scripts/services/RelocationService.js"></script>
     <script src="scripts/services/StockOrderService.js"></script>
@@ -299,6 +301,7 @@
     <script src="scripts/services/ExpenseService.js"></script>
     <script src="scripts/services/RevisionService.js"></script>
     <script src="scripts/services/DiscountService.js"></script>
+    <script src="scripts/services/ImportBarcodesService.js"></script>
     
     <!-- Directives -->
     <script src="scripts/directives/SaleModalDirective.js"></script>

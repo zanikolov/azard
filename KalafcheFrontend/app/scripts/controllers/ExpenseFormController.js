@@ -11,7 +11,7 @@ angular.module('kalafcheFrontendApp')
     });
 
 
-	function ExpenseFormController ($scope, $rootScope, ExpenseService, KalafcheStoreService, ServerValidationService, SessionService, AuthService) {
+	function ExpenseFormController ($scope, $rootScope, ExpenseService, StoreService, ServerValidationService, SessionService, AuthService) {
 
         init();
 
@@ -31,9 +31,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.expense.storeId = SessionService.currentUser.employeeKalafcheStoreId;
+                $scope.expense.storeId = SessionService.currentUser.employeeStoreId;
             });
 
         };
@@ -56,7 +56,7 @@ angular.module('kalafcheFrontendApp')
 
         function resetExpenseForm() {
             $scope.expense = {};
-            $scope.expense.storeId = SessionService.currentUser.employeeKalafcheStoreId
+            $scope.expense.storeId = SessionService.currentUser.employeeStoreId
             $scope.image = null;
             $scope.filepreview = null;
             $scope.serverErrorMessages = {};

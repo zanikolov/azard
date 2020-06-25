@@ -29,7 +29,7 @@ public class ProductDaoImpl extends JdbcDaoSupport implements ProductDao {
 			"psp.specific_price as price, " +
 			"concat(ks.city, ', ', ks.name) as store_name, " +
 			"ks.id as store_id " +
-			"from kalafche_store ks " +
+			"from store ks " +
 			"left join product_specific_price psp on psp.store_id = ks.id " +
 			"and psp.product_id = ? " +
 			"where ks.is_store is true ";

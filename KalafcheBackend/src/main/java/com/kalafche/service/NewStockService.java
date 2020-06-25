@@ -16,9 +16,7 @@ public interface NewStockService {
 
 	void deleteNewStock(Integer newStockId);
 
-	void submitNewStock(Integer productId, Integer deviceModelId, Integer quantity);
-
-	void submitNewStockFromFile(MultipartFile newStockFile) throws EncryptedDocumentException, InvalidFormatException, IOException;
+	void submitNewStockFromFile(MultipartFile newStockFile, Integer storeId) throws EncryptedDocumentException, InvalidFormatException, IOException;
 	
 	List<ExcelItem> validateNewStockFile(MultipartFile newStockFile) throws EncryptedDocumentException, InvalidFormatException, IOException;
 
@@ -26,6 +24,10 @@ public interface NewStockService {
 
 	void approveNewStock(List<NewStock> newStocks);
 
-	void printNewStockStickers();
+	byte[] printNewStockStickers();
+
+	void submitNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId);
+
+	List<NewStock> getNewStockByStoreId(Integer storeId);
 	
 }

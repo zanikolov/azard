@@ -19,6 +19,7 @@ public class RevisionItem {
 	private Integer expected;
 	private Integer actual;
 	private Boolean partOfTheCurrentRevision = true;
+	private Boolean synced;
 
 	public RevisionItem() {
 	}
@@ -26,12 +27,12 @@ public class RevisionItem {
 	public RevisionItem(Integer revisionId, Item item, Integer expected, Integer actual) {
 		this(revisionId, item.getId(), item.getProductId(), item.getProductCode(), item.getProductName(),
 				item.getBarcode(), item.getDeviceModelId(), item.getDeviceModelName(), item.getDeviceBrandId(),
-				item.getProductPrice(), 0, 0);
+				item.getProductPrice(), 0, 0, false);
 	}
 	
 	public RevisionItem(Integer revisionId, Integer itemId, Integer productId, String productCode, String productName,
 			String barcode, Integer deviceModelId, String deviceModelName, Integer deviceBrandId,
-			BigDecimal productPrice, Integer expected, Integer actual) {
+			BigDecimal productPrice, Integer expected, Integer actual, Boolean synced) {
 		this.revisionId = revisionId;
 		this.itemId = itemId;
 		this.productId = productId;
@@ -44,6 +45,7 @@ public class RevisionItem {
 		this.productPrice = productPrice;
 		this.expected = expected;
 		this.actual = actual;
+		this.synced = synced;
 	}
 	
 	public Integer getId() {
@@ -164,6 +166,14 @@ public class RevisionItem {
 
 	public void setPartOfTheCurrentRevision(Boolean partOfTheCurrentRevision) {
 		this.partOfTheCurrentRevision = partOfTheCurrentRevision;
+	}
+
+	public Boolean getSynced() {
+		return synced;
+	}
+
+	public void setSynced(Boolean synced) {
+		this.synced = synced;
 	}
 
 }

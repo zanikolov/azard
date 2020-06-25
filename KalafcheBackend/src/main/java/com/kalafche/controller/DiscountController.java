@@ -56,6 +56,16 @@ public class DiscountController {
 		return discountService.getDiscountCodes();
 	}
 	
+	@GetMapping("/code/partner")
+	public List<DiscountCode> getAvailablePartnerDiscountCodes() {
+		return discountService.getAvailableDiscountCodesForPartnerCampaign();
+	}	
+	
+	@GetMapping("/code/loyal")
+	public List<DiscountCode> getAvailableLoyalDiscountCodes() {
+		return discountService.getAvailableDiscountCodesForLoyalCampaign();
+	}
+	
 	@GetMapping("/code/{code}")
 	public DiscountCode getDiscountCode(@PathVariable(value = "code") Integer code) {
 		return discountService.getDiscountCode(code);

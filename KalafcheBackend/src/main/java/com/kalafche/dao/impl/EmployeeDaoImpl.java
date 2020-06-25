@@ -1,57 +1,50 @@
 package com.kalafche.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.EmployeeDao;
+import com.kalafche.model.AuthRole;
 import com.kalafche.model.Employee;
 
 @Service
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 
-	private static final String GET_EMPLOYEE_BY_USERNAME = "select u.id as user_id, e.id as id, u.username, e.name, e.kalafche_store_id, e.job_responsibility_id from user u "
-			+ "join employee e on u.id = e.user_id where username = ?";
+	private static final String GET_EMPLOYEE_BY_USERNAME = "select id, username, name, store_id, job_responsibility_id from employee where username = ?";
 	private static final String GET_ALL_EMPLOYEE = "select "
-			+ "u.id as user_id, "
-			+ "e.id as id, "
-			+ "u.username, "
-			+ "u.password, "
+			+ "e.id, "
+			+ "username, "
+			+ "password, "
 			+ "e.name, "
-			+ "e.kalafche_store_id, "
-			+ "concat(ks.city, ', ',ks.name) as kalafche_store_name, "
-			+ "e.job_responsibility_id, "
+			+ "store_id, "
+			+ "concat(ks.city, ', ',ks.name) as store_name, "
+			+ "job_responsibility_id, "
 			+ "jr.name as job_responsibility_name,"
-			+ "u.enabled "
-			+ "from user u "
-			+ "join employee e on u.id = e.user_id "
-			+ "join kalafche_store ks on e.kalafche_store_id = ks.id "
+			+ "enabled "
+			+ "from employee e "
+			+ "join store ks on e.store_id = ks.id "
 			+ "join job_responsibility jr on e.job_responsibility_id = jr.id ";
-	private static final String GET_ALL_ACTIVE_EMPLOYEES = "select " +
-			"e.id as id, " +
-			"e.name, " +
-			"e.kalafche_store_id, " +
-			"concat(ks.city, ', ',ks.name) as kalafche_store_name " +
-			"from user u " +
-			"join employee e on u.id = e.user_id " +
-			"join kalafche_store ks on e.kalafche_store_id = ks.id " +
-			"where u.enabled is true ";
+	private static final String ENABLED_CLAUSE = "where e.enabled is true ";
 	private static final String IN_CLAUSE = "and e.id in (%s) ";
 	private static final String ORDER_BY_ID_CLAUSE = "order by e.id ";
-	private static final String INSERT_EMPLOYEE = "insert into employee (name, kalafche_store_id, job_responsibility_id, user_id) values (?, ?, ?, ?)";
-	
-	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, kalafche_store_id = ? where id = ?";
-
+	private static final String ORDER_BY_ENABLED_CLAUSE = "order by enabled desc ";
+	private static final String INSERT_EMPLOYEE = "insert into employee (name, username, password, store_id, job_responsibility_id, enabled) values (?, ?, ?, ?, ?, ?)";
+	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, store_id = ?, enabled = ? where id = ?";
 	private static final String IS_EMPLOYEE_ADMIN = "select " +
 			"count(*) " +
-			"from user_to_role " +
+			"from employee_role " +
 			"where auth_role_id in " +
 			"( " +
 			"   select " +
@@ -59,9 +52,17 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 			"   from auth_role " +
 			"   where name in ('ROLE_ADMIN','ROLE_SUPERADMIN') " +
 			") " +
-			"and user_id=(select id from user where username=?) ";
+			"and employee_id=(select id from employee where username=?) ";
 	
-	private BeanPropertyRowMapper<Employee> rowMapper;
+	private static final String INSERT_EMPLOYEE_ROLE = "insert into employee_role(employee_id, auth_role_id) "
+			+ "values (?, (select id from auth_role where name = ?))";	
+	private static final String GET_ALL_ROLES_FOR_EMPLOYEE = "select * from auth_role r join employee_role er on r.id = er.auth_role_id where er.employee_id = ?";
+	private static final String CHECK_IF_EMPLOYEE_USERNAME_EXISTS = "select count(*) from employee where username = ? ";
+	private static final String ID_NOT_CLAUSE = " and id <> ?";
+	
+	private BeanPropertyRowMapper<Employee> employeeRowMapper;
+	
+	private BeanPropertyRowMapper<AuthRole> authRoleRowMapper;
 	
 	@Autowired
 	public EmployeeDaoImpl(DataSource dataSource) {
@@ -69,55 +70,86 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 		setDataSource(dataSource);
 	}
 	
-	private BeanPropertyRowMapper<Employee> getRowMapper() {
-		if (rowMapper == null) {
-			rowMapper = new BeanPropertyRowMapper<Employee>(Employee.class);
-			rowMapper.setPrimitivesDefaultedForNullValue(true);
+	private BeanPropertyRowMapper<Employee> getEmployeeRowMapper() {
+		if (employeeRowMapper == null) {
+			employeeRowMapper = new BeanPropertyRowMapper<Employee>(Employee.class);
+			employeeRowMapper.setPrimitivesDefaultedForNullValue(true);
 		}
 		
-		return rowMapper;
+		return employeeRowMapper;
+	}
+	
+	private BeanPropertyRowMapper<AuthRole> getAuthRoleRowMapper() {
+		if (authRoleRowMapper == null) {
+			authRoleRowMapper = new BeanPropertyRowMapper<AuthRole>(AuthRole.class);
+			authRoleRowMapper.setPrimitivesDefaultedForNullValue(true);
+		}
+		
+		return authRoleRowMapper;
 	}
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		List<Employee> employeeList = getJdbcTemplate().query(GET_ALL_EMPLOYEE, getRowMapper());
+		List<Employee> employeeList = getJdbcTemplate().query(GET_ALL_EMPLOYEE, getEmployeeRowMapper());
 		
 		return employeeList;
 	}
 
 	@Override
 	public Employee getEmployee(String username) {
-		Employee employee = null;
-		try {
-			employee = getJdbcTemplate().queryForObject(GET_EMPLOYEE_BY_USERNAME, getRowMapper(), username);
-		} catch(EmptyResultDataAccessException e) {
-			e.printStackTrace();
-		}
+		List<Employee> employees = getJdbcTemplate().query(GET_EMPLOYEE_BY_USERNAME, getEmployeeRowMapper(), username);
+
 		
-		return employee;
+		return employees.isEmpty() ? null : employees.get(0);
 	}
 
 	@Override
-	public void insertEmployee(Employee newEmployee) {
-		getJdbcTemplate().update(INSERT_EMPLOYEE, newEmployee.getName(), newEmployee.getKalafcheStoreId(), newEmployee.getJobResponsibilityId(), newEmployee.getUserId());
+	public Integer insertEmployee(Employee employee) throws SQLException {
+		try (Connection connection = getDataSource().getConnection();
+				PreparedStatement statement = connection.prepareStatement(
+						INSERT_EMPLOYEE, Statement.RETURN_GENERATED_KEYS);) {
+			statement.setString(1, employee.getName());
+			statement.setString(2, employee.getUsername());
+			statement.setString(3, employee.getPassword());
+			statement.setInt(4, employee.getStoreId());
+			statement.setInt(5, employee.getJobResponsibilityId());
+			statement.setBoolean(6, employee.isEnabled());
+
+			int affectedRows = statement.executeUpdate();
+
+			if (affectedRows == 0) {
+				throw new SQLException(
+						"Creating the employee failed, no rows affected.");
+			}
+
+			try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				} else {
+					throw new SQLException(
+							"Creating the employee failed, no rows affected.");
+				}
+			}
+		}
+		
 	}
 
 	@Override
 	public void updateEmployee(Employee employee) {
-		getJdbcTemplate().update(UPDATE_EMPLOYEE, employee.getName(), employee.getKalafcheStoreId(), employee.getId());
+		getJdbcTemplate().update(UPDATE_EMPLOYEE, employee.getName(), employee.getStoreId(), employee.isEnabled(), employee.getId());
 		
 	}
 
 	@Override
 	public List<Employee> getAllActiveEmployees() {
-		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES + ORDER_BY_ID_CLAUSE, getRowMapper());
+		return getJdbcTemplate().query(GET_ALL_EMPLOYEE + ENABLED_CLAUSE + ORDER_BY_ENABLED_CLAUSE, getEmployeeRowMapper());
 	}
 	
 	@Override
 	public List<Employee> getEmployeesByIds(List<Integer> employeeIds) {
 		String commaSeparatedEmployeeIds = employeeIds.stream().map(id -> id.toString())
 				.collect(Collectors.joining(","));
-		return getJdbcTemplate().query(GET_ALL_ACTIVE_EMPLOYEES + String.format(IN_CLAUSE, commaSeparatedEmployeeIds) + ORDER_BY_ID_CLAUSE, getRowMapper());
+		return getJdbcTemplate().query(GET_ALL_EMPLOYEE + ENABLED_CLAUSE + String.format(IN_CLAUSE, commaSeparatedEmployeeIds) + ORDER_BY_ID_CLAUSE, getEmployeeRowMapper());
 	}
 	
 	@Override
@@ -125,6 +157,30 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 	    Integer result = getJdbcTemplate().queryForObject(IS_EMPLOYEE_ADMIN, Integer.class, username);
 
 	    return result != null && result > 0;
+	}
+	
+	@Override
+	public void insertEmployeeRole(Integer employeeId, String authRoleName) {
+		getJdbcTemplate().update(INSERT_EMPLOYEE_ROLE, employeeId, authRoleName);
+	}
+	
+	@Override
+	public List<AuthRole> getAllRolesForEmployee(Integer employeeId) {
+		List<AuthRole> authRoles = getJdbcTemplate().query(GET_ALL_ROLES_FOR_EMPLOYEE, getAuthRoleRowMapper(), employeeId);
+
+		return authRoles;
+	}
+	
+	@Override
+	public boolean checkIfEmployeeUsernameExists(Employee employee) {
+		Integer exists = null;
+		if (employee.getId() == null) {
+			exists = getJdbcTemplate().queryForObject(CHECK_IF_EMPLOYEE_USERNAME_EXISTS, Integer.class, employee.getUsername());
+		} else {
+			exists = getJdbcTemplate().queryForObject(CHECK_IF_EMPLOYEE_USERNAME_EXISTS + ID_NOT_CLAUSE, Integer.class, employee.getUsername(), employee.getId());
+		}
+			
+		return exists != null && exists > 0 ;
 	}
 
 }

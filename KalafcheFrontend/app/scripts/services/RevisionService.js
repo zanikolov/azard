@@ -60,6 +60,15 @@ angular.module('kalafcheFrontendApp')
                 );
         };
 
+        function syncRevisionItemQuantity(revisionItem) { 
+            return $http.post(Environment.apiEndpoint + '/KalafcheBackend/revision/sync', revisionItem)
+                .then(
+                    function(response) {
+                        return response.data
+                    }
+                );
+        };
+
         function submitRevision(revision) { 
             return $http.post(Environment.apiEndpoint + '/KalafcheBackend/revision', revision)
                 .then(

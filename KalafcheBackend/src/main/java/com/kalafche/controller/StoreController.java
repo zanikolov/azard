@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kalafche.dao.KalafcheStoreDao;
+import com.kalafche.dao.StoreDao;
 import com.kalafche.model.StoreDto;
 import com.kalafche.service.EntityService;
 
@@ -20,19 +21,24 @@ import com.kalafche.service.EntityService;
 public class StoreController {
 	
 	@Autowired
-	private KalafcheStoreDao kalafcheStoreDao;
+	private StoreDao storeDao;
 	
 	@Autowired
 	EntityService entityService;
 
-	@GetMapping("/getAllKalafcheStores")
-	public List<StoreDto> getAllKalafcheEntities() {
-		return kalafcheStoreDao.getAllKalafcheEntities();
+	@GetMapping("/entities")
+	public List<StoreDto> getAllEntities() {
+		return storeDao.getAllEntities();
 	}
 
+	@PutMapping
+	public void createStore(@RequestBody StoreDto store) {
+		entityService.createEntity(store);
+	}
+	
 	@PostMapping
-	public void createKalafcheStore(@RequestBody StoreDto kalafcheStore) {
-		this.kalafcheStoreDao.insertKalafcheStore(kalafcheStore);
+	public void updateStore(@RequestBody StoreDto store) {
+		entityService.updateEntity(store);
 	}
 
 	@GetMapping("/stores")

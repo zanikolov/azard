@@ -6,8 +6,12 @@ import com.kalafche.model.PartnerStore;
 
 public interface PartnerStoreDao {
 
-	public abstract List<PartnerStore> getAllPartnerStores();
+	public List<PartnerStore> getAllPartnerStores();
 
-	public abstract void insertPartnerStore(PartnerStore partnerStore);
+	public void insertPartnerStore(PartnerStore partnerStore);
+
+	public void updatePartnerStore(PartnerStore partnerStore);
+
+	public boolean checkIfPartnerStoreNameExists(PartnerStore partnerStore);
 
 }

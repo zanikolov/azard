@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kalafche.exceptions.ExcelInvalidFormatException;
@@ -37,15 +38,17 @@ public class NewStockExcelReaderServiceImpl implements NewStockExcelReaderServic
 	        	});
 	        	System.out.println();
 	        	
-	            item.setBarcode(new BigDecimal(row.getCell(0).toString()).toPlainString());
-	            item.setName(getCellValue(row.getCell(2)));
-	            item.setQuantity((int)Double.parseDouble(getCellValue(row.getCell(8))));
-	            items.add(item);
+	        	if (!StringUtils.isEmpty(row.getCell(0))) {
+		            item.setBarcode(new BigDecimal(row.getCell(0).toString()).toPlainString());
+		            item.setName(getCellValue(row.getCell(2)));
+		            item.setQuantity((int)Double.parseDouble(getCellValue(row.getCell(8))));
+		            items.add(item);
+	        	}
 	        	
 	        });
 		} catch (IllegalStateException | InvalidFormatException | IOException e) {
 			e.printStackTrace();
-			throw new ExcelInvalidFormatException("file", "Невалиден формат на Excel документ.");
+			throw new ExcelInvalidFormatException("file", "The excel contains invalid data.");
 		}
 		
 		return items;

@@ -34,7 +34,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			"rt.name as type_name, " + 
 			"rt.code as type_code " + 
 			"from revision r " +
-			"join kalafche_store st on r.store_id = st.id " +
+			"join store st on r.store_id = st.id " +
 			"join revision_type rt on r.type_id = rt.id " +
 			"where r.id = ?";
 	
@@ -45,7 +45,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			"rt.name as type_name, " + 
 			"rt.code as type_code " + 
 			"from revision r " +
-			"join kalafche_store st on r.store_id = st.id " +
+			"join store st on r.store_id = st.id " +
 			"join revision_type rt on r.type_id = rt.id " +
 			"where store_id = ? and submit_timestamp is null";
 	
@@ -63,7 +63,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	"      r.id " +
 	"      from revision_device_model ri2 " +
 	"      join revision r on ri2.revision_id = r.id " +
-	"      join kalafche_store st on st.id = r.store_id " +
+	"      join store st on st.id = r.store_id " +
 	"      join revision_type rt on rt.id = r.type_id " +
 	"      where r.store_id = ? and rt.code = 'DAILY' " +
 	"      group by r.store_id " +
@@ -80,7 +80,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			"from stock st " +
 			"join item_vw iv on st.item_id = iv.id " +
 			"left join product_specific_price psp on psp.product_id = iv.product_id and psp.store_id = ? " +
-			"where st.kalafche_store_id = ? ";
+			"where st.store_id = ? ";
 	
 	private static final String DEVICE_MODEL_CLAUSE = "and iv.device_model_id in (%s) ";
 	
@@ -103,6 +103,8 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			"from revision_item ri " +
 			"join item_vw iv on ri.item_id = iv.id " +
 			"where ri.revision_id = ? ";
+	
+	private static final String SELECT_REVISION_ITEM_BY_ID = "select * from revision_item where id = ?";
 	
 	private static final String MISMATCHES_CLAUSE = "and ri.actual <> ri.expected ";
 	
@@ -133,7 +135,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			"r.total_actual, " +
 			"r.total_expected " +
 			"from revision r " +
-			"join kalafche_store ks on r.store_id = ks.id ";
+			"join store ks on r.store_id = ks.id ";
 	
 	private static final String PERIOD_CLAUSE = " where r.submit_timestamp between ? and ? ";
 	
@@ -141,7 +143,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	
 	private static final String ORDER_BY_CLAUSE = " order by r.submit_timestamp";
 
-	private static final String SYNC_STOCK_MISMATCH = "update stock set quantity = ? where item_id = ? and kalafche_store_id = ?";
+	private static final String SYNC_STOCK_MISMATCH = "update stock set quantity = quantity - ? where item_id = ? and store_id = ?";
 	
 	private BeanPropertyRowMapper<Revision> revisionRowMapper;
 	
@@ -183,7 +185,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	}
 	
 	@Override
-	public Integer insertRevision(Revision revision) throws SQLException{	
+	public Integer insertRevision(Revision revision) throws SQLException {	
 		try (Connection connection = getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(
 						INSERT_REVISION, Statement.RETURN_GENERATED_KEYS);) {
@@ -247,6 +249,14 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			searchQuery += MISMATCHES_CLAUSE;
 		}
 		return getJdbcTemplate().query(searchQuery, getRevisionItemRowMapper(), revisionId);
+	}
+	
+
+	@Override
+	public RevisionItem getRevisionItemById(Integer revisionItemId) {
+		List<RevisionItem> result = getJdbcTemplate().query(SELECT_REVISION_ITEM_BY_ID, getRevisionItemRowMapper(), revisionItemId);
+		
+		return result.size() == 1 ? result.get(0) : null;
 	}
 
 	@Override
@@ -360,7 +370,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	public void syncRevisionItemsActualWithStockQuantities(Integer storeId,
 			List<RevisionItem> mismatchedRevisionItems) {
 		mismatchedRevisionItems.forEach(revisionItem -> {
-			Integer rowUpdated = getJdbcTemplate().update(SYNC_STOCK_MISMATCH, revisionItem.getActual(), revisionItem.getItemId(), storeId);
+			Integer rowUpdated = getJdbcTemplate().update(SYNC_STOCK_MISMATCH, revisionItem.getExpected() - revisionItem.getActual(), revisionItem.getItemId(), storeId);
 			
 			if (rowUpdated == 0) {
 				stockDao.insertOrUpdateQuantityOfInStock(revisionItem.getItemId(), storeId, revisionItem.getActual());

@@ -14,8 +14,8 @@ import com.kalafche.model.Stock;
 public class WarehouseDaoImpl extends JdbcDaoSupport implements WarehouseDao {
 
 	private static final String UPSERT_APPROVED_IN_STOCK = "insert into stock "
-			+ "(item_id, kalafche_store_id, quantity, approved) values "
-			+ "(?, (select id from kalafche_store where code = 'RU_WH'), ?, true) "
+			+ "(item_id, store_id, quantity, approved) values "
+			+ "(?, (select id from store where code = 'RU_WH'), ?, true) "
 			+ "on duplicate key update quantity = quantity + ?";
 	
 	private BeanPropertyRowMapper<Stock> rowMapper;

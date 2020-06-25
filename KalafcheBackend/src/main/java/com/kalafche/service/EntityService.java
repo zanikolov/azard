@@ -10,4 +10,8 @@ public interface EntityService {
 
 	String getStoreIdsByOwner(String owner);
 
+	void createEntity(StoreDto store);
+
+	void updateEntity(StoreDto store);
+
 }

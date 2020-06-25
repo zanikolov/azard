@@ -13,8 +13,9 @@ import com.kalafche.dao.DeviceBrandDao;
 import com.kalafche.dao.DeviceModelDao;
 import com.kalafche.dao.DiscountDao;
 import com.kalafche.dao.ItemDao;
-import com.kalafche.dao.KalafcheStoreDao;
 import com.kalafche.dao.SaleDao;
+import com.kalafche.dao.StoreDao;
+import com.kalafche.exceptions.DomainObjectNotFoundException;
 import com.kalafche.model.DiscountCode;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Sale;
@@ -47,7 +48,7 @@ public class SaleServiceImpl implements SaleService {
 	ItemDao itemDao;
 	
 	@Autowired
-	KalafcheStoreDao storeDao;
+	StoreDao storeDao;
 	
 	@Autowired
 	DeviceBrandDao deviceBrandDao;
@@ -65,10 +66,15 @@ public class SaleServiceImpl implements SaleService {
 		DiscountCode discountCode = null;
 		if (sale.getDiscountCodeCode() != null) {
 			discountCode = discountDao.selectDiscountCode(sale.getDiscountCodeCode());
+			if (discountCode == null) {
+				throw new DomainObjectNotFoundException("discountCodeCode", "Несъществуващ код за намаление.");
+			} else {
+				sale.setDiscountCodeId(discountCode.getId());
+			}
 		}
 		
 		sale.setEmployeeId(loggedInEmployee.getId());
-		sale.setStoreId(loggedInEmployee.getKalafcheStoreId());
+		sale.setStoreId(loggedInEmployee.getStoreId());
 		sale.setSaleTimestamp(dateService.getCurrentMillisBGTimezone());
 		
 		Integer saleId = saleDao.insertSale(sale);
@@ -105,7 +111,7 @@ public class SaleServiceImpl implements SaleService {
 			}
 			
 			saleDao.insertSaleItem(saleItem);
-			stockService.updateTheQuantitiyOfSoldStock(saleItem.getItemId(), loggedInEmployee.getKalafcheStoreId());
+			stockService.updateTheQuantitiyOfSoldStock(saleItem.getItemId(), loggedInEmployee.getStoreId());
 		}
 	}
 

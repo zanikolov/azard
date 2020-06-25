@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.PartnerDao;
 import com.kalafche.exceptions.DomainObjectNotFoundException;
+import com.kalafche.exceptions.DuplicationException;
 import com.kalafche.model.Partner;
 import com.kalafche.service.PartnerService;
 
@@ -23,7 +24,7 @@ public class PartnerServiceImpl implements PartnerService {
 		if (partner == null) {
 			throw new DomainObjectNotFoundException("partnerCode", "Unexisting partner.");
 		} else {
-			return partnerDao.getPartnerByCode(code);
+			return partner;
 		}
 	}
 
@@ -33,8 +34,27 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 
 	@Override
-	public void submitPartner(Partner partner) {
+	public void createPartner(Partner partner) {
+		validateName(partner);
+		validateDiscountCode(partner);
 		partnerDao.insertPartner(partner);
+	}
+
+	@Override
+	public void updatePartner(Partner partner) {
+		partnerDao.updatePartner(partner);
+	}
+	
+	private void validateName(Partner partner) {
+		if (partnerDao.checkIfPartnerNameExists(partner)) {
+			throw new DuplicationException("name", "Name duplication.");
+		}
+	}
+	
+	private void validateDiscountCode(Partner partner) {
+		if (partnerDao.checkIfPartnerDiscountCodeExists(partner)) {
+			throw new DuplicationException("discountCodeId", "Code duplication.");
+		}
 	}
 	
 }

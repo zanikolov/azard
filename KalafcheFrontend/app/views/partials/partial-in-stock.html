@@ -3,7 +3,7 @@
         <div flex>
             <form>
                 <div layout="row" layout-xs="column">
-                    <div layout-xs="row" flex="33" flex-xs="100">
+                    <div layout-xs="row" flex="30" flex-xs="100">
                         <md-input-container flex="70">
                             <div data-barcode-scanner="barcodeScanned"></div>
                             <label>Баркод</label>
@@ -14,10 +14,10 @@
                             <input ng-model="productCode">
                         </md-input-container>  
                     </div>  
-                    <div layout-xs="row" flex="33" flex-xs="100">
+                    <div layout-xs="row" flex="30" flex-xs="100">
                         <md-input-container flex style="width:48%">
                             <label>Марка</label>
-                            <md-select ng-model="selectedBrand.id" ng-change="resetCurrentPage()">
+                            <md-select ng-model="selectedBrand.id" ng-change="resetDeviceModel()">
                                 <md-option value="" selected></md-option>
                                 <md-option ng-repeat="brand in brands" ng-value="brand.id">
                                     {{brand.name}}
@@ -44,14 +44,19 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div layout-xs="row" flex="30" flex-offset="5" flex-xs="100">
+                    <div layout-xs="row" flex="20" flex-offset="5" flex-xs="100">
                         <md-input-container flex  flex style="width:100%">
-                            <md-select ng-model="selectedKalafcheStore.id" ng-change="getAllInStock()">
+                            <md-select ng-model="selectedStore.id">
                                 <md-option value="0">Всички магазини</md-option>
-                                <md-option ng-repeat="kalafcheStore in kalafcheStores" ng-value="kalafcheStore.id">
-                                    {{kalafcheStore.city}}, {{kalafcheStore.name}}
+                                <md-option ng-repeat="store in stores" ng-value="store.id">
+                                    {{store.city}}, {{store.name}}
                                 </md-option>
                             </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout-xs="row" flex="10" flex-offset="5" flex-xs="100">
+                        <md-input-container flex>
+                            <md-button ng-click="getInStock()" class="md-raised md-primary">Търси</md-button>
                         </md-input-container>
                     </div>
                 </div>
@@ -71,7 +76,7 @@
                         <th>
                             <label>Продукт</label>
                         </th>
-                        <th ng-if="selectedKalafcheStore.id == 0">
+                        <th ng-if="selectedStore.id == 0">
                             <label>Магазин</label>
                         </th>
                         <th>
@@ -80,31 +85,31 @@
                         <th>
                             <label>Брой</label>
                         </th>
-                        <th ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">
-                            <label ng-show="selectedKalafcheStore.id==4">Моят Магазин</label>
-                            <label ng-show="selectedKalafcheStore.id!=4">Склад</label>
+                        <th ng-show="!(selectedStore.id==4 && isAdmin())">
+                            <label ng-show="selectedStore.id==4">Моят Магазин</label>
+                            <label ng-show="selectedStore.id!=4">Склад</label>
                         </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>               
-                    <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!selectedBarcode || undefined) && {barcode: selectedBarcode} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
+                    <tr dir-paginate="inStock in inStockList | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
                         <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
                         <td>{{inStock.deviceModelName}}</td>
                         <td>{{inStock.productCode}} {{inStock.productName}}</td>
-                        <td ng-if="selectedKalafcheStore.id == 0">{{inStock.kalafcheStoreName}}</td>
+                        <td ng-if="selectedStore.id == 0">{{inStock.storeName}}</td>
                         <td>{{inStock.productPrice}}</td>
 
-                        <td>{{inStock.quantity}} <span ng-if="selectedKalafcheStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
-                        <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedKalafcheStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
+                        <td>{{inStock.quantity}} <span ng-if="selectedStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
+                        <td  ng-show="!(selectedStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
                         <td>
-                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openSaleModal(inStock)">
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeStoreSelected(inStock)" href="" ng-click="openSaleModal(inStock)">
                                 <md-icon class="primary-icon" md-svg-src="images/icons/add_shopping_cart.svg"></md-icon>
                             </a>
-                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openWasteModal(inStock)">
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeStoreSelected(inStock)" href="" ng-click="openWasteModal(inStock)">
                                 <md-icon class="primary-icon" md-svg-src="images/icons/delete.svg"></md-icon>
                             </a>
-                            <a ng-if="inStock.quantity > 0 && !isAdmin() && !isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openRelocationModal(inStock)">
+                            <a ng-if="inStock.quantity > 0 && !isAdmin() && !isEmployeeStoreSelected(inStock)" href="" ng-click="openRelocationModal(inStock)">
                                 <md-icon class="primary-icon" md-svg-src="images/icons/compare_arrows.svg"></md-icon>
                             </a>
                         </td>
@@ -113,10 +118,10 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td ng-if="selectedKalafcheStore.id == 0"></td>
+                        <td ng-if="selectedStore.id == 0"></td>
                         <td></td>
                         <td><b>{{getTotalSum()}}</b></td>
-                        <td ng-show="!(selectedKalafcheStore.id==4 && isAdmin())"></td>
+                        <td ng-show="!(selectedStore.id==4 && isAdmin())"></td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -125,75 +130,10 @@
                 <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
             </div>
         </div>
+
+        <div flex ng-if="selectedStore.id != 0">
+            <md-button type="submit" class="md-raised md-primary" ng-click="printStickersStocks()">Принтирай</md-button>
+        </div>
+
     </md-content>
-
-
-
-<!--     <div class="row">
-        <div class="col-xs-12">
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>
-                            <label>Модел</label>
-                        </th>
-                        <th>
-                            <label>Продукт</label>
-                        </th>
-                        <th ng-if="!selectedKalafcheStore.id">
-                            <label>Магазин</label>
-                        </th>
-                        <th>
-                            <label>Цена</label>
-                        </th>
-                        <th>
-                            <label>Брой</label>
-                        </th>
-                        <th ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">
-                            <label ng-show="selectedKalafcheStore.id==4">Моят Магазин</label>
-                            <label ng-show="selectedKalafcheStore.id!=4">Склад</label>
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>               
-                    <tr dir-paginate="inStock in inStockList | filter:(!!selectedBrand.id || undefined) && {deviceBrandId: selectedBrand.id} : true | filter:(!!selectedModel.id || undefined) && {deviceModelId: selectedModel.id} : true | filter:(!!productCode || undefined) && filterByProductCode() | itemsPerPage: inStockPerPage track by $index"  current-page="currentPage" class="item-row">
-                        <td>{{(currentPage - 1) * inStockPerPage + $index + 1}}</td>
-                        <td>{{inStock.deviceModelName}}</td>
-                        <td>{{inStock.productCode}} {{inStock.productName}}</td>
-                        <td ng-if="!selectedKalafcheStore.id">{{inStock.kalafcheStoreName}}</td>
-                        <td>{{inStock.productPrice}}</td>
-
-                        <td>{{inStock.quantity}} <span ng-if="selectedKalafcheStore.id!=4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
-                        <td  ng-show="!(selectedKalafcheStore.id==4 && isAdmin())">{{inStock.extraQuantity}}<span ng-if="selectedKalafcheStore.id==4 && inStock.orderedQuantity && inStock.orderedQuantity > 0" class="ordered-stock-quantity"> + {{inStock.orderedQuantity}}</span></td>
-                        <td>
-                            <a ng-if="inStock.quantity > 0 && !isAdmin() && isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openSaleModal(inStock)"><span class="glyphicon glyphicon-piggy-bank sell-item-icon"></span></a>
-                            <a ng-if="inStock.quantity > 0 && !isAdmin() && !isEmployeeKalafcheStoreSelected(inStock)" href="" ng-click="openRelocationModal(inStock)"><span class="glyphicon glyphicon-share-alt kalafche-icon"></span></a>
-                        </td>
-                    </tr>
-                     <tr ng-show="isTotalSumRowVisible()" class="warning total-sum-row item-row">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td ng-if="!selectedKalafcheStore.id"></td>
-                        <td></td>
-                        <td><b>{{getTotalSum()}}</b></td>
-                        <td ng-show="!(selectedKalafcheStore.id==4 && isAdmin())"></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="centered-pagination">
-                <dir-pagination-controls template-url="views/directives/dir-pagination.html"></dir-pagination-controls>
-            </div>
-        </div>
-    </div>
-    <div class="row" ng-if="currentSale.selectedStocks.length > 0">
-        <div class="col-xs-9">          
-        </div>
-        <div class="col-xs-3">
-            <a href="" ng-click="openSaleModal()">Текуща продажба</a>   
-        </div>
-    </div> -->
 </div>

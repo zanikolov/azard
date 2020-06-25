@@ -28,16 +28,17 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"s.sale_timestamp, " +
 			"s.employee_id, " +
 			"s.store_id, " +
+			"s.is_cash_payment, " +
 			"sum(si.sale_price) as amount, " +
 			"e.name as employee_name, " +
 			"CONCAT(ks.city, \", \", ks.name) as store_name, " +
-			"p.code as partner_code " +
+			"dc.code as discount_code_code " +
 			"from sale s " +
 			"join sale_item si on si.sale_id = s.id " +
 			//"join sale_item si2 on si2.sale_id = s.id" +
 			"join employee e on s.employee_id = e.id " +
-			"join kalafche_store ks on s.store_id = ks.id " +
-			"left join partner p on p.id = s.partner_id ";
+			"join store ks on s.store_id = ks.id " +
+			"left join discount_code dc on s.discount_code_id = dc.id ";
 	
 	private static final String GET_ALL_SALE_ITEMS_QUERY = "select " +
 			"si.id, " +
@@ -56,11 +57,13 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"e.id as employee_id, " +
 			"e.name as employee_name, " +
 			"ks.id as store_id, " +
-			"CONCAT(ks.city, \", \", ks.name) as store_name " +
+			"CONCAT(ks.city, \", \", ks.name) as store_name, " +
+			"dc.code as discountCodeCode " +
 			"from sale_item si " +
 			"join sale s on si.sale_id = s.id " +
+			"left join discount_code dc on s.discount_code_id = dc.id " +
 			"join item_vw iv on iv.id = si.item_id " +
-			"join kalafche_store ks on ks.id = s.store_id " +
+			"join store ks on ks.id = s.store_id " +
 			"join employee e on e.id = s.employee_id ";
 
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
@@ -70,7 +73,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	private static final String DEVICE_BRAND_QUERY = " and iv.device_brand_id = ?";
 	private static final String DEVICE_MODEL_QUERY = " and iv.device_model_id = ?";
 	private static final String PRODUCT_TYPE_QUERY = " and iv.product_type_id = ?";
-	private static final String INSERT_SALE = "insert into sale (employee_id, store_id, sale_timestamp, is_cash_payment, partner_id)"
+	private static final String INSERT_SALE = "insert into sale (employee_id, store_id, sale_timestamp, is_cash_payment, discount_code_id)"
 			+ " values (?, ?, ?, ?, ?)";
 	private static final String ORDER_BY = " order by s.sale_timestamp";
 	private static final String GROUP_BY = " group by s.id";
@@ -136,8 +139,8 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			statement.setInt(2, sale.getStoreId());
 			statement.setLong(3, sale.getSaleTimestamp());
 			statement.setBoolean(4, sale.getIsCashPayment());
-			if (sale.getPartnerId() != null) {
-				statement.setInt(5, sale.getPartnerId());
+			if (sale.getDiscountCodeId() != null) {
+				statement.setInt(5, sale.getDiscountCodeId());
 			} else {
 				statement.setNull(5, Types.INTEGER);
 			}
@@ -160,8 +163,8 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	@Override
 	public List<Sale> searchSales(Long startDateMilliseconds,
-			Long endDateMilliseconds, String kalafcheStoreIds) {
-		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, kalafcheStoreIds);
+			Long endDateMilliseconds, String storeIds) {
+		String searchQuery = GET_ALL_SALES_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, storeIds);
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);
@@ -178,8 +181,8 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	
 	@Override
 	public List<SaleItem> searchSaleItems(Long startDateMilliseconds,
-			Long endDateMilliseconds, String kalafcheStoreIds, String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
-		String searchQuery = GET_ALL_SALE_ITEMS_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, kalafcheStoreIds) + REFUND_QUERY;
+			Long endDateMilliseconds, String storeIds, String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
+		String searchQuery = GET_ALL_SALE_ITEMS_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, storeIds) + REFUND_QUERY;
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);

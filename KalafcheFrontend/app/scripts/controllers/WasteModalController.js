@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-	.controller('WasteModalController', function ($scope, $mdDialog, selectedStock, WasteService) {
+	.controller('WasteModalController', function ($scope, $mdDialog, selectedStock, WasteService, ServerValidationService) {
 
         init();
 

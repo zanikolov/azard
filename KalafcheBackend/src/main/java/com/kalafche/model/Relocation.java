@@ -12,8 +12,10 @@ public class Relocation extends BaseModel {
 	private float productPrice;
 	private int sourceStoreId;
 	private String sourceStoreName;
+	private String sourceStoreCode;
 	private int destStoreId;
 	private String destStoreName;
+	private String destStoreCode;
 	private int deviceModelId;
 	private String deviceModelName;
 	private int deviceBrandId;
@@ -219,6 +221,22 @@ public class Relocation extends BaseModel {
 
 	public void setDestStoreName(String destStoreName) {
 		this.destStoreName = destStoreName;
+	}
+
+	public String getSourceStoreCode() {
+		return sourceStoreCode;
+	}
+
+	public void setSourceStoreCode(String sourceStoreCode) {
+		this.sourceStoreCode = sourceStoreCode;
+	}
+
+	public String getDestStoreCode() {
+		return destStoreCode;
+	}
+
+	public void setDestStoreCode(String destStoreCode) {
+		this.destStoreCode = destStoreCode;
 	}
 
 }

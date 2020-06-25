@@ -34,7 +34,7 @@ public class ExpenseDaoImpl extends JdbcDaoSupport implements ExpenseDao {
 			"ks.id as store_id, " +
 			"CONCAT(ks.city, ', ', ks.name) as store_name " +
 			"from expense e " +
-			"join kalafche_store ks on ks.id = e.store_id " +
+			"join store ks on ks.id = e.store_id " +
 			"join employee em on em.id = e.employee_id ";
 	
 	private static final String PERIOD_CRITERIA_QUERY = " where create_timestamp between ? and ?";

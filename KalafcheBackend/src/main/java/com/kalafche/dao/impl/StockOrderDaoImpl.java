@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.StockOrderDao;
 import com.kalafche.exceptions.CommonException;
+import com.kalafche.model.Employee;
 import com.kalafche.model.StockOrder;
-import com.kalafche.model.User;
-import com.kalafche.service.AuthenticationService;
+import com.kalafche.service.EmployeeService;
 
 @Service
 public class StockOrderDaoImpl extends JdbcDaoSupport implements StockOrderDao {
@@ -25,7 +25,7 @@ public class StockOrderDaoImpl extends JdbcDaoSupport implements StockOrderDao {
 	private BeanPropertyRowMapper<StockOrder> rowMapper;
 	
 	@Autowired
-	AuthenticationService authenticationService;
+	EmployeeService employeeService;
 	
 	@Autowired
 	public StockOrderDaoImpl(DataSource dataSource) {
@@ -59,17 +59,17 @@ public class StockOrderDaoImpl extends JdbcDaoSupport implements StockOrderDao {
 
 	@Override
 	public void insertStockOrder() {
-		User user = authenticationService.getPrincipal();
+		Employee employee = employeeService.getLoggedInEmployee();
 		long currentTime = System.currentTimeMillis(); 
 		
-		StockOrder stockOrder = new StockOrder(user.getId(), currentTime, user.getId(), currentTime, false, false);
+		StockOrder stockOrder = new StockOrder(employee.getId(), currentTime, employee.getId(), currentTime, false, false);
 		
 		getJdbcTemplate().update(INSERT_STOCK_ORDER, stockOrder.isArrived(), stockOrder.isCompleted(), stockOrder.getUpdatedBy(), stockOrder.getUpdateTimestamp(), stockOrder.getCreateTimestamp(), stockOrder.getCreatedBy());
 		
 	}
 
 	@Override
-	public void updateStockOrderUpdateTimestamp(int orderId, int updater, long updateTimestamp) {
+	public void updateStockOrderUpdateTimestamp(Integer orderId, Integer updater, Long updateTimestamp) {
 		getJdbcTemplate().update(UPDATE_STOCK_ORDER_UPDATE_TIMESTAMP, updater, updateTimestamp, orderId);
 		
 	}

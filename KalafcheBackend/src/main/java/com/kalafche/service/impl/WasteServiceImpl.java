@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kalafche.dao.ItemDao;
-import com.kalafche.dao.KalafcheStoreDao;
+import com.kalafche.dao.StoreDao;
 import com.kalafche.dao.WasteDao;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Waste;
@@ -43,7 +43,7 @@ public class WasteServiceImpl implements WasteService {
 	ImageUploadService imageUploadService;
 	
 	@Autowired
-	KalafcheStoreDao storeDao;
+	StoreDao storeDao;
 	
 	@Override
 	public WasteReport searchWastes(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
@@ -83,13 +83,13 @@ public class WasteServiceImpl implements WasteService {
 		String fileId = imageUploadService.uploadWasteImage(wasteImage);
 		Employee loggedInEmployee = employeeService.getLoggedInEmployee();
 		waste.setEmployeeId(loggedInEmployee.getId());
-		waste.setStoreId(loggedInEmployee.getKalafcheStoreId());
+		waste.setStoreId(loggedInEmployee.getStoreId());
 		waste.setTimestamp(dateService.getCurrentMillisBGTimezone());
 		waste.setPrice(itemDao.getItemPriceByStoreId(waste.getItemId(), waste.getStoreId()));
 		waste.setFileId(fileId);
 		
 		wasteDao.insertWaste(waste);
-		stockService.updateTheQuantitiyOfSoldStock(waste.getItemId(), loggedInEmployee.getKalafcheStoreId());
+		stockService.updateTheQuantitiyOfSoldStock(waste.getItemId(), loggedInEmployee.getStoreId());
 	}
 
 }

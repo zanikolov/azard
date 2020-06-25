@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, KalafcheStoreService, BrandService, ModelService, ProductService, SessionService) {
+    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, StoreService, BrandService, ModelService, ProductService, SessionService) {
 
         init();
 
@@ -141,9 +141,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
                 getSaleItems();
             });
 

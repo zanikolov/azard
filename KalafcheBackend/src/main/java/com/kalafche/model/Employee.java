@@ -4,23 +4,22 @@ import java.util.List;
 
 public class Employee {
 
-	private int id;
+	private Integer id;
 	private String name;
-	private int kalafcheStoreId;
-	private String kalafcheStoreName;
-	private int jobResponsibilityId;
+	private Integer storeId;
+	private String storeName;
+	private Integer jobResponsibilityId;
 	private String jobResponsibilityName;
-	private int userId;
 	private String username;
 	private String password;
 	private List<AuthRole> roles;
 	private boolean enabled;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -32,28 +31,20 @@ public class Employee {
 		this.name = name;
 	}
 
-	public int getKalafcheStoreId() {
-		return kalafcheStoreId;
+	public Integer getStoreId() {
+		return storeId;
 	}
 
-	public void setKalafcheStoreId(int kalafcheStoreId) {
-		this.kalafcheStoreId = kalafcheStoreId;
+	public void setStoreId(Integer storeId) {
+		this.storeId = storeId;
 	}
 
-	public int getJobResponsibilityId() {
+	public Integer getJobResponsibilityId() {
 		return jobResponsibilityId;
 	}
 
-	public void setJobResponsibilityId(int jobResponsibilityId) {
+	public void setJobResponsibilityId(Integer jobResponsibilityId) {
 		this.jobResponsibilityId = jobResponsibilityId;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -88,12 +79,12 @@ public class Employee {
 		this.jobResponsibilityName = jobResponsibilityName;
 	}
 
-	public String getKalafcheStoreName() {
-		return kalafcheStoreName;
+	public String getStoreName() {
+		return storeName;
 	}
 
-	public void setKalafcheStoreName(String kalafcheStoreName) {
-		this.kalafcheStoreName = kalafcheStoreName;
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 
 	public boolean isEnabled() {

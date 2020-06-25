@@ -19,14 +19,9 @@ import com.kalafche.dao.OrderedStockDao;
 import com.kalafche.dao.StockOrderDao;
 import com.kalafche.exceptions.CommonException;
 import com.kalafche.model.OrderedStock;
-import com.kalafche.model.User;
-import com.kalafche.service.AuthenticationService;
 
 @Service
 public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockDao {
-
-	@Autowired
-	AuthenticationService authenticationService;
 	
 	@Autowired
 	StockOrderDao stockOrderDao;
@@ -112,10 +107,9 @@ public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockD
 	@Override
 	@Transactional
 	public void deleteOrderedStock(int orderedStockId, int stockOrderId) {
-		User currentUser = authenticationService.getPrincipal();
 		long currentTime = System.currentTimeMillis();
 		
-		stockOrderDao.updateStockOrderUpdateTimestamp(stockOrderId, currentUser.getId(), currentTime);
+		stockOrderDao.updateStockOrderUpdateTimestamp(stockOrderId, null, currentTime);
 		getJdbcTemplate().update(DELETE_ORDERED_STOCK, orderedStockId);
 	}
 

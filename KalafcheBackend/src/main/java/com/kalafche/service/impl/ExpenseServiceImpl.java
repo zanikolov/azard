@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kalafche.dao.ExpenseDao;
-import com.kalafche.dao.KalafcheStoreDao;
+import com.kalafche.dao.StoreDao;
 import com.kalafche.model.Employee;
 import com.kalafche.model.Expense;
 import com.kalafche.model.ExpenseReport;
@@ -35,7 +35,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 	ImageUploadService imageUploadService;
 
 	@Autowired
-	KalafcheStoreDao storeDao;
+	StoreDao storeDao;
 
 	@Transactional
 	@Override
@@ -47,7 +47,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		expense.setEmployeeId(loggedInEmployee.getId());
 		
 		if (!isAdmin) {
-			expense.setStoreId(loggedInEmployee.getKalafcheStoreId());
+			expense.setStoreId(loggedInEmployee.getStoreId());
 		} else {
 			expense.setStoreId(storeId);
 		}

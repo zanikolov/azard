@@ -27,4 +27,8 @@ public interface DiscountService {
 
 	DiscountCode getDiscountCode(Integer code);
 
+	List<DiscountCode> getAvailableDiscountCodesForPartnerCampaign();
+	
+	List<DiscountCode> getAvailableDiscountCodesForLoyalCampaign();
+
 }

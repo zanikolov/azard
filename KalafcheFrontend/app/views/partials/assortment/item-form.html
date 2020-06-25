@@ -9,8 +9,8 @@
                     </md-input-container> 
                     <div layout="row">
                         <md-input-container flex="30">
-                            <label>Продукт</label>
-                            <input name="productCode" ng-model="item.productCode" ng-blur="getProductProperties()" ng-focus="resetProductProperties(item)" ng-maxlength="4" ng-disabled="item.id" required>
+                            <label>Продуктов код</label>
+                            <input name="productCode" ng-model="item.productCode" ng-blur="getProductProperties()" ng-focus="resetProductProperties(item)" ng-disabled="item.id" required>
                             <span ng-message="serverError" class="label label-error">
                             {{serverErrorMessages.productCode}}</span>
                         </md-input-container> 

@@ -38,6 +38,7 @@ angular.module('kalafcheFrontendApp')
             SaleService.submitSale(requestBody).then(
                 function(response) {
                     $scope.sale.selectedStocks = [];
+                    $scope.sale.isCashPayment = null;
                     $mdDialog.cancel();
                 }
             );

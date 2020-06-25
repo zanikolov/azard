@@ -34,7 +34,7 @@ public class RefundController {
 	}
 	
 	@PutMapping
-	public void submitWaste(@RequestBody Refund refund) {
+	public void submitRefund(@RequestBody Refund refund) {
 		refundService.submitRefund(refund);
 	}
 	

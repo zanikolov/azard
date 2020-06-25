@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function ExpenseReportController($scope, $rootScope, $mdDialog, ApplicationService, ExpenseService, AuthService, KalafcheStoreService, SessionService) {
+    function ExpenseReportController($scope, $rootScope, $mdDialog, ApplicationService, ExpenseService, AuthService, StoreService, SessionService) {
 
         init();
 
@@ -89,9 +89,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         function getAllStores() {
-            KalafcheStoreService.getAllKalafcheStores().then(function(response) {
+            StoreService.getAllStores().then(function(response) {
                 $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeKalafcheStoreId};
+                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
                 $scope.searchExpenses();
             });
 

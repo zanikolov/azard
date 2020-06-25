@@ -13,12 +13,14 @@ public interface NewStockDao {
 
 	void insertOrUpdateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity);
 
-	void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity);
-
 	void updateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity);
 
-	Integer insertNewStockImport(Long importTimestamp, Integer employeeTd, String fileName) throws SQLException;
+	void insertNewStockFromFile(String barcode, Integer quantity, Integer importId, Integer storeId);
 
-	void insertNewStockFromFile(String barcode, Integer quantity, Integer importId);
+	Integer insertNewStockImport(Long importTimestamp, Integer employeeId, String fileName) throws SQLException;
+
+	void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId);
+
+	List<NewStock> getNewStockByStoreId(Integer storeId);
 
 }

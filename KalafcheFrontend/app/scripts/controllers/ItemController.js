@@ -63,8 +63,8 @@ angular.module('kalafcheFrontendApp')
         $scope.filterByProductCode = function() {
             var productCodesString = $scope.productCode;
             var productCodes = productCodesString.split(" ");
-            return function predicateFunc(inStock) {
-                return productCodes.indexOf(inStock.productCode) !== -1 ;
+            return function predicateFunc(item) {
+                return productCodes.indexOf(item.productCode) !== -1 ;
             };
         };
 

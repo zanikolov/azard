@@ -2,12 +2,12 @@ package com.kalafche.model;
 
 public class Partner {
 	private Integer id;
-	private String code;
 	private String name;
 	private Integer partnerStoreId;
 	private String partnerStoreName;
 	private String phoneNumber;
 	private Integer discountCodeId;
+	private Integer discountCodeCode;
 
 	public Integer getId() {
 		return this.id;
@@ -15,14 +15,6 @@ public class Partner {
 	
 	public Integer setId(Integer id) {
 		return this.id = id;
-	}
-	
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getName() {
@@ -63,6 +55,14 @@ public class Partner {
 
 	public void setDiscountCodeId(Integer discountCodeId) {
 		this.discountCodeId = discountCodeId;
+	}
+
+	public Integer getDiscountCodeCode() {
+		return discountCodeCode;
+	}
+
+	public void setDiscountCodeCode(Integer discountCodeCode) {
+		this.discountCodeCode = discountCodeCode;
 	}
 
 }

@@ -25,4 +25,6 @@ public interface RevisionService {
 
 	List<Revision> searchRevisions(Long startDateMilliseconds, Long endDateMilliseconds, Integer storeId);
 
+	Integer correctionOfItemQuantityAfterRevision(RevisionItem revisionItem);
+
 }

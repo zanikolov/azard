@@ -28,8 +28,8 @@ public class PhoneHomeProductDaoImpl extends JdbcDaoSupport implements
 			"join product p on st.PRODUCT_ID = p.ID " +
 			"join device_model dm on dm.ID = st.DEVICE_MODEL_ID " +
 			"join device_brand db on db.id = dm.DEVICE_BRAND_ID " +
-			//"where st.KALAFCHE_STORE_ID = 4 " +
-			"where st.KALAFCHE_STORE_ID = 5 "
+			//"where st.store_ID = 4 " +
+			"where st.store_ID = 5 "
 			+ "and dm.ID = 255 or dm.ID = 256 " +
 			//"and p.CODE not in (123, 125, 141, 142, 143, 152, 182, 223, 231, 232, 233, 236, 237, 238, 239, 241, 243, 245, 247, 402, 432, 503, 506, 521, 522, 524, 525, 526, 533, 539, 542, 550, 641, 811, 812, 813, 814, 831, 871, 872, 873) ";
 			"and p.CODE not in (123, 125, 141, 142, 143, 152, 182, 223, 231, 232, 233, 236, 237, 238, 239, 245, 401, 402, 451, 453, 454, 432, 503, 506, 521, 522, 524, 525, 526, 533, 539, 550, 641, 811, 812, 813, 814, 831, 871, 872, 873) ";
@@ -47,8 +47,8 @@ public class PhoneHomeProductDaoImpl extends JdbcDaoSupport implements
 			"join product p on st.PRODUCT_ID = p.ID " +
 			"join device_model dm on dm.ID = st.DEVICE_MODEL_ID " +
 			"join device_brand db on db.id = dm.DEVICE_BRAND_ID " +
-			"where (st.KALAFCHE_STORE_ID = 4 " +
-			"or st.KALAFCHE_STORE_ID = 5) " +
+			"where (st.store_ID = 4 " +
+			"or st.store_ID = 5) " +
 			"and p.CODE not in (123, 125, 141, 142, 143, 152, 182, 223, 231, 232, 233, 236, 237, 238, 239, 241, 243, 245, 247, 402, 432, 503, 506, 521, 522, 524, 525, 526, 533, 539, 542, 550, 641, 811, 812, 813, 814, 831, 871, 872, 873) " +
 			"and p.CODE not in (123, 125, 141, 142, 143, 152, 182, 223, 231, 232, 233, 236, 237, 238, 239, 245, 401, 402, 451, 453, 454, 432, 503, 506, 521, 522, 524, 525, 526, 533, 539, 550, 641, 811, 812, 813, 814, 831, 871, 872, 873) " +
 			"and db.id = 3 " +

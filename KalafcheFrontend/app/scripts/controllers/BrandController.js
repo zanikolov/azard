@@ -41,7 +41,7 @@ angular.module('kalafcheFrontendApp')
                 });
         };
 
-         $scope.resetServerErrorMessages = function() {
+        $scope.resetServerErrorMessages = function() {
             $scope.serverErrorMessages = {};
         };
 

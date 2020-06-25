@@ -20,21 +20,18 @@ public class OrderedStockService {
 	@Autowired
 	StockOrderDao stockOrderDao;
 	
-	@Autowired
-	AuthenticationService authenticationService;
-	
 	@Transactional
 	public int addStockToOrder(OrderedStock orderedStock) throws CommonException, SQLException {
-		int currentUserId = authenticationService.getPrincipal().getId();
+		//int currentUserId = authenticationService.getPrincipal().getId();
 		long currentTime = System.currentTimeMillis();
 		int stockOrderId = orderedStock.getStockOrderId();
 		
-		orderedStock.setCreatedBy(currentUserId);
+		orderedStock.setCreatedBy(null);
 		orderedStock.setCreateTimestamp(currentTime);
 		
 		int orderedStockId = orderedStockDao.insertOrderedStock(orderedStock);
 		
-		stockOrderDao.updateStockOrderUpdateTimestamp(stockOrderId, currentUserId, currentTime);
+		stockOrderDao.updateStockOrderUpdateTimestamp(stockOrderId, null, currentTime);
 		
 		return orderedStockId;
 	}

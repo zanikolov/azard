@@ -10,7 +10,7 @@ angular.module('kalafcheFrontendApp')
         }
     });
 
-    function NewStockImportController($http, $scope, ModelService, BrandService, ProductService, NewStockService, KalafcheStoreService, ServerValidationService) {
+    function NewStockImportController($http, $scope, AuthService, SessionService, ModelService, BrandService, ProductService, NewStockService, StoreService, ServerValidationService) {
 
         init();
 
@@ -32,7 +32,11 @@ angular.module('kalafcheFrontendApp')
             getAllBrands();
             getAllProducts();
             getAllDeviceModels();
-            getAllNewStocks();
+            getAllStores();
+        };
+
+        $scope.isAdmin = function() {
+            return AuthService.isAdmin();
         };
 
         $scope.addNewStock = function() {
@@ -47,9 +51,9 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.submitNewAddedStock = function() {
-            if ($scope.newStockForm.$valid) {
-                NewStockService.submitNewStock($scope.newNewStock).then(function(response) {
-                    NewStockService.getAllNewStocks().then(function(response) {
+            if ($scope.newStockForm.$valid && $scope.selectedStore) {
+                NewStockService.submitNewStock($scope.newNewStock, $scope.selectedStore.id).then(function(response) {
+                    NewStockService.getNewStocks($scope.selectedStore.id).then(function(response) {
                         $scope.newStockFormVisible = false;
                         $scope.newNewStock = {};
                         $scope.newStocks = response;  
@@ -110,12 +114,25 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        function getAllNewStocks() {
-            NewStockService.getAllNewStocks().then(function(response) {
-                $scope.newStocks = response; 
-            });
+        function getNewStocks() {
+            if ($scope.selectedStore) {
+                NewStockService.getNewStocks($scope.selectedStore.id).then(function(response) {
+                    $scope.newStocks = response; 
+                });
+            }
         };
 
+        $scope.getNewStocks = function() {
+            getNewStocks();
+        }
+
+        function getAllStores() {
+            StoreService.getAllStores().then(function(response) {
+                $scope.stores = response;
+                $scope.selectedStore = {"id": SessionService.currentUser.employeeStoreId};
+                getNewStocks();
+            });
+        };
 
         $scope.getNameById = function(list, id) {
             if (list) {
@@ -131,7 +148,7 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.isApproveButtonVisible = function() {
-            return  $scope.isAdmin() && $scope.stocksWaitingForApprovalByKalafcheStore[$scope.selectedKalafcheStore.id].length > 0;
+            return  $scope.isAdmin() && $scope.stocksWaitingForApprovalByStore[$scope.selectedStore.id].length > 0;
         };
 
         $scope.getProductProperties = function () {
@@ -153,14 +170,15 @@ angular.module('kalafcheFrontendApp')
             $scope.newNewStock.productName = null;
         };
 
-        $scope.importFile = function () {
-            var file = $scope.file;
-            NewStockService.importFile(file).then(function(response) {
-                getAllNewStocks(); 
-            },
-            function(errorResponse) {
-                ServerValidationService.processServerErrors(errorResponse, $scope.fileForm);
-                $scope.serverErrorMessages = errorResponse.data.errors;
-            });
+        $scope.importFile = function (file) {          
+            if ($scope.selectedStore && $scope.selectedStore.id != 0 && file) {
+                NewStockService.importFile(file, $scope.selectedStore.id).then(function(response) {
+                    getNewStocks($scope.selectedStore.id); 
+                },
+                function(errorResponse) {
+                    ServerValidationService.processServerErrors(errorResponse, $scope.fileForm);
+                    $scope.serverErrorMessages = errorResponse.data.errors;
+                });
+            }
         };
   };

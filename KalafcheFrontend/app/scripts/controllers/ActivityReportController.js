@@ -76,22 +76,13 @@ angular.module('kalafcheFrontendApp')
         function getAllEmployees() {
             EmployeeService.getAllActiveEmployees().then(function(response) {
                 $scope.employees = response;
-                //$scope.selectedKalafcheStore = KalafcheStoreService.getRealSelectedStore($scope.kalafcheStores, $scope.isAdmin());
                 getActivities();
             });
 
         };
 
         $scope.getActivityTimestamp = function(activityTimestamp) {
-            var timeStamp = new Date(activityTimestamp);
-
-            var minutes = ApplicationService.getTwoDigitNumber(timeStamp.getMinutes());
-            var hh = ApplicationService.getTwoDigitNumber(timeStamp.getHours()) + timeStamp.getTimezoneOffset();
-            var dd = ApplicationService.getTwoDigitNumber(timeStamp.getDate());
-            var mm = ApplicationService.getTwoDigitNumber(timeStamp.getMonth() + 1); //January is 0!
-            var yyyy = timeStamp.getFullYear();
-
-            return dd + "-" + mm + "-" + yyyy + " " + hh + ":" + minutes;
+            return ApplicationService.convertEpochToTimestamp(activityTimestamp);
         };
 
         $scope.resetCurrentPage = function() {

@@ -3,7 +3,6 @@ package com.kalafche.service;
 import java.util.List;
 
 import com.kalafche.model.Item;
-import com.kalafche.model.Product;
 
 public interface ItemService {
 
@@ -16,5 +15,9 @@ public interface ItemService {
 	void updateItem(Item item);
 
 	Item getItemByProductIdAndDeviceModelId(Integer productId, Integer deviceModelId);
+
+	void updateItemOnlyForIntegrationPurposes(Integer productId, Integer deviceModelId, String barcode);
+
+	void insertItemOrUpdateBarcode(Item item);
 
 }

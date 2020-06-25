@@ -23,7 +23,7 @@ public class SaleItemExcelReportServiceImpl implements SaleItemExcelReportServic
 	@Override
 	public byte[] generateExcel(SaleItemExcelReportRequest saleItemExcelReportRequest) {
 		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet(String.format("от %s до %s",
+		XSSFSheet sheet = workbook.createSheet(String.format("Продажби",
 				dateService.convertMillisToDateTimeString(saleItemExcelReportRequest.getStartDate(), false),
 				dateService.convertMillisToDateTimeString(saleItemExcelReportRequest.getEndDate(), false)));
 

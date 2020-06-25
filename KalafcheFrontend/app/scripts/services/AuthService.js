@@ -15,7 +15,7 @@ angular.module('kalafcheFrontendApp')
         function login(credentials) {
             var authorizationHeader = 'Basic ' + btoa(credentials.username + ':' + credentials.password);
             //$http.defaults.headers.common['Authorization'] = authorizationHeader;
-            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/service/employee/getEmployee', 
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/employee/login', 
                     {headers: {'Authorization': authorizationHeader}});
         };
 
@@ -29,7 +29,7 @@ angular.module('kalafcheFrontendApp')
             } else {
                 var currentUser = $cookies.getObject("currentUser");
 
-                if (currentUser && currentUser.userId) {
+                if (currentUser && currentUser.employeeId) {
                     SessionService.currentUser = currentUser;
                     $rootScope.currentUser = currentUser;
 

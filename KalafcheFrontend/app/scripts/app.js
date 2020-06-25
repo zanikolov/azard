@@ -22,7 +22,7 @@ angular
         'ui.bootstrap',
         'ngMaterial',
         'ngFileSaver'])
-    .config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $httpProvider, UserRoles) {
+    .config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $httpProvider, UserRoles, AuthServiceProvider) {
         $httpProvider.defaults.withCredentials = true;
         $urlRouterProvider.otherwise('/login');
         
@@ -31,7 +31,7 @@ angular
                 url: '/assortment',
                 templateUrl: 'views/partials/assortment/assortment-tab.html',
                 data: {
-                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Асортимент"
                 }
             })
@@ -39,22 +39,29 @@ angular
                 url: '/device',
                 templateUrl: 'views/partials/device/device-tab.html',
                 data: {
-                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Устройства"
                 }
             }).state('employee', {
                 url: '/employee',
                 templateUrl: 'views/partials/partial-employee.html',
                 data: {
-                    authorizedRoles: [UserRoles.superAdmin],
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Служители"
                 }      
-            }).state('kalafcheStore', {
-                url: '/kalafcheStore',
-                templateUrl: 'views/partials/partial-kalafche-store.html',
+            }).state('store', {
+                url: '/store',
+                templateUrl: 'views/partials/partial-store.html',
                 data: {
-                    authorizedRoles: [UserRoles.superAdmin],
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Обекти"
+                }      
+            }).state('loyalCustomer', {
+                url: '/loyalCustomer',
+                templateUrl: 'views/partials/partial-loyal-customer.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
+                    title: "Лоялни клиенти"
                 }      
             }).state('partner', {
                 url: '/partner',
@@ -151,8 +158,15 @@ angular
                 url: '/discount',
                 templateUrl: 'views/partials/discount/discount-tab.html',
                 data: {
-                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin, UserRoles.user],
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
                     title: "Промоции"
+                }      
+            }).state('rawItem', {
+                url: '/rawItem',
+                templateUrl: 'views/partials/partial-import-barcodes.html',
+                data: {
+                    authorizedRoles: [UserRoles.superAdmin, UserRoles.admin],
+                    title: "Баркодове"
                 }      
             }).state('login',{
                 url: '/login',
@@ -203,21 +217,31 @@ angular
             }
         });
         $rootScope.$on(AuthEvents.notAuthenticated, function () {
+            console.log(">>>> notAuthenticated");
             SessionService.destroy();
             $state.go('login');
         });
         $rootScope.$on(AuthEvents.sessionTimeout, function () {
+            console.log(">>>> sessionTimeout");
             SessionService.destroy();
-            $state.go('login');
+            $state.go('login');       
         });
         $rootScope.$on(AuthEvents.notAuthorized, function () {
-            console.log("403 Forbidden");
+            console.log(">>>> notAuthorized");
+            SessionService.destroy();
+            $state.go('login'); 
         });
         $rootScope.$on(AuthEvents.loginSuccess, function () {
             $rootScope.sideNavVisible = true;
-            $state.go('discount');
+            if (AuthService.isAdmin()) {
+                $state.go('saleReport'); 
+            } else {
+                $state.go('inStock');    
+            }
         })
         $rootScope.$on(AuthEvents.logoutSuccess, function () {
+            console.log(">>>> logoutSuccess");
+            SessionService.destroy();
             $state.go('login');
         })
 
