@@ -3,6 +3,8 @@ package com.kalafche.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.kalafche.model.PastPeriodSaleReport;
+import com.kalafche.model.PastPeriodTurnover;
 import com.kalafche.model.Sale;
 import com.kalafche.model.SaleItem;
 import com.kalafche.model.SaleReport;
@@ -21,5 +23,10 @@ public interface SaleService {
 			String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId);
 
 	public TotalSumReport calculateTotalSum(TotalSumRequest totalSumRequest);
+
+	public SaleReport searchSalesByStores(Long startDateMilliseconds, Long endDateMilliseconds, String productCode,
+			Integer deviceBrandId, Integer deviceModelId, Integer productTypeId);
+
+	public PastPeriodSaleReport searchSalesForPastPeriodsByStores(String month);
 
 }

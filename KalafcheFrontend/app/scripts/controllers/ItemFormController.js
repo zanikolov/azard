@@ -32,6 +32,9 @@ angular.module('kalafcheFrontendApp')
                     if (response) {  
                     	$scope.item.productId = response.id;
             			$scope.item.productName = response.name;
+                    } else {
+                        $scope.item.productName = "Несъществуващ продуктов код.";
+                        $scope.itemForm.$invalid = true;
                     }
                 }
             );

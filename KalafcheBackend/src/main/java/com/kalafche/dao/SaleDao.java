@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.kalafche.model.Sale;
+import com.kalafche.model.SalesByStore;
 import com.kalafche.model.SaleItem;
 
 public abstract interface SaleDao {
@@ -25,4 +26,6 @@ public abstract interface SaleDao {
 	public abstract void updateRefundedSaleItem(Integer saleItemId);
 
 	public abstract BigDecimal getSaleItemPrice(Integer saleItemId);
+
+	public abstract List<SalesByStore> searchSaleByStore(Long startDateMilliseconds, Long endDateMilliseconds);
 }

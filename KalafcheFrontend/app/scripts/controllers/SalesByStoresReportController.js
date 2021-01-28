@@ -1,22 +1,22 @@
 'use strict';
 
 angular.module('kalafcheFrontendApp')
-    .directive('saleReportByItem', function() {
+    .directive('saleReportByStore', function() {
         return {
             restrict: 'E',
             scope: {},
-            templateUrl: 'views/partials/sale-report/by-item.html',
-            controller: SaleItemReportController
+            templateUrl: 'views/partials/sale-report/by-store.html',
+            controller: SalesByStoresReportController
         }
     });
 
-    function SaleItemReportController($scope, ApplicationService, AuthService, SaleService, StoreService, BrandService, ModelService, ProductService, SessionService) {
+    function SalesByStoresReportController($scope, ApplicationService, AuthService, SaleService, StoreService, BrandService, ModelService, ProductService, SessionService) {
 
         init();
 
         function init() {
             $scope.currentPage = 1;  
-            $scope.saleItemsPerPage = 15;
+            $scope.salesByStorePerPage = 25;
             $scope.saleItems = []; 
             $scope.stores = [];
             $scope.brands = [];
@@ -55,10 +55,10 @@ angular.module('kalafcheFrontendApp')
                 showWeeks: false
             };
 
-            getAllStores();
             getAllBrands();
             getAllDeviceModels();
-            getAllProductTypes()
+            getAllProductTypes();
+            getSalesByStores();
         }
 
         function getCurrentDate() {
@@ -91,12 +91,12 @@ angular.module('kalafcheFrontendApp')
             });
         };
 
-        $scope.searchSaleItems = function() {
-            getSaleItems();         
+        $scope.searchSalesByStores = function() {
+            getSalesByStores();         
         }
 
-        function getSaleItems() {
-            SaleService.searchSaleItems($scope.startDateMilliseconds, $scope.endDateMilliseconds, $scope.selectedStore.id,
+        function getSalesByStores() {
+            SaleService.getSalesByStores($scope.startDateMilliseconds, $scope.endDateMilliseconds,
                 $scope.selectedBrand.id, $scope.selectedModel.id, $scope.productCode, $scope.selectedProductType.id).then(function(response) {
                 $scope.report = response;
 
@@ -134,25 +134,6 @@ angular.module('kalafcheFrontendApp')
             $scope.endDatePopup.opened = true;
         };
 
-        $scope.filterByPeriod = function () {
-            return function predicateFunc(sale) {
-                return sale.saleTimestamp >= $scope.startDateMilliseconds && sale.saleTimestamp <= $scope.endDateMilliseconds;
-            };
-        };
-
-        function getAllStores() {
-            StoreService.getAllStores().then(function(response) {
-                $scope.stores = response;
-                $scope.selectedStore =  {"id": SessionService.currentUser.employeeStoreId};
-                getSaleItems();
-            });
-
-        };
-
-        $scope.getSaleTimestamp = function(saleTimestamp) {
-            return ApplicationService.convertEpochToTimestamp(saleTimestamp)
-        };
-
         $scope.getReportDate = function(reportTimestamp) {
             return ApplicationService.convertEpochToDate(reportTimestamp)
         };
@@ -168,28 +149,16 @@ angular.module('kalafcheFrontendApp')
         $scope.resetCurrentPage = function() {
             $scope.currentPage = 1;
         };
-
-        $scope.expandAll = function(expanded) {
-            $scope.$broadcast('onExpandAll', {
-                expanded: expanded
-            });
-        };
-
-        $scope.expand = function(sale) {
-            getSaleItems(sale);
-            sale.expanded = !sale.expanded;
-        };
-
         
         $scope.isAdmin = function() {
             return AuthService.isAdmin();
         }
 
-        $scope.generateExcel = function() {
-            SaleService.generateExcel($scope.report.saleItems, $scope.startDateMilliseconds, $scope.endDateMilliseconds).then(function(response) {
-                console.log(">>> Success!");
-            });   
-        }
+        // $scope.generateExcel = function() {
+        //     SaleService.generateExcel($scope.report.saleItems, $scope.startDateMilliseconds, $scope.endDateMilliseconds).then(function(response) {
+        //         console.log(">>> Success!");
+        //     });   
+        // }
 
     };
 

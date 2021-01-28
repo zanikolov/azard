@@ -26,6 +26,7 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.submitSale = function() {
+            $scope.loading = true;
             var requestBody = {};
             if ($scope.discountCode) {
                 requestBody.discountCodeCode = $scope.code;
@@ -40,6 +41,10 @@ angular.module('kalafcheFrontendApp')
                     $scope.sale.selectedStocks = [];
                     $scope.sale.isCashPayment = null;
                     $mdDialog.cancel();
+                    $scope.loading = false;
+                },
+                function(error) {
+                    $scope.loading = false;
                 }
             );
             

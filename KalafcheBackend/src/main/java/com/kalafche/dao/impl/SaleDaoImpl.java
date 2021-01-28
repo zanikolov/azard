@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.kalafche.dao.SaleDao;
 import com.kalafche.model.Sale;
+import com.kalafche.model.SalesByStore;
 import com.kalafche.model.SaleItem;
 
 @Service
@@ -66,6 +67,18 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"join store ks on ks.id = s.store_id " +
 			"join employee e on e.id = s.employee_id ";
 
+	private static final String GET_SALES_BY_STORE_QUERY = "select " +
+			"ks.id as storeId, " +
+			"ks.code as storeCode, " +
+			"CONCAT(ks.city,\",\",ks.name) as store_name, " +
+			"coalesce(sum(si.sale_price), 0.00) as amount, " +
+			"coalesce(count(si.id), 0) as count " +
+			"from store ks " +
+			"left join sale s on s.store_id = ks.id and s.sale_timestamp between ? and ? " +
+			"left join sale_item si on si.sale_id = s.id " +
+			"and si.is_refunded <> true " +
+			"where ks.is_store is true ";
+	
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String STORE_CRITERIA_QUERY = " and ks.id in (%s)";
 	private static final String REFUND_QUERY = " and si.is_refunded <> true";
@@ -75,8 +88,10 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	private static final String PRODUCT_TYPE_QUERY = " and iv.product_type_id = ?";
 	private static final String INSERT_SALE = "insert into sale (employee_id, store_id, sale_timestamp, is_cash_payment, discount_code_id)"
 			+ " values (?, ?, ?, ?, ?)";
-	private static final String ORDER_BY = " order by s.sale_timestamp";
-	private static final String GROUP_BY = " group by s.id";
+	private static final String ORDER_BY_SALE = " order by s.sale_timestamp";
+	private static final String ORDER_BY_STORE = " order by ks.id";
+	private static final String GROUP_BY_SALE = " group by s.id";
+	private static final String GROUP_BY_STORE = " group by ks.id";
 	private static final String GET_SALE_ITEMS_PER_SALE = "select " +
 			"si.id, " +
 			"si.sale_id, " +
@@ -103,8 +118,9 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 
 	private static final String GET_SALE_ITEM_PRICE = "select sale_price from sale_item where id = ?";
 	
-	private BeanPropertyRowMapper<Sale> rowMapper;
+	private BeanPropertyRowMapper<Sale> saleRowMapper;
 	private BeanPropertyRowMapper<SaleItem> saleItemRowMapper;
+	private BeanPropertyRowMapper<SalesByStore> saleByStoreRowMapper;
 
 	@Autowired
 	public SaleDaoImpl(DataSource dataSource) {
@@ -112,13 +128,13 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		setDataSource(dataSource);
 	}
 	
-	private BeanPropertyRowMapper<Sale> getRowMapper() {
-		if (rowMapper == null) {
-			rowMapper = new BeanPropertyRowMapper<Sale>(Sale.class);
-			rowMapper.setPrimitivesDefaultedForNullValue(true);
+	private BeanPropertyRowMapper<Sale> getSaleRowMapper() {
+		if (saleRowMapper == null) {
+			saleRowMapper = new BeanPropertyRowMapper<Sale>(Sale.class);
+			saleRowMapper.setPrimitivesDefaultedForNullValue(true);
 		}
 
-		return rowMapper;
+		return saleRowMapper;
 	}
 	
 	private BeanPropertyRowMapper<SaleItem> getSaleItemRowMapper() {
@@ -128,6 +144,15 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		}
 		
 		return saleItemRowMapper;
+	}
+	
+	private BeanPropertyRowMapper<SalesByStore> getSaleByStoreRowMapper() {
+		if (saleByStoreRowMapper == null) {
+			saleByStoreRowMapper = new BeanPropertyRowMapper<SalesByStore>(SalesByStore.class);
+			saleByStoreRowMapper.setPrimitivesDefaultedForNullValue(true);
+		}
+		
+		return saleByStoreRowMapper;
 	}
 
 	@Override
@@ -169,14 +194,14 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);
 		
-		searchQuery += GROUP_BY;
-		searchQuery += ORDER_BY;
+		searchQuery += GROUP_BY_SALE;
+		searchQuery += ORDER_BY_SALE;
 		
 		Object[] argsArr = new Object[argsList.size()];
 		argsArr = argsList.toArray(argsArr);
 
 		return getJdbcTemplate().query(
-				searchQuery, argsArr, getRowMapper());
+				searchQuery, argsArr, getSaleRowMapper());
 	}
 	
 	@Override
@@ -189,7 +214,7 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 		
 		searchQuery += addDetailedSearch(productCode, deviceBrandId, deviceModelId, productTypeId, argsList);
 		
-		searchQuery += ORDER_BY;
+		searchQuery += ORDER_BY_SALE;
 		
 		Object[] argsArr = new Object[argsList.size()];
 		argsArr = argsList.toArray(argsArr);
@@ -242,6 +267,25 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	@Override
 	public BigDecimal getSaleItemPrice(Integer saleItemId) {
 		return getJdbcTemplate().queryForObject(GET_SALE_ITEM_PRICE, BigDecimal.class, saleItemId);
+	}
+
+	@Override
+	public List<SalesByStore> searchSaleByStore(Long startDateMilliseconds, Long endDateMilliseconds) {
+		String searchQuery = GET_SALES_BY_STORE_QUERY;
+		List<Object> argsList = new ArrayList<Object>();
+		argsList.add(startDateMilliseconds);
+		argsList.add(endDateMilliseconds);
+		
+		//searchQuery += addDetailedSearch(productCode, deviceBrandId, deviceModelId, productTypeId, argsList);
+		
+		searchQuery += GROUP_BY_STORE;
+		searchQuery += ORDER_BY_STORE;
+		
+		Object[] argsArr = new Object[argsList.size()];
+		argsArr = argsList.toArray(argsArr);
+
+		return getJdbcTemplate().query(
+				searchQuery, argsArr, getSaleByStoreRowMapper());
 	}
 	
 }

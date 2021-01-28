@@ -84,11 +84,13 @@
                         <td>{{convertEpochToDate(relocation.relocationCompleteTimestamp)}}</td>
                         <td>
                             <div ng-if="isAdmin() && relocation.status == 'INITIATED'">
-                                <a href="" ng-click="changeStatus(relocation, 'APPROVED')">
-                                    <md-icon class="primary-icon" md-svg-src="images/icons/check.svg"></md-icon>
+                                <a href="" ng-click="changeStatus(relocation, 'APPROVED')" class="primary-icon">
+                                    <!-- <md-icon class="primary-icon" md-svg-src="images/icons/check.svg"></md-icon> -->
+                                    Одобри
                                 </a>
-                                <a href="" ng-click="changeStatus(relocation, 'REJECTED')">
-                                    <md-icon class="primary-icon" md-svg-src="images/icons/close.svg"></md-icon>
+                                <a href="" ng-click="changeStatus(relocation, 'REJECTED')" class="primary-icon">
+                                    <!-- <md-icon class="primary-icon" md-svg-src="images/icons/close.svg"></md-icon> -->
+                                    Откажи
                                 </a>
                             </div>
                             <div ng-if="!isAdmin() && relocation.status == 'INITIATED'">
@@ -102,10 +104,7 @@
                                     <md-icon class="primary-icon" md-svg-src="images/icons/call_made.svg"></md-icon>
                                 </a>
                             </div>
-                            <div ng-if="relocation.status === 'APPROVED' && !isEmployeeOfSourceStore(relocation) && !(isAdmin() && isSourceStoreWarehouse(relocation))">
-                                <md-icon md-svg-src="images/icons/check.svg"></md-icon>
-                            </div>
-                            <div ng-if="relocation.status === 'APPROVED' && isEmployeeOfDestStore(relocation)">
+                            <div ng-if="(relocation.status === 'APPROVED' && !isEmployeeOfSourceStore(relocation) && !(isAdmin() && isSourceStoreWarehouse(relocation))) || (relocation.status === 'APPROVED' && isEmployeeOfDestStore(relocation))">
                                 <md-icon md-svg-src="images/icons/check.svg"></md-icon>
                             </div>
                             <div ng-if="relocation.status === 'SENT' && isEmployeeOfDestStore(relocation)">

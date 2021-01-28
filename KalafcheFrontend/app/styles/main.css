@@ -372,3 +372,11 @@
     .borderless td, .borderless th {
         border: none !important;
     }
+
+    .negativeDelta {
+        color: red !important;
+    }
+
+    .positiveDelta {
+        color: green !important;
+    }

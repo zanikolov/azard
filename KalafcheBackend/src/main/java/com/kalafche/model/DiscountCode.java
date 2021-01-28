@@ -1,7 +1,5 @@
 package com.kalafche.model;
 
-import java.math.BigDecimal;
-
 public class DiscountCode {
 
 	private Integer id;
@@ -12,7 +10,7 @@ public class DiscountCode {
 	private Integer discountTypeId;
 	private String discountTypeCode;
 	private String discountTypeSign;
-	private BigDecimal discountValue;
+	private String discountValue;
 	private Integer partnerId;
 	private String partnerName;
 	private Integer partnerStoreId;
@@ -69,11 +67,11 @@ public class DiscountCode {
 		this.discountTypeSign = discountTypeSign;
 	}
 
-	public BigDecimal getDiscountValue() {
+	public String getDiscountValue() {
 		return discountValue;
 	}
 
-	public void setDiscountValue(BigDecimal discountValue) {
+	public void setDiscountValue(String discountValue) {
 		this.discountValue = discountValue;
 	}
 

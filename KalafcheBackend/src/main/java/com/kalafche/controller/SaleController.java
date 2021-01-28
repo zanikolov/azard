@@ -2,6 +2,7 @@ package com.kalafche.controller;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kalafche.model.PastPeriodSaleReport;
 import com.kalafche.model.Sale;
 import com.kalafche.model.SaleItem;
 import com.kalafche.model.SaleItemExcelReportRequest;
@@ -52,8 +54,22 @@ public class SaleController {
 		return saleService.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId, productTypeId);
 	}
 	
+	@GetMapping("/store")
+	public SaleReport searchSalesByStores(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
+			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds,
+			@RequestParam(value = "productCode", required = false) String productCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
+			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId, @RequestParam(value = "productTypeId", required = false) Integer productTypeId) {
+		return saleService.searchSalesByStores(startDateMilliseconds, endDateMilliseconds, productCode, deviceBrandId, deviceModelId, productTypeId);
+	}
+	
+	@GetMapping("/pastPeriods")
+	public PastPeriodSaleReport searchSalesByStores(@RequestParam(value = "month") String month) {
+		return saleService.searchSalesForPastPeriodsByStores(month);
+	}
+	
 	@PutMapping
-	public void insertSale(@RequestBody Sale sale) throws SQLException {
+	public void insertSale(@RequestBody Sale sale) throws SQLException, InterruptedException {
+		//TimeUnit.SECONDS.sleep(5);
 		saleService.submitSale(sale);
 	}
 	

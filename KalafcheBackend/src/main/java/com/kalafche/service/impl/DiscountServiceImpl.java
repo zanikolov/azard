@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.kalafche.dao.DiscountDao;
 import com.kalafche.exceptions.DuplicationException;
@@ -65,7 +66,7 @@ public class DiscountServiceImpl implements DiscountService {
 	@Override
 	public void updateDiscountCampaign(DiscountCampaign discountCampaign) {
 		if (discountCampaign.getCode() != null && discountCampaign.getCode() != ""
-				&& discountCampaign.getDiscountValue() != null && discountCampaign.getDiscountValue() != 0) {
+				&& !StringUtils.isEmpty(discountCampaign.getDiscountValue()) && discountCampaign.getDiscountValue() != "0") {
 			discountDao.updateDiscountCampaign(discountCampaign);
 		}
 	}

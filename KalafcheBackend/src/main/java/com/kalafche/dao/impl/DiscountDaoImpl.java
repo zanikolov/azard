@@ -67,9 +67,9 @@ public class DiscountDaoImpl extends JdbcDaoSupport implements DiscountDao {
 	
 	private static final String UPDATE_DISCOUNT_CODE = "update discount_code set active = ? where id = ?";
 	
-	private static final String SELECT_AVAILABLE_PARTNER_CODES = "select * from discount_code where id not in (select discount_code_id from partner) and discount_campaign_id = (select id from discount_campaign where code = 'PARTNER') ";		
+	private static final String SELECT_AVAILABLE_PARTNER_CODES = "select * from discount_code where id not in (select coalesce(0, discount_code_id) from partner) and discount_campaign_id = (select id from discount_campaign where code = 'PARTNER') ";		
 	
-	private static final String SELECT_AVAILABLE_LOYAL_CODES = "select * from discount_code where id not in (select discount_code_id from loyal_customer) and discount_campaign_id = (select id from discount_campaign where code = 'LOYAL') ";	
+	private static final String SELECT_AVAILABLE_LOYAL_CODES = "select * from discount_code where id not in (select coalesce(0, discount_code_id) from loyal_customer) and discount_campaign_id = (select id from discount_campaign where code = 'LOYAL') ";	
 	
 	private BeanPropertyRowMapper<DiscountCampaign> discountCampaignRowMapper;
 	
@@ -120,7 +120,7 @@ public class DiscountDaoImpl extends JdbcDaoSupport implements DiscountDao {
 			statement.setString(3, discountCampaign.getName());
 			statement.setString(4, discountCampaign.getDescription());
 			statement.setInt(5, discountCampaign.getDiscountTypeId());
-			statement.setInt(6, discountCampaign.getDiscountValue());
+			statement.setString(6, discountCampaign.getDiscountValue());
 			statement.setString(7, discountCampaign.getCode());
 
 			int affectedRows = statement.executeUpdate();

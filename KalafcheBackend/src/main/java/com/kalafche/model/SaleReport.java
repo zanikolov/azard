@@ -7,6 +7,8 @@ public class SaleReport {
 
 	private List<Sale> sales;
 	private List<SaleItem> saleItems;
+	private List<SalesByStore> salesByStores;
+	private List<SalesForPastPeriodsByStore> salesForPastPeriodsByStore;
 	private Integer warehouseQuantity;
 	private Integer companyQuantity;
 	private BigDecimal totalAmount;
@@ -21,9 +23,13 @@ public class SaleReport {
 	public SaleReport() {
 	}
 	
-	public SaleReport(List<Sale> sales, List<SaleItem> saleItems, Integer warehouseQuantity, Integer companyQuantity) {
+	public SaleReport(List<Sale> sales, List<SaleItem> saleItems, List<SalesByStore> saleByStore,
+			Integer warehouseQuantity, Integer companyQuantity,
+			List<SalesForPastPeriodsByStore> salesForPastPeriodsByStore) {
 		this.sales = sales;
 		this.setSaleItems(saleItems);
+		this.salesByStores = saleByStore;
+		this.salesForPastPeriodsByStore = salesForPastPeriodsByStore;
 		this.warehouseQuantity = warehouseQuantity;
 		this.companyQuantity = companyQuantity;
 	}
@@ -42,6 +48,22 @@ public class SaleReport {
 
 	public void setSaleItems(List<SaleItem> saleItems) {
 		this.saleItems = saleItems;
+	}
+
+	public List<SalesByStore> getSalesByStores() {
+		return salesByStores;
+	}
+
+	public void setSalesByStores(List<SalesByStore> salesByStores) {
+		this.salesByStores = salesByStores;
+	}
+
+	public List<SalesForPastPeriodsByStore> getSalesForPastPeriodsByStore() {
+		return salesForPastPeriodsByStore;
+	}
+
+	public void setSalesForPastPeriodsByStore(List<SalesForPastPeriodsByStore> salesForPastPeriodsByStore) {
+		this.salesForPastPeriodsByStore = salesForPastPeriodsByStore;
 	}
 
 	public Integer getWarehouseQuantity() {

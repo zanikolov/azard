@@ -11,7 +11,7 @@ public class DiscountCampaign {
 	private String discountTypeCode;
 	private String discountTypeName;
 	private String discountTypeSign;
-	private Integer discountValue;
+	private String discountValue;
 	private Integer createdByEmployeeId;
 	private String createdByEmployeeName;
 	private Integer updatedByEmployeeId;
@@ -89,11 +89,11 @@ public class DiscountCampaign {
 		this.discountTypeSign = discountTypeSign;
 	}
 
-	public Integer getDiscountValue() {
+	public String getDiscountValue() {
 		return discountValue;
 	}
 
-	public void setDiscountValue(Integer discountValue) {
+	public void setDiscountValue(String discountValue) {
 		this.discountValue = discountValue;
 	}
 

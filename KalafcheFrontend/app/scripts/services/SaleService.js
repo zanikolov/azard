@@ -5,10 +5,12 @@ angular.module('kalafcheFrontendApp')
 		angular.extend(this, {
 			submitSale: submitSale,
             getSaleItems: getSaleItems,
+            getSalesByStores: getSalesByStores,
             searchSales: searchSales,
             searchSaleItems: searchSaleItems,
             getTotalSum: getTotalSum,
-            generateExcel: generateExcel
+            generateExcel: generateExcel,
+            getMonthlyTurnover: getMonthlyTurnover
 		});
 
         function getTotalSum(items, code) {
@@ -21,12 +23,9 @@ angular.module('kalafcheFrontendApp')
             request.prices = prices;
             request.discountCode = code
 
-            console.log(request);
-
             return $http.post(Environment.apiEndpoint + '/KalafcheBackend/sale/totalSum', request)
                 .then(
                     function(response) {
-                        console.log(response.data);
                         return response.data
                     }
                 );
@@ -72,7 +71,18 @@ angular.module('kalafcheFrontendApp')
             return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale/saleItem', params)
                 .then(
                     function(response) {
-                        console.log(response.data);
+                        return response.data
+                    }
+                );
+        }
+
+        function getSalesByStores(startDateMilliseconds, endDateMilliseconds, selectedBrandId, selectedModelId, productCode, productTypeId) { 
+            var params = {"params" : {"startDateMilliseconds": startDateMilliseconds, "endDateMilliseconds": endDateMilliseconds,
+             "deviceBrandId": selectedBrandId, "deviceModelId": selectedModelId, "productCode": productCode, "productTypeId": productTypeId}};
+
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale/store', params)
+                .then(
+                    function(response) {
                         return response.data
                     }
                 );
@@ -84,13 +94,22 @@ angular.module('kalafcheFrontendApp')
             request.startDate = startDateMilliseconds;
             request.endDate = endDateMilliseconds;
 
-            console.log(request);
-
             return $http.post(Environment.apiEndpoint + '/KalafcheBackend/sale/excel', request, {responseType: "arraybuffer"})
                 .then(
                     function(response) {
                         var blob = new Blob([response.data], {type: "application/vnd.openxmlformat-officedocument.spreadsheetml.sheet;"});
                         FileSaver.saveAs(blob, 'Справка продажби артикули.xlsx')
+                    }
+                );
+        }
+
+        function getMonthlyTurnover(month) {
+            var params = {"params" : {"month": month}};
+
+            return $http.get(Environment.apiEndpoint + '/KalafcheBackend/sale/pastPeriods', params)
+                .then(
+                    function(response) {
+                        return response.data
                     }
                 );
         }

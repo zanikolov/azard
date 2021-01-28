@@ -4,7 +4,7 @@
       <div class="md-toolbar-tools">
         <h2>Продажба</h2>
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="closeModal()">
+        <md-button ng-disabled="loading" class="md-icon-button" ng-click="closeModal()">
           <md-icon md-svg-src="images/icons/close.svg" aria-label="Затвори"></md-icon>
         </md-button>
       </div>
@@ -88,10 +88,10 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <md-button ng-click="resetSale()" class="md-raised md-primary">Отмени</md-button>
+      <md-button ng-disabled="loading" ng-click="resetSale()" class="md-raised md-primary">Отмени</md-button>
       <span flex></span>
-      <md-button ng-click="closeModal()" class="md-raised md-primary">Продължи</md-button>
-      <md-button ng-disabled="saleForm.$invalid" class="md-raised md-primary" ng-click="submitSale()">Потвърди</md-button>
+      <md-button ng-disabled="loading" ng-click="closeModal()" class="md-raised md-primary">Продължи</md-button>
+      <md-button ng-disabled="saleForm.$invalid || loading" class="md-raised md-primary" ng-click="submitSale()">Потвърди</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

@@ -62,7 +62,6 @@ angular.module('kalafcheFrontendApp')
         };
 
         $scope.changeStartDate = function() {
-            $scope.endDateOptions.minDate = $scope.startDate;
             $scope.startDate.setHours(0);
             $scope.startDate.setMinutes(1);
             $scope.startDateMilliseconds = $scope.startDate.getTime();
