@@ -9,10 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.kalafche.dao.ItemDao;
-import com.kalafche.exceptions.DuplicationException;
-import com.kalafche.model.Item;
-import com.kalafche.service.impl.ItemServiceImpl;
+import com.azard.dao.ItemDao;
+import com.azard.exceptions.DuplicationException;
+import com.azard.model.Item;
+import com.azard.service.impl.ItemServiceImpl;
+import com.azard.service.impl.SaleServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SaleServiceImplTest {
