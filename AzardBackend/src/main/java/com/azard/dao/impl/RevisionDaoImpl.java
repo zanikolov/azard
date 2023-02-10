@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.azard.dao.RevisionDao;
-import com.azard.model.DeviceModel;
+import com.azard.model.Model;
 import com.azard.model.Employee;
 import com.azard.model.Revision;
 import com.azard.model.RevisionItem;
@@ -239,7 +239,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	@Override
 	public void insertRevisionItems(Integer revisionId, List<RevisionItem> revisionItems) {
 		revisionItems.forEach(revisionItem -> getJdbcTemplate().update(INSERT_REVISION_ITEM, revisionItem.getItemId(),
-				revisionId, revisionItem.getExpected(), 0, revisionItem.getProductPrice()));
+				revisionId, revisionItem.getExpected(), 0, revisionItem.getItemPrice()));
 	}
 
 	@Override
@@ -309,7 +309,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 			statement.setInt(2, revisionItem.getRevisionId());
 			statement.setInt(3, revisionItem.getExpected());
 			statement.setInt(4, revisionItem.getActual());
-			statement.setBigDecimal(5, revisionItem.getProductPrice());
+			statement.setBigDecimal(5, revisionItem.getItemPrice());
 
 			int affectedRows = statement.executeUpdate();
 
@@ -358,7 +358,7 @@ public class RevisionDaoImpl extends JdbcDaoSupport implements RevisionDao {
 	}
 
 	@Override
-	public List<RevisionItem> getItemsForRevision(Integer storeId, List<DeviceModel> deviceModels) {
+	public List<RevisionItem> getItemsForRevision(Integer storeId, List<Model> deviceModels) {
 		String commaSeparatedDeviceModelIds = deviceModels.stream().map(deviceModel -> deviceModel.getId().toString())
 				.collect(Collectors.joining(","));
 

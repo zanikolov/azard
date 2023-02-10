@@ -72,8 +72,8 @@ public class OrderedStockDaoImpl extends JdbcDaoSupport implements OrderedStockD
 				PreparedStatement statement = connection.prepareStatement(
 						INSERT_ORDERED_STOCK, Statement.RETURN_GENERATED_KEYS);) {
 			statement.setInt(1, orderedStock.getStockOrderId());
-			statement.setInt(2, orderedStock.getProductId());
-			statement.setInt(3, orderedStock.getDeviceModelId());
+			statement.setInt(2, orderedStock.getLeatherId());
+			statement.setInt(3, orderedStock.getModelId());
 			statement.setInt(4, orderedStock.getQuantity());
 			statement.setLong(5, orderedStock.getCreateTimestamp());
 			statement.setInt(6, orderedStock.getCreatedBy());

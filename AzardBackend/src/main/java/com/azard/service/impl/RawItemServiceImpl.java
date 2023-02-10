@@ -30,20 +30,20 @@ public class RawItemServiceImpl implements RawItemService {
 		rawItems.forEach(rawItem -> {
 			Item item = itemService.getItemByBarcode(rawItem.getBarcode());
 			if (item != null) {
-				rawItem.setDeviceBrandId(item.getDeviceBrandId());
-				rawItem.setDeviceModelId(item.getDeviceModelId());
-				rawItem.setProductId(item.getProductId());
-				rawItem.setProductCode(item.getProductCode());
-				rawItem.setProductName(item.getProductName());
+				rawItem.setBrandId(item.getBrandId());
+				rawItem.setModelId(item.getModelId());
+				rawItem.setLeatherId(item.getLeatherId());
+				rawItem.setLeatherCode(item.getLeatherCode());
+				rawItem.setLeatherName(item.getLeatherName());
 			}
 		});
 		
 		return rawItems;
 	}
 
-	@Override
-	public void updateItemBarcode(Integer productId, Integer deviceModelId, String barcode) {
-		itemService.updateItemOnlyForIntegrationPurposes(productId, deviceModelId, barcode);
-	}
+//	@Override
+//	public void updateItemBarcode(Integer productId, Integer deviceModelId, String barcode) {
+//		itemService.updateItemOnlyForIntegrationPurposes(productId, deviceModelId, barcode);
+//	}
 
 }

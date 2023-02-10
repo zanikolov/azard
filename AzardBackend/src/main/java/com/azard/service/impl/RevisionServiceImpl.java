@@ -10,18 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.azard.dao.RevisionDao;
 import com.azard.exceptions.DomainObjectNotFoundException;
-import com.azard.model.DeviceModel;
+import com.azard.model.Model;
 import com.azard.model.Employee;
 import com.azard.model.Item;
-import com.azard.model.ProductSpecificPrice;
+import com.azard.model.ItemSpecificPricePerStore;
 import com.azard.model.Revision;
 import com.azard.model.RevisionItem;
 import com.azard.model.RevisionType;
 import com.azard.service.DateService;
-import com.azard.service.DeviceModelService;
+import com.azard.service.ModelService;
 import com.azard.service.EmployeeService;
 import com.azard.service.ItemService;
-import com.azard.service.ProductService;
+import com.azard.service.LeatherService;
 import com.azard.service.RevisionService;
 import com.azard.service.StockService;
 import com.google.common.collect.Lists;
@@ -34,7 +34,7 @@ public class RevisionServiceImpl implements RevisionService {
 	RevisionDao revisionDao;
 	
 	@Autowired
-	DeviceModelService deviceModelService;
+	ModelService deviceModelService;
 	
 	@Autowired
 	StockService stockService;
@@ -49,7 +49,7 @@ public class RevisionServiceImpl implements RevisionService {
 	ItemService itemService;
 	
 	@Autowired
-	ProductService productService;
+	LeatherService productService;
 	
 	@Transactional
 	@Override
@@ -64,7 +64,7 @@ public class RevisionServiceImpl implements RevisionService {
 		Integer revisionId = revisionDao.insertRevision(revision);
 		
 		revisionDao.insertRevisers(revisionId, revision.getRevisers());
-		List<DeviceModel> deviceModels = createRevisionDeviceModels(revisionId, revision.getTypeId(), revision.getStoreId());
+		List<Model> deviceModels = createRevisionDeviceModels(revisionId, revision.getTypeId(), revision.getStoreId());
 		List<RevisionItem> revisionItems = createRevisionItems(revisionId, revision.getStoreId(), deviceModels);
 		String revisionTypeCode = revisionDao.selectRevisionTypeCode(revision.getTypeId());
 		
@@ -76,31 +76,31 @@ public class RevisionServiceImpl implements RevisionService {
 		return revision;
 	}
 
-	private List<RevisionItem> createRevisionItems(Integer revisionId, Integer storeId, List<DeviceModel> deviceModels) {
+	private List<RevisionItem> createRevisionItems(Integer revisionId, Integer storeId, List<Model> deviceModels) {
 		List<RevisionItem> revisionItems = revisionDao.getItemsForRevision(storeId, deviceModels);
 		revisionDao.insertRevisionItems(revisionId, revisionItems);
 		
 		return revisionDao.getRevisionItemByRevisionId(revisionId, false);
 	}
 
-	private List<DeviceModel> createRevisionDeviceModels(Integer revisionId, Integer revisionTypeId, Integer storeId) {
+	private List<Model> createRevisionDeviceModels(Integer revisionId, Integer revisionTypeId, Integer storeId) {
 		List<Integer> deviceModelIds = Lists.newArrayList();
 		
 		if ("DAILY".equals(revisionDao.selectRevisionTypeCode(revisionTypeId))) {
 			Integer lastRevisedDeviceModelId = revisionDao.getLastDeviceIdFromLastRevisionByStoreId(storeId);
-			deviceModelIds = deviceModelService.getDeviceModelIdsForDailyRevision(lastRevisedDeviceModelId, 10);
+			deviceModelIds = deviceModelService.getModelIdsForDailyRevision(lastRevisedDeviceModelId, 10);
 			
 			//in case we reach the end of the device models' table, we start from the beginning
 			if (deviceModelIds.size() < 10) {
-				deviceModelIds.addAll(deviceModelService.getDeviceModelIdsForDailyRevision(0, 10 - deviceModelIds.size()));
+				deviceModelIds.addAll(deviceModelService.getModelIdsForDailyRevision(0, 10 - deviceModelIds.size()));
 			}
 		} else {
-			deviceModelIds = deviceModelService.getDeviceModelIdsForFullRevision();
+			deviceModelIds = deviceModelService.getModelIdsForFullRevision();
 		}
 		
 		revisionDao.insertRevisionDeviceModels(revisionId, deviceModelIds);
 		
-		return deviceModelService.getDeviceModelsByIds(deviceModelIds);
+		return deviceModelService.getModelsByIds(deviceModelIds);
 	}
 
 	@Override
@@ -139,13 +139,13 @@ public class RevisionServiceImpl implements RevisionService {
 		List<Employee> revisers = getRevisers(revisionId);
 		revision.setRevisers(revisers);
 		
-		List<DeviceModel> deviceModels = getRevisionDeviceModels(revisionId);	
+		List<Model> deviceModels = getRevisionDeviceModels(revisionId);	
 		revision.setDeviceModels(deviceModels);
 	}
 
-	private List<DeviceModel> getRevisionDeviceModels(Integer revisionId) {
+	private List<Model> getRevisionDeviceModels(Integer revisionId) {
 		List<Integer> deviceModelIds = revisionDao.getDeviceModelIdByRevisionId(revisionId);
-		List<DeviceModel> deviceModels = deviceModelService.getDeviceModelsByIds(deviceModelIds);
+		List<Model> deviceModels = deviceModelService.getModelsByIds(deviceModelIds);
 		return deviceModels;
 	}
 
@@ -169,15 +169,15 @@ public class RevisionServiceImpl implements RevisionService {
 
 			if (item != null) {
 				Revision revision = revisionDao.getRevision(revisionId);
-				ProductSpecificPrice specificItemPriceForStore = productService.getProductSpecificPrice(item.getProductId(), revision.getStoreId());
+				ItemSpecificPricePerStore specificItemPriceForStore = itemService.getItemSpecificPrice(item.getLeatherId(), revision.getStoreId());
 				if (specificItemPriceForStore != null && specificItemPriceForStore.getPrice() != null
 						&& specificItemPriceForStore.getPrice() != BigDecimal.ZERO) {
-					item.setProductPrice(specificItemPriceForStore.getPrice());
+					item.setPrice(specificItemPriceForStore.getPrice());
 				}
 
 				revisionItem = new RevisionItem(revisionId, item, 0, 0);
 				List<Integer> deviceModelIds = revisionDao.getDeviceModelIdByRevisionId(revisionId);
-				if (!deviceModelIds.contains(revisionItem.getDeviceModelId())) {
+				if (!deviceModelIds.contains(revisionItem.getModelId())) {
 					revisionItem.setPartOfTheCurrentRevision(false);
 				}
 				
@@ -196,7 +196,7 @@ public class RevisionServiceImpl implements RevisionService {
 			revisionDao.updateRevisionItemActual(revisionItemId, 1);
 		} else {
 			List<Integer> deviceModelIds = revisionDao.getDeviceModelIdByRevisionId(revisionItem.getRevisionId());
-			if (deviceModelIds.contains(revisionItem.getDeviceModelId())) {
+			if (deviceModelIds.contains(revisionItem.getModelId())) {
 				revisionItem.setActual(1);
 				revisionItemId = revisionDao.insertNonExpectedRevisionItem(revisionItem);	
 			} else {
@@ -220,11 +220,11 @@ public class RevisionServiceImpl implements RevisionService {
 			totalActual += revisionItem.getActual();
 			totalExpected += revisionItem.getExpected();
 			
-			BigDecimal actualAmount = revisionItem.getProductPrice().multiply(new BigDecimal(revisionItem.getActual()));
+			BigDecimal actualAmount = revisionItem.getItemPrice().multiply(new BigDecimal(revisionItem.getActual()));
 			totalActualAmount = totalActualAmount.add(actualAmount);
 			System.out.println(">>>> act: " + actualAmount);
 			
-			BigDecimal expectedAmount = revisionItem.getProductPrice().multiply(new BigDecimal(revisionItem.getExpected()));
+			BigDecimal expectedAmount = revisionItem.getItemPrice().multiply(new BigDecimal(revisionItem.getExpected()));
 			totalExpectedAmount = totalExpectedAmount.add(expectedAmount);
 			System.out.println(">>>> exp: " + expectedAmount);
 		}		

@@ -29,12 +29,12 @@ public class StockController {
 	public List<Stock> getStocksByStoreId(
 			@RequestParam(value = "userStoreId", required = false) Integer userStoreId,
 			@RequestParam(value = "selectedStoreId", required = false) Integer selectedStoreId,
-			@RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
-			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId,
-			@RequestParam(value = "productCodes", required = false) String productCodes,
+			@RequestParam(value = "brandId", required = false) Integer brandId,
+			@RequestParam(value = "modelId", required = false) Integer modelId,
+			@RequestParam(value = "leatherId", required = false) Integer leatherId,
 			@RequestParam(value = "barcode", required = false) String barcode
 			) {
-		return stockService.getAllApprovedStocks(userStoreId, selectedStoreId, deviceBrandId, deviceModelId, productCodes, barcode);
+		return stockService.getAllApprovedStocks(userStoreId, selectedStoreId, brandId, modelId, leatherId, barcode);
 	}
 	
 	@GetMapping("/getAllStocksForReport")

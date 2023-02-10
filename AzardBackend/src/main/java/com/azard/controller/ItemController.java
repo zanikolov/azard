@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azard.BaseController;
 import com.azard.model.Item;
+import com.azard.model.ItemSpecificPricePerStore;
 import com.azard.service.ItemService;
 
 @CrossOrigin
@@ -25,7 +26,7 @@ public class ItemController  extends BaseController {
 	private ItemService itemService;
 
 	@GetMapping
-	public List<Item> getAllProducts() {
+	public List<Item> getAllItems() {
 		return itemService.getAllItems();
 	}
 	
@@ -49,4 +50,13 @@ public class ItemController  extends BaseController {
 		itemService.insertItemOrUpdateBarcode(item);
 	}
 
+	@GetMapping("/specificPrice/{itemId}")
+	public List<ItemSpecificPricePerStore> getItemSpecificPricePerStore(@PathVariable(value = "itemId", required = false) Integer itemId) {
+		return itemService.getItemSpecificPrice(itemId);
+	}
+	
+	@PostMapping("/exists")
+	public Item checkIfItemExists(@RequestBody Item item) {
+		return itemService.getItemByLeatherIdAndBrandIdAndModelId(item.getLeatherId(), item.getBrandId(), item.getModelId());
+	}
 }

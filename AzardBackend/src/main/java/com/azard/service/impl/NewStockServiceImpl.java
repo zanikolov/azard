@@ -1,6 +1,7 @@
 package com.azard.service.impl;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,17 +66,19 @@ public class NewStockServiceImpl implements NewStockService {
 
 	@Transactional
 	@Override
-	public void submitNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId) {
-		Item item = itemDao.getItem(productId, deviceModelId);
+	public void submitNewStock(Integer leatherId, Integer modelId, Integer quantity, Integer storeId, BigDecimal price) {
+		Item item = itemDao.getItem(leatherId, modelId);
 		
 		if (item == null) {
-			itemDao.insertItem(productId, deviceModelId, null);
-		} 
+			itemDao.insertItem(leatherId, modelId, null, price);
+		} else {
+			itemDao.updateItemPrice(item.getId(), price);
+		}
 //		else {
 //			newStockDao.insertOrUpdateQuantityOfNewStock(productId, deviceModelId, quantity);
 //		}
 		
-		newStockDao.insertNewStock(productId, deviceModelId, quantity, storeId);
+		newStockDao.insertNewStock(leatherId, modelId, quantity, storeId);
 	}
 
 	@Transactional

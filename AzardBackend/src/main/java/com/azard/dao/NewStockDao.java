@@ -11,15 +11,15 @@ public interface NewStockDao {
 
 	void deleteNewStock(Integer newStockId);
 
-	void insertOrUpdateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity);
+	void insertOrUpdateQuantityOfNewStock(Integer leatherId, Integer modelId, Integer quantity);
 
-	void updateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity);
+	void updateQuantityOfNewStock(Integer leatherId, Integer modelId, Integer quantity);
 
 	void insertNewStockFromFile(String barcode, Integer quantity, Integer importId, Integer storeId);
 
 	Integer insertNewStockImport(Long importTimestamp, Integer employeeId, String fileName) throws SQLException;
 
-	void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId);
+	void insertNewStock(Integer leatherId, Integer modelId, Integer quantity, Integer storeId);
 
 	List<NewStock> getNewStockByStoreId(Integer storeId);
 

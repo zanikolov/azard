@@ -3,7 +3,7 @@ package com.azard.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.azard.model.DeviceModel;
+import com.azard.model.Model;
 import com.azard.model.Employee;
 import com.azard.model.Revision;
 import com.azard.model.RevisionItem;
@@ -19,7 +19,7 @@ public interface RevisionDao {
 
 	void insertRevisionDeviceModels(Integer id, List<Integer> deviceModelIds);
 
-	List<RevisionItem> getItemsForRevision(Integer storeId, List<DeviceModel> deviceModels);
+	List<RevisionItem> getItemsForRevision(Integer storeId, List<Model> deviceModels);
 
 	void insertRevisionItems(Integer revisionId, List<RevisionItem> revisionItems);
 

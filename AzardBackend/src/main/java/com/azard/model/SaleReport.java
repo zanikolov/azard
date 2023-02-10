@@ -16,9 +16,8 @@ public class SaleReport {
 	private String storeName;
 	private Long startDate;
 	private Long endDate;
-	private String deviceModelName;
-	private String deviceBrandName;
-	private String productCode;
+	private String modelName;
+	private String brandName;
 
 	public SaleReport() {
 	}
@@ -122,28 +121,20 @@ public class SaleReport {
 		this.endDate = endDate;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public String getDeviceBrandName() {
-		return deviceBrandName;
+	public String getBrandName() {
+		return brandName;
 	}
 
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
-	}
-
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
 }

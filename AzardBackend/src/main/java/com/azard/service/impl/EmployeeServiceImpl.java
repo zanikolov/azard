@@ -62,7 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	public void createEmployee(Employee employee) throws SQLException {
 		validateUsername(employee);
-		employee.setJobResponsibilityId(1);
+		//employee.setJobResponsibilityId(1);
 		Integer employeeId = employeeDao.insertEmployee(employee);
 		employeeDao.insertEmployeeRole(employeeId, "ROLE_USER");
 	}

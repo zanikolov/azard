@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@ComponentScan("com.kalafche")
+@ComponentScan("com.azard")
 @EnableWebMvc
 @EnableTransactionManagement
 public class AppConfig extends WebMvcConfigurerAdapter  {
@@ -27,7 +27,7 @@ public class AppConfig extends WebMvcConfigurerAdapter  {
 	public DataSource getDataSource() throws SQLException {
 		final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
 		dsLookup.setResourceRef(true);
-		DataSource dataSource = dsLookup.getDataSource("jdbc/KalafcheDB");
+		DataSource dataSource = dsLookup.getDataSource("jdbc/AzardDB");
 		dataSource.getConnection().setAutoCommit(false);
 		
 		return dataSource;

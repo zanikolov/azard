@@ -46,7 +46,7 @@ public class NewStockController {
 	
 	@PutMapping
 	public void submitNewStock(@RequestBody NewStock newStock) {
-		newStockService.submitNewStock(newStock.getProductId(), newStock.getDeviceModelId(), newStock.getQuantity(), newStock.getStoreId());
+		newStockService.submitNewStock(newStock.getLeatherId(), newStock.getModelId(), newStock.getQuantity(), newStock.getStoreId(), newStock.getPrice());
 	}
 	
 	@DeleteMapping

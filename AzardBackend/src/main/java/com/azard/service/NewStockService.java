@@ -1,6 +1,7 @@
 package com.azard.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -26,7 +27,7 @@ public interface NewStockService {
 
 	byte[] printNewStockStickers();
 
-	void submitNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId);
+	void submitNewStock(Integer leatherId, Integer modelId, Integer quantity, Integer storeId, BigDecimal price);
 
 	List<NewStock> getNewStockByStoreId(Integer storeId);
 	

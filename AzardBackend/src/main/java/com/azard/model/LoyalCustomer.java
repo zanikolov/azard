@@ -7,10 +7,10 @@ public class LoyalCustomer {
 	private String phoneNumber;
 	private Integer discountCodeId;
 	private Integer discountCodeCode;
-	private Integer deviceModelId;
-	private String deviceModelName;
-	private Integer deviceBrandId;
-	private String deviceBrandName;
+	private Integer modelId;
+	private String modelName;
+	private Integer brandId;
+	private String brandName;
 	private Integer createdById;
 	private String createdByName;
 	private Long createdTimestamp;
@@ -55,36 +55,36 @@ public class LoyalCustomer {
 		this.discountCodeCode = discountCodeCode;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
-	public String getDeviceBrandName() {
-		return deviceBrandName;
+	public String getBrandName() {
+		return brandName;
 	}
 
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
 	public Integer getCreatedById() {

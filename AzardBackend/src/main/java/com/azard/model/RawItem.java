@@ -4,11 +4,11 @@ public class RawItem {
 
 	private String name;
 	private String barcode;
-	private Integer deviceBrandId;
-	private Integer deviceModelId;
-	private Integer productId;
-	private String productCode;
-	private String productName;
+	private Integer brandId;
+	private Integer modelId;
+	private Integer leatherId;
+	private String leatherCode;
+	private String leatherName;
 
 	public String getName() {
 		return name;
@@ -26,44 +26,44 @@ public class RawItem {
 		this.barcode = barcode;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getLeatherCode() {
+		return leatherCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
 }

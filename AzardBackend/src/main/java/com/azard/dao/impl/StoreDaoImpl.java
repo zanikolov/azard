@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.azard.dao.StoreDao;
-import com.azard.model.Product;
+import com.azard.model.Leather;
 import com.azard.model.StoreDto;
 
 @Service

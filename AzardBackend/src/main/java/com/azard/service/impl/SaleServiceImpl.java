@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.azard.dao.DeviceBrandDao;
-import com.azard.dao.DeviceModelDao;
+import com.azard.dao.BrandDao;
+import com.azard.dao.DeviceDao;
 import com.azard.dao.DiscountDao;
 import com.azard.dao.ItemDao;
 import com.azard.dao.SaleDao;
@@ -64,10 +64,10 @@ public class SaleServiceImpl implements SaleService {
 	StoreDao storeDao;
 	
 	@Autowired
-	DeviceBrandDao deviceBrandDao;
+	BrandDao deviceBrandDao;
 	
 	@Autowired
-	DeviceModelDao deviceModelDao;
+	DeviceDao deviceModelDao;
 	
 	@Autowired
 	DiscountDao discountDao;
@@ -208,7 +208,7 @@ public class SaleServiceImpl implements SaleService {
 	}
 
 	private SaleReport generateReport(String storeId, Long startDateMilliseconds,
-			Long endDateMilliseconds, String productCode, Integer deviceBrandId, Integer deviceModelId) {
+			Long endDateMilliseconds, Integer leatherId, Integer brandId, Integer modelId) {
 		SaleReport report = new SaleReport();
 		
 		report.setStartDate(startDateMilliseconds);
@@ -218,16 +218,12 @@ public class SaleServiceImpl implements SaleService {
 			setSaleReportStoreName(storeId, report);
 		}
 		
-		if (deviceBrandId != null) {
-			report.setDeviceBrandName(deviceBrandDao.selectDeviceBrand(deviceBrandId).getName());
+		if (brandId != null) {
+			report.setBrandName(deviceBrandDao.selectBrand(brandId).getName());
 		}
 		
-		if (deviceModelId != null) {
-			report.setDeviceModelName(deviceModelDao.selectDeviceModel(deviceModelId).getName());
-		}
-		
-		if (productCode != null) {
-			report.setProductCode(productCode);
+		if (modelId != null) {
+			report.setModelName(deviceModelDao.selectModel(modelId).getName());
 		}
 		
 		return report;
@@ -235,20 +231,12 @@ public class SaleServiceImpl implements SaleService {
 	}
 
 	private void setSaleReportStoreName(String storeId, SaleReport report) {
-		switch (storeId) {
-			case "0": 
-				report.setStoreName("Всички магазини");
-				break;
-			case "ANIKO":
-				report.setStoreName("Анико ЕООД");
-				break;
-			case "AZARD":
-				report.setStoreName("Азард ЕООД");
-				break;
-			default: {
-				StoreDto store = storeDao.selectStore(storeId);
-				report.setStoreName(store.getCity() + ", " + store.getName());
-			}
+		System.out.println(">>>> " + storeId);
+		if (storeId.equals("0")) {
+			report.setStoreName("������ ��������");
+		} else {
+			StoreDto store = storeDao.selectStore(storeId);
+			report.setStoreName(store.getCity() + ", " + store.getName());
 		}
 	}
 
@@ -259,19 +247,19 @@ public class SaleServiceImpl implements SaleService {
 
 	@Override
 	public SaleReport searchSaleItems(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
-			String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
-		SaleReport saleReport = generateReport(storeIds, startDateMilliseconds, endDateMilliseconds, productCode, deviceBrandId, deviceModelId);
+			Integer leatherId, Integer brandId, Integer modelId) {
+		SaleReport saleReport = generateReport(storeIds, startDateMilliseconds, endDateMilliseconds, leatherId, brandId, modelId);
 		
 		if (storeIds.equals("0") || storeIds.equals("ANIKO") || storeIds.equals("AZARD")) {
 			storeIds = storeDao.selectStoreIdsByOwner(storeIds);
 		}
 		
-		List<SaleItem> saleItems = saleDao.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId, productTypeId);
+		List<SaleItem> saleItems = saleDao.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, leatherId, brandId, modelId);
 		
-		if (deviceModelId != null && productCode != null && productCode != "") {
-			saleReport.setWarehouseQuantity(stockService.getQuantitiyOfStockInWH(productCode, deviceModelId));
-			saleReport.setCompanyQuantity(stockService.getCompanyQuantityOfStock(productCode, deviceModelId));
-		}		
+//		if (modelId != null && leatherId != null) {
+//			saleReport.setWarehouseQuantity(stockService.getQuantitiyOfStockInWH(leatherId, modelId));
+//			saleReport.setCompanyQuantity(stockService.getCompanyQuantityOfStock(leatherId, modelId));
+//		}		
 
 		calculateTotalAmountAndCountSaleItems(saleItems, saleReport);
 		saleReport.setSaleItems(saleItems);
@@ -381,16 +369,16 @@ public class SaleServiceImpl implements SaleService {
 	}
 
 	@Override
-	public SaleReport searchSalesByStores(Long startDateMilliseconds, Long endDateMilliseconds, String productCode,
-			Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
-		SaleReport saleReport = generateReport(null, startDateMilliseconds, endDateMilliseconds, productCode, deviceBrandId, deviceModelId);
+	public SaleReport searchSalesByStores(Long startDateMilliseconds, Long endDateMilliseconds, Integer leatherId,
+			Integer brandId, Integer modelId) {
+		SaleReport saleReport = generateReport(null, startDateMilliseconds, endDateMilliseconds, leatherId, brandId, modelId);
 		
 		List<SalesByStore> salesByStores = saleDao.searchSaleByStore(startDateMilliseconds, endDateMilliseconds);
 		
-		if (deviceModelId != null && productCode != null && productCode != "") {
-			saleReport.setWarehouseQuantity(stockService.getQuantitiyOfStockInWH(productCode, deviceModelId));
-			saleReport.setCompanyQuantity(stockService.getCompanyQuantityOfStock(productCode, deviceModelId));
-		}		
+//		if (modelId != null && productCode != null && productCode != "") {
+//			saleReport.setWarehouseQuantity(stockService.getQuantitiyOfStockInWH(productCode, modelId));
+//			saleReport.setCompanyQuantity(stockService.getCompanyQuantityOfStock(productCode, modelId));
+//		}		
 
 		calculateTotalAmountAndCountSaleByStore(salesByStores, saleReport);
 		saleReport.setSalesByStores(salesByStores);

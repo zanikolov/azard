@@ -10,6 +10,4 @@ public interface RawItemService {
 
 	List<RawItem> submitRawItemsFromFile(MultipartFile rawItemFile);
 
-	void updateItemBarcode(Integer productId, Integer deviceModelId, String barcode);
-
 }

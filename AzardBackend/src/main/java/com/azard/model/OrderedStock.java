@@ -3,13 +3,13 @@ package com.azard.model;
 public class OrderedStock {
 
 	private int id;
-	private int productId;
-	private String productName;
-	private String productCode;
-	private int deviceModelId;
-	private String deviceModelName;
-	private int deviceBrandId;
-	private String deviceBrandName;
+	private int leatherId;
+	private String leatherName;
+	private String leatherCode;
+	private int modelId;
+	private String modelName;
+	private int brandId;
+	private String brandName;
 	private int stockOrderId;
 	private int quantity;
 	private long createTimestamp;
@@ -23,20 +23,60 @@ public class OrderedStock {
 		this.id = id;
 	}
 
-	public int getDeviceModelId() {
-		return deviceModelId;
+	public int getLeatherId() {
+		return leatherId;
 	}
 
-	public void setDeviceModelId(int deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setLeatherId(int leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
+	}
+
+	public String getLeatherCode() {
+		return leatherCode;
+	}
+
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
+	}
+
+	public int getModelId() {
+		return modelId;
+	}
+
+	public void setModelId(int modelId) {
+		this.modelId = modelId;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public int getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(int brandId) {
+		this.brandId = brandId;
+	}
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
 	public int getStockOrderId() {
@@ -45,6 +85,14 @@ public class OrderedStock {
 
 	public void setStockOrderId(int stockOrderId) {
 		this.stockOrderId = stockOrderId;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public long getCreateTimestamp() {
@@ -59,56 +107,8 @@ public class OrderedStock {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Integer createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public String getDeviceBrandName() {
-		return deviceBrandName;
-	}
-
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
-	}
-
-	public int getDeviceBrandId() {
-		return deviceBrandId;
-	}
-
-	public void setDeviceBrandId(int deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
-	}
-
-	public int getProductId() {
-		return productId;
-	}
-
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
 	}
 
 }

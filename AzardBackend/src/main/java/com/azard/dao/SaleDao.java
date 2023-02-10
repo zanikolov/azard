@@ -20,8 +20,7 @@ public abstract interface SaleDao {
 	public abstract void insertSaleItem(SaleItem saleItem);
 
 	public abstract List<SaleItem> searchSaleItems(Long startDateMilliseconds, Long endDateMilliseconds,
-			String storeIds, String productCode, Integer deviceBrandId, Integer deviceModelId,
-			Integer productTypeId);
+			String storeIds, Integer leatherIds, Integer brandId, Integer modelId);
 
 	public abstract void updateRefundedSaleItem(Integer saleItemId);
 

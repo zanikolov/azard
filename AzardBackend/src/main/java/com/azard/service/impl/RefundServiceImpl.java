@@ -71,7 +71,7 @@ public class RefundServiceImpl implements RefundService {
 
 	private void registerExpense(Integer saleItemId) {
 		BigDecimal saleItemPrice = saleDao.getSaleItemPrice(saleItemId);
-		expenseService.createExpense("REFUND", "Р’СЉСЂРЅР°С‚Рё РїР°СЂРё РЅР° РєР»РёРµРЅС‚", saleItemPrice, null, null);
+		expenseService.createExpense("REFUND", "Върната стока от клиент.", saleItemPrice, null, null);
 	}
 
 }

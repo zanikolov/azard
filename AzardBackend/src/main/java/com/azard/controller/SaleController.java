@@ -2,7 +2,6 @@ package com.azard.controller;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -49,17 +48,17 @@ public class SaleController {
 	@GetMapping("/saleItem")
 	public SaleReport searchSaleItems(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
 			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds, @RequestParam(value = "storeIds") String storeIds,
-			@RequestParam(value = "productCode", required = false) String productCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
-			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId, @RequestParam(value = "productTypeId", required = false) Integer productTypeId) {
-		return saleService.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId, productTypeId);
+			@RequestParam(value = "leatherId", required = false) Integer leatherId, @RequestParam(value = "brandId", required = false) Integer brandId,
+			@RequestParam(value = "modelId", required = false) Integer modelId) {
+		return saleService.searchSaleItems(startDateMilliseconds, endDateMilliseconds, storeIds, leatherId, brandId, modelId);
 	}
 	
 	@GetMapping("/store")
 	public SaleReport searchSalesByStores(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
 			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds,
-			@RequestParam(value = "productCode", required = false) String productCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
+			@RequestParam(value = "leatherId", required = false) Integer leatherId, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
 			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId, @RequestParam(value = "productTypeId", required = false) Integer productTypeId) {
-		return saleService.searchSalesByStores(startDateMilliseconds, endDateMilliseconds, productCode, deviceBrandId, deviceModelId, productTypeId);
+		return saleService.searchSalesByStores(startDateMilliseconds, endDateMilliseconds, leatherId, deviceBrandId, deviceModelId);
 	}
 	
 	@GetMapping("/pastPeriods")

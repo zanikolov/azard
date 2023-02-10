@@ -1,21 +1,21 @@
 package com.azard.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Item {
 
 	private int id;
-	private int deviceBrandId;
-	private int deviceModelId;
-	private String deviceModelName;
-	private int productId;
-	private String productCode;
-	private String productName;
-	private BigDecimal productPrice;
-	private String productPurchasePrice;
-	private Integer productTypeId;
-	private String productTypeName;
+	private int brandId;
+	private int modelId;
+	private String modelName;
+	private String purchasePrice;
+	private Integer leatherId;
+	private String leatherName;
+	private String leatherCode;
 	private String barcode;
+	private BigDecimal price;
+	private List<ItemSpecificPricePerStore> specificPrices;
 
 	public int getId() {
 		return id;
@@ -25,84 +25,68 @@ public class Item {
 		this.id = id;
 	}
 
-	public int getDeviceBrandId() {
-		return deviceBrandId;
+	public int getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(int deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(int brandId) {
+		this.brandId = brandId;
 	}
 
-	public int getDeviceModelId() {
-		return deviceModelId;
+	public int getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(int deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(int modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public int getProductId() {
-		return productId;
+	public BigDecimal getPrice() {
+		return price;
 	}
 
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getPurchasePrice() {
+		return purchasePrice;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setPurchasePrice(String purchasePrice) {
+		this.purchasePrice = purchasePrice;
 	}
 
-	public String getProductName() {
-		return productName;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public BigDecimal getProductPrice() {
-		return productPrice;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductPrice(BigDecimal productPrice) {
-		this.productPrice = productPrice;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
-	public String getProductPurchasePrice() {
-		return productPurchasePrice;
+	public String getLeatherCode() {
+		return leatherCode;
 	}
 
-	public void setProductPurchasePrice(String productPurchasePrice) {
-		this.productPurchasePrice = productPurchasePrice;
-	}
-
-	public Integer getProductTypeId() {
-		return productTypeId;
-	}
-
-	public void setProductTypeId(Integer productTypeId) {
-		this.productTypeId = productTypeId;
-	}
-
-	public String getProductTypeName() {
-		return productTypeName;
-	}
-
-	public void setProductTypeName(String productTypeName) {
-		this.productTypeName = productTypeName;
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
 	}
 
 	public String getBarcode() {
@@ -111,6 +95,14 @@ public class Item {
 
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
+	}
+
+	public List<ItemSpecificPricePerStore> getSpecificPrices() {
+		return specificPrices;
+	}
+
+	public void setSpecificPrices(List<ItemSpecificPricePerStore> specificPrices) {
+		this.specificPrices = specificPrices;
 	}
 
 }

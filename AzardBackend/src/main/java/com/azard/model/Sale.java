@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Sale {
-	
+
 	private Integer id;
 	private Integer itemId;
 	private Integer stockId;
-	private String productName;
-	private String productCode;
+	private String leatherName;
+	private Integer leatherId;
 	private Integer storeId;
 	private String storeName;
-	private Integer deviceModelId;
-	private String deviceModelName;
-	private Integer deviceBrandId;
+	private Integer modelId;
+	private String modelName;
+	private Integer brandId;
 	private long saleTimestamp;
 	private Integer partnerId;
 	private Integer employeeId;
@@ -28,7 +28,7 @@ public class Sale {
 
 	public Sale() {
 	}
-	
+
 	public Sale(Integer itemId, Integer employeeId, Integer storeId, Integer saleTimestamp, Integer partnerId) {
 		this.itemId = itemId;
 		this.employeeId = employeeId;
@@ -36,13 +36,13 @@ public class Sale {
 		this.saleTimestamp = saleTimestamp;
 		this.partnerId = partnerId;
 	}
-	
+
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
-	public Integer setId(Integer id) {
-		return this.id = id;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getItemId() {
@@ -53,38 +53,6 @@ public class Sale {
 		this.itemId = itemId;
 	}
 
-	public long getSaleTimestamp() {
-		return this.saleTimestamp;
-	}
-
-	public void setSaleTimestamp(long saleTimestamp) {
-		this.saleTimestamp = saleTimestamp;
-	}
-
-	public Integer getPartnerId() {
-		return this.partnerId;
-	}
-
-	public void setPartnerId(Integer partnerId) {
-		this.partnerId = partnerId;
-	}
-
-	public String getPartnerCode() {
-		return partnerCode;
-	}
-
-	public void setPartnerCode(String partnerCode) {
-		this.partnerCode = partnerCode;
-	}
-
-	public Integer getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(Integer employeeId) {
-		this.employeeId = employeeId;
-	}
-
 	public Integer getStockId() {
 		return stockId;
 	}
@@ -93,44 +61,20 @@ public class Sale {
 		this.stockId = stockId;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public Integer getStoreId() {
+		return storeId;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
-	}
-
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
-	}
-
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
-	}
-
-	public String getEmployeeName() {
-		return employeeName;
-	}
-
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setStoreId(Integer storeId) {
+		this.storeId = storeId;
 	}
 
 	public String getStoreName() {
@@ -141,20 +85,76 @@ public class Sale {
 		this.storeName = storeName;
 	}
 
-	public int getStoreId() {
-		return storeId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setStoreId(Integer storeId) {
-		this.storeId = storeId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public Integer getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
+	}
+
+	public long getSaleTimestamp() {
+		return saleTimestamp;
+	}
+
+	public void setSaleTimestamp(long saleTimestamp) {
+		this.saleTimestamp = saleTimestamp;
+	}
+
+	public Integer getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(Integer partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public String getPartnerCode() {
+		return partnerCode;
+	}
+
+	public void setPartnerCode(String partnerCode) {
+		this.partnerCode = partnerCode;
 	}
 
 	public List<SaleItem> getSaleItems() {
@@ -189,11 +189,12 @@ public class Sale {
 		this.discountCodeCode = discountCodeCode;
 	}
 
-	public BigDecimal getAmount() {
-		return amount;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
+
 }

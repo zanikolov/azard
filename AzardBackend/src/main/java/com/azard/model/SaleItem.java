@@ -8,13 +8,13 @@ public class SaleItem {
 	private Integer saleId;
 	private Long saleTimestamp;
 	private Integer itemId;
-	private Integer productId;
-	private String productCode;
-	private String productName;
-	private Integer deviceModelId;
-	private String deviceModelName;
-	private Integer deviceBrandId;
-	private String deviceBrandName;
+	private Integer leatherId;
+	private String leatherCode;
+	private String leatherName;
+	private Integer modelId;
+	private String modelName;
+	private Integer brandId;
+	private String brandName;
 	private BigDecimal itemPrice;
 	private BigDecimal salePrice;
 	private Integer storeId;
@@ -39,6 +39,14 @@ public class SaleItem {
 		this.saleId = saleId;
 	}
 
+	public Long getSaleTimestamp() {
+		return saleTimestamp;
+	}
+
+	public void setSaleTimestamp(Long saleTimestamp) {
+		this.saleTimestamp = saleTimestamp;
+	}
+
 	public Integer getItemId() {
 		return itemId;
 	}
@@ -47,60 +55,60 @@ public class SaleItem {
 		this.itemId = itemId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getLeatherCode() {
+		return leatherCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
-	public String getDeviceBrandName() {
-		return deviceBrandName;
+	public String getBrandName() {
+		return brandName;
 	}
 
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
 	public BigDecimal getItemPrice() {
@@ -149,14 +157,6 @@ public class SaleItem {
 
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
-	}
-
-	public Long getSaleTimestamp() {
-		return saleTimestamp;
-	}
-
-	public void setSaleTimestamp(Long saleTimestamp) {
-		this.saleTimestamp = saleTimestamp;
 	}
 
 	public Boolean getIsRefunded() {

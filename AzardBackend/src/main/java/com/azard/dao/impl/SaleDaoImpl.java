@@ -47,12 +47,11 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"si.item_id, " +
 			"si.is_refunded, " +
 			"s.sale_timestamp, " +
-			"iv.product_id, " +
-			"iv.product_code, " +
-			"iv.product_name, " +
-			"iv.device_model_id, " +
-			"iv.device_model_name, " +
-			"iv.device_brand_id, " +
+			"iv.leather_id, " +
+			"iv.leather_name, " +
+			"iv.model_id, " +
+			"iv.model_name, " +
+			"iv.brand_id, " +
 			"si.sale_price, " +
 			"si.item_price, " +
 			"e.id as employee_id, " +
@@ -82,10 +81,9 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	private static final String PERIOD_CRITERIA_QUERY = " where sale_timestamp between ? and ?";
 	private static final String STORE_CRITERIA_QUERY = " and ks.id in (%s)";
 	private static final String REFUND_QUERY = " and si.is_refunded <> true";
-	private static final String PRODUCT_CODE_QUERY = " and iv.product_code in (?)";
-	private static final String DEVICE_BRAND_QUERY = " and iv.device_brand_id = ?";
-	private static final String DEVICE_MODEL_QUERY = " and iv.device_model_id = ?";
-	private static final String PRODUCT_TYPE_QUERY = " and iv.product_type_id = ?";
+	private static final String LEATHER_QUERY = " and iv.leather_id = ?";
+	private static final String BRAND_QUERY = " and iv.device_brand_id = ?";
+	private static final String MODEL_QUERY = " and iv.device_model_id = ?";
 	private static final String INSERT_SALE = "insert into sale (employee_id, store_id, sale_timestamp, is_cash_payment, discount_code_id)"
 			+ " values (?, ?, ?, ?, ?)";
 	private static final String ORDER_BY_SALE = " order by s.sale_timestamp";
@@ -97,20 +95,19 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 			"si.sale_id, " +
 			"si.item_id, " +
 			"si.is_refunded, " +
-			"p.id as product_id, " +
-			"p.code as product_code, " +
-			"p.name as product_name, " +
-			"dm.id as device_model_id, " +
-			"dm.name as device_model_name, " +
-			"db.id as device_brand_id, " +
-			"db.name as device_brand_name, " +
+			"l.id as leather_id, " +
+			"l.name as leather_name, " +
+			"m.id as model_id, " +
+			"m.name as model_name, " +
+			"b.id as brand_id, " +
+			"b.name as brand_name, " +
 			"si.sale_price, " +
 			"si.item_price " +
 			"from sale_item si " +
 			"join item i on si.item_id = i.id " +
-			"join product p on i.product_id = p.id " +
-			"join device_model dm on i.device_model_id = dm.id " +
-			"join device_brand db on dm.device_brand_id = db.id " +
+			"join leather l on i.leather_id = l.id " +
+			"join model m on i.model_id = m.id " +
+			"join brand b on m.brand_id = b.id " +
 			"where si.sale_id = ?";
 	private static final String INSERT_SALE_ITEM = "insert into sale_item(sale_id, item_id, item_price, sale_price) values (?, ?, ?, ?)";
 	
@@ -206,13 +203,13 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 	
 	@Override
 	public List<SaleItem> searchSaleItems(Long startDateMilliseconds,
-			Long endDateMilliseconds, String storeIds, String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId) {
+			Long endDateMilliseconds, String storeIds, Integer leatherId, Integer brandId, Integer modelId) {
 		String searchQuery = GET_ALL_SALE_ITEMS_QUERY + PERIOD_CRITERIA_QUERY + String.format(STORE_CRITERIA_QUERY, storeIds) + REFUND_QUERY;
 		List<Object> argsList = new ArrayList<Object>();
 		argsList.add(startDateMilliseconds);
 		argsList.add(endDateMilliseconds);
 		
-		searchQuery += addDetailedSearch(productCode, deviceBrandId, deviceModelId, productTypeId, argsList);
+		searchQuery += addDetailedSearch(leatherId, brandId, modelId, argsList);
 		
 		searchQuery += ORDER_BY_SALE;
 		
@@ -223,26 +220,21 @@ public class SaleDaoImpl extends JdbcDaoSupport implements SaleDao {
 				searchQuery, argsArr, getSaleItemRowMapper());
 	}
 
-	private String addDetailedSearch(String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId, List<Object> args) {
+	private String addDetailedSearch(Integer leatherId, Integer brandId, Integer modelId, List<Object> args) {
 		String detailedQuery = "";
-		if (productCode != null && productCode != "") {
-			detailedQuery += PRODUCT_CODE_QUERY;
-			args.add(productCode);
+		if (leatherId != null) {
+			detailedQuery += LEATHER_QUERY;
+			args.add(leatherId);
 		}
 		
-		if (deviceBrandId != null) {
-			detailedQuery += DEVICE_BRAND_QUERY;
-			args.add(deviceBrandId);
+		if (brandId != null) {
+			detailedQuery += BRAND_QUERY;
+			args.add(brandId);
 		}
 		
-		if (deviceModelId != null) {
-			detailedQuery += DEVICE_MODEL_QUERY;
-			args.add(deviceModelId);
-		}
-		
-		if (productTypeId != null) {
-			detailedQuery += PRODUCT_TYPE_QUERY;
-			args.add(productTypeId);
+		if (modelId != null) {
+			detailedQuery += MODEL_QUERY;
+			args.add(modelId);
 		}
 		
 		return detailedQuery;

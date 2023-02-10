@@ -63,14 +63,14 @@ public class LoyalCustomerDaoImpl extends JdbcDaoSupport implements LoyalCustome
 	
 	@Override
 	public void insertLoyalCustomer(LoyalCustomer loyalCustomer) {
-		getJdbcTemplate().update(INSERT_LOYAL_CUSTOMER, loyalCustomer.getName(), loyalCustomer.getDeviceModelId(),
+		getJdbcTemplate().update(INSERT_LOYAL_CUSTOMER, loyalCustomer.getName(), loyalCustomer.getModelId(),
 				loyalCustomer.getPhoneNumber(), loyalCustomer.getDiscountCodeId(),
 				loyalCustomer.getCreatedById(), loyalCustomer.getCreatedTimestamp());
 	}
 
 	@Override
 	public void updateLoyalCustomer(LoyalCustomer loyalCustomer) {
-		getJdbcTemplate().update(UPDATE_LOYAL_CUSTOMER, loyalCustomer.getName(), loyalCustomer.getDeviceModelId(), loyalCustomer.getPhoneNumber(), loyalCustomer.getId());
+		getJdbcTemplate().update(UPDATE_LOYAL_CUSTOMER, loyalCustomer.getName(), loyalCustomer.getModelId(), loyalCustomer.getPhoneNumber(), loyalCustomer.getId());
 	}
 
 	@Override

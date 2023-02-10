@@ -6,19 +6,15 @@ public class BaseStock {
 
 	private Integer id;
 	private Integer itemId;
-	private Integer productId;
-	private String productName;
-	private String productCode;
-	private Integer deviceBrandId;
-	private String deviceBrandName;
-	private Integer deviceModelId;
-	private String deviceModelName;
+	private Integer leatherId;
+	private String leatherName;
+	private Integer brandId;
+	private String brandName;
+	private Integer modelId;
+	private String modelName;
 	private Integer quantity;
-	private BigDecimal productPrice;
+	private BigDecimal price;
 	private String barcode;
-	private String productFabric;
-	private Integer productTypeId;
-	private String productTypeName;
 
 	public Integer getId() {
 		return id;
@@ -36,60 +32,52 @@ public class BaseStock {
 		this.itemId = itemId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public String getBrandName() {
+		return brandName;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
-	public String getDeviceBrandName() {
-		return deviceBrandName;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceBrandName(String deviceBrandName) {
-		this.deviceBrandName = deviceBrandName;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
-	}
-
-	public String getDeviceModelName() {
-		return deviceModelName;
-	}
-
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	public Integer getQuantity() {
@@ -100,12 +88,12 @@ public class BaseStock {
 		this.quantity = quantity;
 	}
 
-	public BigDecimal getProductPrice() {
-		return productPrice;
+	public BigDecimal getPrice() {
+		return price;
 	}
 
-	public void setProductPrice(BigDecimal productPrice) {
-		this.productPrice = productPrice;
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	public String getBarcode() {
@@ -114,30 +102,6 @@ public class BaseStock {
 
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
-	}
-
-	public String getProductFabric() {
-		return productFabric;
-	}
-
-	public void setProductFabric(String productFabric) {
-		this.productFabric = productFabric;
-	}
-
-	public Integer getProductTypeId() {
-		return productTypeId;
-	}
-
-	public void setProductTypeId(Integer productTypeId) {
-		this.productTypeId = productTypeId;
-	}
-
-	public String getProductTypeName() {
-		return productTypeName;
-	}
-
-	public void setProductTypeName(String productTypeName) {
-		this.productTypeName = productTypeName;
 	}
 
 }

@@ -7,14 +7,14 @@ public class RevisionItem {
 	private Integer id;
 	private Integer revisionId;
 	private Integer itemId;
-	private Integer productId;
-	private String productCode;
-	private String productName;
+	private Integer leatherId;
+	private String leatherCode;
+	private String leatherName;
 	private String barcode;
-	private Integer deviceModelId;
-	private String deviceModelName;
-	private Integer deviceBrandId;
-	private BigDecimal productPrice;
+	private Integer modelId;
+	private String modelName;
+	private Integer brandId;
+	private BigDecimal itemPrice;
 	private Integer balance;
 	private Integer expected;
 	private Integer actual;
@@ -23,31 +23,31 @@ public class RevisionItem {
 
 	public RevisionItem() {
 	}
-	
+
 	public RevisionItem(Integer revisionId, Item item, Integer expected, Integer actual) {
-		this(revisionId, item.getId(), item.getProductId(), item.getProductCode(), item.getProductName(),
-				item.getBarcode(), item.getDeviceModelId(), item.getDeviceModelName(), item.getDeviceBrandId(),
-				item.getProductPrice(), 0, 0, false);
+		this(revisionId, item.getId(), item.getLeatherId(), item.getLeatherCode(), item.getLeatherName(),
+				item.getBarcode(), item.getModelId(), item.getModelName(), item.getBrandId(), item.getPrice(), 0, 0,
+				false);
 	}
-	
-	public RevisionItem(Integer revisionId, Integer itemId, Integer productId, String productCode, String productName,
+
+	public RevisionItem(Integer revisionId, Integer itemId, Integer leatherId, String leatherCode, String leatherName,
 			String barcode, Integer deviceModelId, String deviceModelName, Integer deviceBrandId,
 			BigDecimal productPrice, Integer expected, Integer actual, Boolean synced) {
 		this.revisionId = revisionId;
 		this.itemId = itemId;
-		this.productId = productId;
-		this.productCode = productCode;
-		this.productName = productName;
+		this.leatherId = leatherId;
+		this.leatherCode = leatherCode;
+		this.leatherName = leatherName;
 		this.barcode = barcode;
-		this.deviceModelId = deviceModelId;
-		this.deviceModelName = deviceModelName;
-		this.deviceBrandId = deviceBrandId;
-		this.productPrice = productPrice;
+		this.modelId = modelId;
+		this.modelName = modelName;
+		this.brandId = brandId;
+		this.itemPrice = itemPrice;
 		this.expected = expected;
 		this.actual = actual;
 		this.synced = synced;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -72,28 +72,28 @@ public class RevisionItem {
 		this.itemId = itemId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public Integer getLeatherId() {
+		return leatherId;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setLeatherId(Integer leatherId) {
+		this.leatherId = leatherId;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getLeatherCode() {
+		return leatherCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
 	public String getBarcode() {
@@ -104,36 +104,36 @@ public class RevisionItem {
 		this.barcode = barcode;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
-	public BigDecimal getProductPrice() {
-		return productPrice;
+	public BigDecimal getItemPrice() {
+		return itemPrice;
 	}
 
-	public void setProductPrice(BigDecimal productPrice) {
-		this.productPrice = productPrice;
+	public void setItemPrice(BigDecimal itemPrice) {
+		this.itemPrice = itemPrice;
 	}
 
 	public Integer getBalance() {

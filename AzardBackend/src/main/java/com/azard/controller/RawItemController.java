@@ -8,8 +8,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +24,10 @@ public class RawItemController {
 	@Autowired
 	private RawItemService rawItemService;
 	
-	@PutMapping
-	public void updateItemBarcode(@RequestBody RawItem rawItem) {
-		rawItemService.updateItemBarcode(rawItem.getProductId(), rawItem.getDeviceModelId(), rawItem.getBarcode());
-	}
+//	@PutMapping
+//	public void updateItemBarcode(@RequestBody RawItem rawItem) {
+//		rawItemService.updateItemBarcode(rawItem.getLeatherId(), rawItem.getModelId(), rawItem.getBarcode());
+//	}
 	
 	@PostMapping("/import")
 	public List<RawItem> submitNewStockFromFile( @RequestParam("rawItemFile") MultipartFile rawItemFile) throws IOException, EncryptedDocumentException, InvalidFormatException {

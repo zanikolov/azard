@@ -33,13 +33,13 @@ public class SaleItemExcelReportServiceImpl implements SaleItemExcelReportServic
 			int colNum = 0;
 
 			Cell deviceCell = row.createCell(colNum++);
-			deviceCell.setCellValue((String) saleItem.getDeviceModelName());
+			deviceCell.setCellValue((String) saleItem.getModelName());
 
 			Cell productCodeCell = row.createCell(colNum++);
-			productCodeCell.setCellValue((String) saleItem.getProductCode());
+			productCodeCell.setCellValue((String) saleItem.getLeatherCode());
 
 			Cell productNameCell = row.createCell(colNum++);
-			productNameCell.setCellValue((String) saleItem.getProductName());
+			productNameCell.setCellValue((String) saleItem.getLeatherName());
 
 			Cell storeNameCell = row.createCell(colNum++);
 			storeNameCell.setCellValue((String) saleItem.getStoreName());

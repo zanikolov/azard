@@ -6,13 +6,13 @@ public class Waste {
 
 	private Integer id;
 	private Integer itemId;
-	private String productName;
-	private String productCode;
+	private String leatherName;
+	private String leatherCode;
 	private Integer storeId;
 	private String storeName;
-	private Integer deviceModelId;
-	private String deviceModelName;
-	private Integer deviceBrandId;
+	private Integer modelId;
+	private String modelName;
+	private Integer brandId;
 	private long timestamp;
 	private Integer employeeId;
 	private String employeeName;
@@ -22,7 +22,7 @@ public class Waste {
 
 	public Waste() {
 	}
-	
+
 	public Waste(Integer itemId, String description) {
 		this.itemId = itemId;
 		this.description = description;
@@ -44,20 +44,20 @@ public class Waste {
 		this.itemId = itemId;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getLeatherName() {
+		return leatherName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setLeatherName(String leatherName) {
+		this.leatherName = leatherName;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getLeatherCode() {
+		return leatherCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setLeatherCode(String leatherCode) {
+		this.leatherCode = leatherCode;
 	}
 
 	public Integer getStoreId() {
@@ -76,28 +76,28 @@ public class Waste {
 		this.storeName = storeName;
 	}
 
-	public Integer getDeviceModelId() {
-		return deviceModelId;
+	public Integer getModelId() {
+		return modelId;
 	}
 
-	public void setDeviceModelId(Integer deviceModelId) {
-		this.deviceModelId = deviceModelId;
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
 	}
 
-	public String getDeviceModelName() {
-		return deviceModelName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setDeviceModelName(String deviceModelName) {
-		this.deviceModelName = deviceModelName;
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
-	public Integer getDeviceBrandId() {
-		return deviceBrandId;
+	public Integer getBrandId() {
+		return brandId;
 	}
 
-	public void setDeviceBrandId(Integer deviceBrandId) {
-		this.deviceBrandId = deviceBrandId;
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
 	}
 
 	public long getTimestamp() {

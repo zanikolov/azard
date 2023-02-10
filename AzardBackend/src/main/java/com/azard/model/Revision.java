@@ -12,7 +12,7 @@ public class Revision {
 	private long submitTimestamp;
 	private List<RevisionItem> revisionItems;
 	private List<Employee> revisers;
-	private List<DeviceModel> deviceModels;
+	private List<Model> models;
 	private Integer typeId;
 	private String typeCode;
 	private String typeName;
@@ -82,12 +82,12 @@ public class Revision {
 		this.revisers = revisers;
 	}
 
-	public List<DeviceModel> getDeviceModels() {
-		return deviceModels;
+	public List<Model> getModels() {
+		return models;
 	}
 
-	public void setDeviceModels(List<DeviceModel> deviceModels) {
-		this.deviceModels = deviceModels;
+	public void setDeviceModels(List<Model> models) {
+		this.models = models;
 	}
 
 	public Integer getTypeId() {

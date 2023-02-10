@@ -1,0 +1,56 @@
+<div ng-controller="ItemFormController" layout="column" ng-cloak>
+    <md-content layout-padding layout="column">
+        <div flex>
+            <form name="itemForm" server-validation novalidate>             
+                    <md-input-container class="md-block">
+                        <label>Баркод</label>
+                        <input  name="barcode" ng-model="item.barcode" ng-maxlength="13" ng-minlength="13" required>
+                        <span ng-message="serverError" class="label label-error">{{serverErrorMessages.barcode}}</span>
+                    </md-input-container> 
+                    <div layout="row">   
+                        <md-input-container flex="50">
+                            <label>Марка</label>
+                            <md-select name="brandId" ng-model="item.brandId" ng-disabled="item.id" required>
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="brand in brands" ng-value="brand.id">
+                                    {{brand.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex="50">
+                            <label>Модел</label>
+                            <md-select name="modelId" ng-model="item.modelId" ng-disabled="!item.brandId || item.id" required>
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="model in models | filter: {brandId : item.brandId} : true" ng-value="model.id">
+                                    {{model.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="60">
+                            <label>Кожа</label>
+                            <md-select name="leatherId" ng-model="item.leatherId" ng-disabled="item.id" required>
+                                <md-option value="" selected></md-option>
+                                <md-option ng-repeat="leather in leathers" ng-value="leather.id">
+                                    {{leather.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="25">
+                            <label>Цена</label>
+                            <input type="number" min="0" step="0.01" ng-model="item.price" name="price" required>
+                            <span ng-message="serverError" class="label label-error">{{serverErrorMessages.price}}</span>
+                        </md-input-container>  
+                    </div> 
+                </div>
+            </form>
+            <md-content layout="row">
+                <md-button ng-if="item.id" class="md-raised md-primary" ng-click="cancelEditItem()">Отмени</md-button>
+                <md-button ng-click="submitItem()" ng-disabled="itemForm.$invalid" class="md-raised md-primary">Запази</md-button>
+            </md-content>
+        </div>
+    </md-content>
+</div>

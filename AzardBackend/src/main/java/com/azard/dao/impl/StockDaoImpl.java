@@ -23,35 +23,31 @@ public class StockDaoImpl extends JdbcDaoSupport {
 	private static final String GET_ALL_APPROVED_STOCKS_FOR_STICKER_PRINTING_BY_STORE_ID = "select " +
 			"s.ID, " +
 			"iv.id as item_id, " +
-			"iv.device_brand_id, " +
-			"iv.device_model_id, " +
-			"iv.device_model_name, " +
-			"iv.product_id, " +
-			"iv.product_code, " +
-			"iv.product_name, " +
-			"iv.product_type_name, " +
+			"iv.brand_id, " +
+			"iv.model_id, " +
+			"iv.model_name, " +
+			"iv.leather_id, " +
+			"iv.leather_name, " +
 			"iv.barcode, " +
-			"coalesce(psp.specific_price, iv.product_price) as product_price, " +
+			"coalesce(isp.specific_price, iv.price) as price, " +
 			"s.QUANTITY, " +
-			"iv.product_fabric " +
 			"from stock s " +
 			"join item_vw iv on s.ITEM_ID=iv.ID " +
-			"left join product_specific_price psp on psp.product_id = iv.product_id and psp.store_id = s.store_id " +
+			"left join item_specific_price isp on isp.item_id = iv.id and isp.store_id = s.store_id " +
 			"where s.approved is true " +
 			"and s.store_id = ? " +
-			"order by iv.device_brand_id, iv.device_model_id";
+			"order by iv.brand_id, iv.model_id";
 	
 	private static final String GET_ALL_APPROVED_STOCKS_FOR_STORES = "select " +
 			"s.ID, " +
 			"iv.id as item_id, " +
-			"iv.device_brand_id, " +
-			"iv.device_model_id, " +
-			"iv.device_model_name, " +
-			"iv.product_id, " +
-			"iv.product_code, " +
-			"iv.product_name, " +
+			"iv.brand_id, " +
+			"iv.model_id, " +
+			"iv.model_name, " +
+			"iv.leather_id, " +
+			"iv.leather_name, " +
 			"iv.barcode, " +
-			"coalesce(psp.specific_price, iv.product_price) as product_price, " +
+			"coalesce(isp.specific_price, iv.price) as price, " +
 			"ks.ID as store_id, " +
 			"CONCAT(ks.CITY,',',ks.NAME) as store_name, " +
 			"s.QUANTITY, " +
@@ -68,8 +64,8 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"   select " +
 			"   sr1.quantity, " +
 			"   sr1.dest_store_id, " +
-			"   st3.product_id, " +
-			"   st3.device_model_id " +
+			"   st3.leather_id, " +
+			"   st3.model_id " +
 			"   from relocation sr1 " +
 			"   join stock st3 on sr1.stock_id=st3.id " +
 			"   where sr1.source_store_id=4 " +
@@ -77,10 +73,10 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"   and sr1.archived=false " +
 			"   and (sr1.rejected=false or sr1.rejected is null) " +
 			") " +
-			"sr2 on sr2.product_id=iv.product_id " +
-			"and sr2.device_model_id=iv.device_model_id " +
+			"sr2 on sr2.leather_id=iv.leather_id " +
+			"and sr2.model_id=iv.model_id " +
 			"and ks.id=sr2.dest_store_id " +
-			"left join product_specific_price psp on psp.product_id = iv.product_id and psp.store_id = ks.id " +
+			"left join item_specific_price isp on isp.item_id = iv.id and isp.store_id = ks.id " +
 			"where s.approved is true " +
 			"and ks.CODE <> 'RU_WH' ";
 	private static final String BY_STORE_CLAUSE = "and ks.ID = ? ";
@@ -90,14 +86,13 @@ public class StockDaoImpl extends JdbcDaoSupport {
 	private static final String GET_ALL_APPROVED_STOCKS_FROM_WH = "select " + 
 			"s.ID, " + 
 			"iv.id as item_id, " + 
-			"iv.device_brand_id, " + 
-			"iv.device_model_id, " + 
-			"iv.device_model_name, " + 
-			"iv.product_id, " + 
-			"iv.product_code, " + 
-			"iv.product_name, " +
+			"iv.brand_id, " + 
+			"iv.model_id, " + 
+			"iv.model_name, " + 
+			"iv.leather_id, " + 
+			"iv.leather_name, " +
 			"iv.barcode, " +
-			"coalesce(psp.specific_price, iv.product_price) as product_price, " +
+			"coalesce(isp.specific_price, iv.price) as price, " +
 			"ks.ID as store_id, " + 
 			"CONCAT(ks.CITY,\",\",ks.NAME) as store_name, " + 
 			"s.QUANTITY, " + 
@@ -114,8 +109,8 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"   select " + 
 			"   sr1.quantity, " + 
 			"   sr1.dest_store_id, " + 
-			"   st3.product_id, " + 
-			"   st3.device_model_id " + 
+			"   st3.leather_id, " + 
+			"   st3.model_id " + 
 			"   from relocation sr1 " + 
 			"   join stock st3 on sr1.stock_id=st3.id " + 
 			"   where sr1.source_store_id=4 " + 
@@ -123,14 +118,14 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"   and sr1.archived=false " + 
 			"   and (sr1.rejected=false or sr1.rejected is null) " + 
 			") " + 
-			"sr2 on sr2.product_id=iv.product_id " + 
-			"and sr2.device_model_id=iv.device_model_id " + 
+			"sr2 on sr2.leather_id=iv.leather_id " + 
+			"and sr2.model_id=iv.model_id " + 
 			"and sr2.dest_store_id=? " + 
-			"left join product_specific_price psp on psp.product_id = iv.product_id and psp.store_id = ks.id " +
+			"left join item_specific_price isp on isp.item_id = iv.id and isp.store_id = ks.id " +
 			"where s.approved is true " + 
 			"and ks.CODE = 'RU_WH' ";
 
-	private static final String ORDER_BY_CLAUSE = "order by iv.device_model_name, iv.product_id, store_id ";
+	private static final String ORDER_BY_CLAUSE = "order by iv.model_name, iv.leather_id, store_id ";
 
 	private static final String UPDATE_QUANTITY_OF_SOLD_STOCK = "update stock set quantity = quantity - 1 where item_id = ? and store_id = ?";
 	
@@ -144,8 +139,8 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"	from stock st " +
 			"	join item_vw iv on st.item_id = iv.id " +
 			"	join store ks on st.store_id = ks.id " +
-			"	where iv.product_code = ? " +
-			"	and iv.device_model_id = ? " +
+			"	where iv.leather_code = ? " +
+			"	and iv.model_id = ? " +
 			"	and ks.code = 'RU_WH' " +
 			"	and approved = true) " +
 			", 0); ";;
@@ -155,7 +150,7 @@ public class StockDaoImpl extends JdbcDaoSupport {
 			"from stock st " +
 			"join item_vw iv on st.item_id = iv.id " +
 			"join store ks on ks.id = st.store_id " +
-			"where iv.product_code = ? " +
+			"where iv.leather_code = ? " +
 			"and iv.device_model_id = ? " +
 			"and ks.code != 'RU_KAUFL_1' " +
 			"and ks.code != 'RU_KAUFL_2' " +
@@ -166,30 +161,30 @@ public class StockDaoImpl extends JdbcDaoSupport {
 
 	private static final String GET_ALL_STOCKS_FOR_REPORT = "select " +
 			"s.ID, " +
-			"iv.device_brand_id, " +
-			"iv.device_model_id, " +
-			"iv.device_model_name, " +
-			"iv.product_id, " +
-			"iv.PRODUCT_CODE as product_code, " +
-			"iv.PRODUCT_NAME as product_name, " +
-			"iv.PRODUCT_PRICE as product_price, " +
+			"iv.brand_id, " +
+			"iv.model_id, " +
+			"iv.model_name, " +
+			"iv.leather_id, " +
+			"iv.leather_CODE as product_code, " +
+			"iv.leather_NAME as product_name, " +
+			"iv.price, " +
 			"os.QUANTITY as ordered_quantity, " +
 			"sum(s.QUANTITY) as quantity " +
 			"from stock s " +
 			"join store ks on s.store_ID=ks.ID " +
 			"join item_vw iv on s.ITEM_ID=iv.ID " +
-			"left join ordered_stock os on os.product_id = iv.product_id " +
-			"and os.DEVICE_MODEL_ID = iv.device_model_id " +
+			"left join ordered_stock os on os.leather_id = iv.leather_id " +
+			"and os.MODEL_ID = iv.model_id " +
 			"and os.STOCK_ORDER_ID = ? " +
 			"where s.approved is true " +
-			"group by iv.PRODUCT_CODE,iv.PRODUCT_NAME,iv.device_model_name " +
-			"order by iv.device_model_name,quantity desc ";
+			"group by iv.leather_CODE,iv.leather_NAME,iv.model_name " +
+			"order by iv.model_name,quantity desc ";
 
-	private static final String DEVICE_BRAND_CLAUSE = "and iv.device_brand_id = ? ";
+	private static final String BRAND_CLAUSE = "and iv.brand_id = ? ";
 
-	private static final String DEVICE_MODEL_CLAUSE = "and iv.device_model_id = ? ";
+	private static final String MODEL_CLAUSE = "and iv.model_id = ? ";
 
-	private static final String PRODUCT_CODES_CLAUSE = "and iv.product_code in (%s) ";
+	private static final String LEATHER_CLAUSE = "and iv.leather_id = ? ";
 
 	private static final String BARCODE_CLAUSE = "and iv.barcode = ? ";
 
@@ -214,14 +209,14 @@ public class StockDaoImpl extends JdbcDaoSupport {
 		getJdbcTemplate().update(UPSERT_APPROVED_IN_STOCK, itemId, storeId, quantity, quantity);
 	}
 
-	public List<Stock> getAllApprovedStocks(int userStoreId, int selectedStoreId, Integer deviceBrandId, Integer deviceModelId, String productCodes, String barcode) {
+	public List<Stock> getAllApprovedStocks(int userStoreId, int selectedStoreId, Integer brandId, Integer modelId, Integer leatherId, String barcode) {
 		
 		List<Object> storeArgsList;
 		List<Object> searchArgsList = Lists.newArrayList();
 		String searchCriteria;
 		if (selectedStoreId == 0) {
 			storeArgsList = Lists.newArrayList(userStoreId, userStoreId);
-			searchCriteria = generateSearchCriteria(deviceBrandId, deviceModelId, productCodes, barcode, searchArgsList);
+			searchCriteria = generateSearchCriteria(brandId, modelId, leatherId, barcode, searchArgsList);
 
 			storeArgsList.addAll(searchArgsList);		
 			
@@ -237,7 +232,7 @@ public class StockDaoImpl extends JdbcDaoSupport {
 
 		} else if (selectedStoreId == 4) {
 			storeArgsList = Lists.newArrayList(userStoreId, userStoreId);
-			searchCriteria = generateSearchCriteria(deviceBrandId, deviceModelId, productCodes, barcode, searchArgsList);
+			searchCriteria = generateSearchCriteria(brandId, modelId, leatherId, barcode, searchArgsList);
 
 			storeArgsList.addAll(searchArgsList);		
 			
@@ -247,7 +242,7 @@ public class StockDaoImpl extends JdbcDaoSupport {
 					storeArgsArr, getRowMapper());
 		} else {
 			storeArgsList = Lists.newArrayList(selectedStoreId);
-			searchCriteria = generateSearchCriteria(deviceBrandId, deviceModelId, productCodes, barcode, searchArgsList);
+			searchCriteria = generateSearchCriteria(brandId, modelId, leatherId, barcode, searchArgsList);
 
 			storeArgsList.addAll(searchArgsList);		
 			
@@ -266,23 +261,24 @@ public class StockDaoImpl extends JdbcDaoSupport {
 		return arr;
 	}
 
-	private String generateSearchCriteria(Integer deviceBrandId, Integer deviceModelId, String productCodes,
+	private String generateSearchCriteria(Integer brandId, Integer modelId, Integer leatherId,
 			String barcode, List<Object> argsList) {
 
 		String searchCriteria = "";
 		
-		if (deviceBrandId != null) {
-			searchCriteria += DEVICE_BRAND_CLAUSE;
-			argsList.add(deviceBrandId);
+		if (brandId != null) {
+			searchCriteria += BRAND_CLAUSE;
+			argsList.add(brandId);
 		}
 		
-		if (deviceModelId != null) {
-			searchCriteria += DEVICE_MODEL_CLAUSE;
-			argsList.add(deviceModelId);
+		if (modelId != null) {
+			searchCriteria += MODEL_CLAUSE;
+			argsList.add(modelId);
 		}
 		
-		if (Strings.isNotBlank(productCodes)) {			
-			searchCriteria += String.format(PRODUCT_CODES_CLAUSE, productCodes);
+		if (leatherId != null) {			
+			searchCriteria += LEATHER_CLAUSE;
+			argsList.add(leatherId);
 		}
 		
 		if (Strings.isNotBlank(barcode)) {

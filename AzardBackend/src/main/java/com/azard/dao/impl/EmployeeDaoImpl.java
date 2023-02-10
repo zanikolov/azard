@@ -40,7 +40,10 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 	private static final String IN_CLAUSE = "and e.id in (%s) ";
 	private static final String ORDER_BY_ID_CLAUSE = "order by e.id ";
 	private static final String ORDER_BY_ENABLED_CLAUSE = "order by enabled desc ";
-	private static final String INSERT_EMPLOYEE = "insert into employee (name, username, password, store_id, job_responsibility_id, enabled) values (?, ?, ?, ?, ?, ?)";
+	/**
+	 * 
+	 */
+	private static final String INSERT_EMPLOYEE = "insert into employee (name, username, password, store_id, job_responsibility_id, enabled) values (?, ?, ?, ?, (select id from job_responsibility where code = 'SELLER'), ?)";
 	private static final String UPDATE_EMPLOYEE = "update employee set name = ?, store_id = ?, enabled = ? where id = ?";
 	private static final String IS_EMPLOYEE_ADMIN = "select " +
 			"count(*) " +
@@ -112,8 +115,7 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 			statement.setString(2, employee.getUsername());
 			statement.setString(3, employee.getPassword());
 			statement.setInt(4, employee.getStoreId());
-			statement.setInt(5, employee.getJobResponsibilityId());
-			statement.setBoolean(6, employee.isEnabled());
+			statement.setBoolean(5, employee.isEnabled());
 
 			int affectedRows = statement.executeUpdate();
 

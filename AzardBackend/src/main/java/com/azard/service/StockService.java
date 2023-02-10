@@ -65,8 +65,8 @@ public class StockService {
 		return pdfGeneratorService.generatePdf(stocks);
 	}
 
-	public List<Stock> getAllApprovedStocks(Integer userStoreId, Integer selectedStoreId, Integer deviceBrandId, Integer deviceModelId, String productCodes, String barcode) {
-		return stockDao.getAllApprovedStocks(userStoreId, selectedStoreId, deviceBrandId, deviceModelId, productCodes, barcode);
+	public List<Stock> getAllApprovedStocks(Integer userStoreId, Integer selectedStoreId, Integer brandId, Integer modelId, Integer leatherId, String barcode) {
+		return stockDao.getAllApprovedStocks(userStoreId, selectedStoreId, brandId, modelId, leatherId, barcode);
 	}
 	
 }

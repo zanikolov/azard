@@ -1,8 +1,5 @@
 package com.azard.controller;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +25,9 @@ public class RefundController {
 	@GetMapping
 	public List<Refund> searchRefunds(@RequestParam(value = "startDateMilliseconds") Long startDateMilliseconds, 
 			@RequestParam(value = "endDateMilliseconds") Long endDateMilliseconds, @RequestParam(value = "storeIds") String storeIds,
-			@RequestParam(value = "productCode", required = false) String productCode, @RequestParam(value = "deviceBrandId", required = false) Integer deviceBrandId,
-			@RequestParam(value = "deviceModelId", required = false) Integer deviceModelId) {
-		return refundService.searchRefunds(startDateMilliseconds, endDateMilliseconds, storeIds, productCode, deviceBrandId, deviceModelId);
+			@RequestParam(value = "leatherCode", required = false) String leatherCode, @RequestParam(value = "brandId", required = false) Integer brandId,
+			@RequestParam(value = "modelId", required = false) Integer modelId) {
+		return refundService.searchRefunds(startDateMilliseconds, endDateMilliseconds, storeIds, leatherCode, brandId, modelId);
 	}
 	
 	@PutMapping

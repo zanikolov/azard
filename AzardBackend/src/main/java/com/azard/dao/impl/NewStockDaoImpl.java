@@ -27,19 +27,19 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 	
 	private static final String UPSERT_NEW_STOCK = "insert into new_stock "
 			+ "(item_id, quantity, printed) values "
-			+ "((select id from item where product_id = ? and device_model_id = ?), ?, false) "
+			+ "((select id from item where leather_id = ? and model_id = ?), ?, false) "
 			+ "on duplicate key update quantity = quantity + ?";
 
 	private static final String DELETE_NEW_STOCK = "delete from new_stock where id = ?";
 
 	private static final String INSERT_NEW_STOCK = "insert into new_stock(item_id, quantity, store_id) "
-			+ " values ((select id from item where product_id = ? and device_model_id = ?), ?, ?);";
+			+ " values ((select id from item where leather_id = ? and model_id = ?), ?, ?);";
 	
 	private static final String INSERT_NEW_STOCK_FROM_FILE = "insert into new_stock(item_id, quantity, import_id, store_id) "
 			+ " values ((select id from item where barcode = ?), ?, ?, ?);";
 
 	private static final String UPDATE_NEW_STOCK = "update new_stock set quantity = quantity + ? "
-			+ " where item_id = (select id from item where product_id = ? and device_model_id = ?)";
+			+ " where item_id = (select id from item where leather_id = ? and model_id = ?)";
 	
 	private static final String INSERT_NEW_STOCK_IMPORT = "insert into new_stock_import(import_timestamp, employee_id, file_name) "
 			+ " values (?, ?, ?)";
@@ -75,21 +75,21 @@ public class NewStockDaoImpl extends JdbcDaoSupport implements NewStockDao {
 	}
 	
 	@Override
-	public void insertOrUpdateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity) {
+	public void insertOrUpdateQuantityOfNewStock(Integer leatherId, Integer modelId, Integer quantity) {
 		getJdbcTemplate().update(UPSERT_NEW_STOCK, 
-				productId, deviceModelId, quantity, quantity);	
+				leatherId, modelId, quantity, quantity);	
 	}
 	
 	@Override
-	public void insertNewStock(Integer productId, Integer deviceModelId, Integer quantity, Integer storeId) {
+	public void insertNewStock(Integer leatherId, Integer modelId, Integer quantity, Integer storeId) {
 		getJdbcTemplate().update(INSERT_NEW_STOCK, 
-				productId, deviceModelId, quantity, storeId);	
+				leatherId, modelId, quantity, storeId);	
 	}
 	
 	@Override
-	public void updateQuantityOfNewStock(Integer productId, Integer deviceModelId, Integer quantity) {
+	public void updateQuantityOfNewStock(Integer leatherId, Integer modelId, Integer quantity) {
 		getJdbcTemplate().update(UPDATE_NEW_STOCK, 
-				quantity, productId, deviceModelId);	
+				quantity, leatherId, modelId);	
 	}
 
 	@Override

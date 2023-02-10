@@ -45,7 +45,7 @@ public class PDFGeneratorServiceImpl implements PDFGeneratorService {
 		Document document = new Document(rect, 0, 0, 0, 0);
 	    try
 	    {
-	        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("/home/ubuntu/KalafcheTest.pdf"));
+	        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("/home/ubuntu/AzardTest.pdf"));
 	    	PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
 	        document.open();
 	 
@@ -57,50 +57,50 @@ public class PDFGeneratorServiceImpl implements PDFGeneratorService {
 		        	PdfPTable stockTable = new PdfPTable(2);
 	
 		        	
-		        	//Empty cells
-		        	stockTable.addCell(configureCell("      ", font, 2));
-		        	
-		        	stockTable.addCell(configureCell("www.keysoo.bg", font, 2));
-		        	
-		        	stockTable.addCell(configureCell("      ", font, 2));
-		        	
-		        	//Product Type
-		        	//stockTable.addCell(configureCell("Ð�Ñ€Ñ‚Ð¸ÐºÑƒÐ»", font));
-		        	stockTable.addCell(configureCell(stock.getProductTypeName(), font, 2));
-		        	
-		        	//Product code
-		        	stockTable.addCell(configureCell(stock.getProductCode(), font, 2));
-		        	
-		        	//Product name
-		        	String productName = stock.getProductName();
-		        	if (!StringUtils.isEmpty(productName)) {
-		        		stockTable.addCell(configureCell(productName.substring(0, Math.min(productName.length(), 30)), font, 2));
-		        	}
-		        	
-		        	//Device
-		        	stockTable.addCell(configureCell(stock.getDeviceModelName(), font, 2));
-		        		  
-		        	stockTable.addCell(configureCell("      ", font, 2));
-		        	
-		        	//Fabric
-		        	stockTable.addCell(configureCell("Състав", font, null));
-		        	stockTable.addCell(configureCell(stock.getProductFabric(), font, 2));
-		        	
-		        	//Manufacturer
-		        	stockTable.addCell(configureCell("Произв.", font, null));
-		        	stockTable.addCell(configureCell("�?деа Шоу", font, null));
-		        	
-		        	//Distributer
-		        	stockTable.addCell(configureCell("Вносител", font, null));
-		        	stockTable.addCell(configureCell("Азаника ЕООД", font, null));
-		        	
-		        	//Origin
-		        	stockTable.addCell(configureCell("Произход", font, null));
-		        	stockTable.addCell(configureCell("Китай", font, null));
-		        	
-		        	//Price
-		        	stockTable.addCell(configureCell("Цена", font, null));
-		        	stockTable.addCell(configureCell(stock.getProductPrice() + "лв", font, null));
+//		        	//Empty cells
+//		        	stockTable.addCell(configureCell("      ", font, 2));
+//		        	
+//		        	stockTable.addCell(configureCell("www.keysoo.bg", font, 2));
+//		        	
+//		        	stockTable.addCell(configureCell("      ", font, 2));
+//		        	
+//		        	//Product Type
+//		        	//stockTable.addCell(configureCell("Ð�Ñ€Ñ‚Ð¸ÐºÑƒÐ»", font));
+//		        	stockTable.addCell(configureCell(stock.getProductTypeName(), font, 2));
+//		        	
+//		        	//Product code
+//		        	stockTable.addCell(configureCell(stock.getProductCode(), font, 2));
+//		        	
+//		        	//Product name
+//		        	String productName = stock.getProductName();
+//		        	if (!StringUtils.isEmpty(productName)) {
+//		        		stockTable.addCell(configureCell(productName.substring(0, Math.min(productName.length(), 30)), font, 2));
+//		        	}
+//		        	
+//		        	//Device
+//		        	stockTable.addCell(configureCell(stock.getDeviceModelName(), font, 2));
+//		        		  
+//		        	stockTable.addCell(configureCell("      ", font, 2));
+//		        	
+//		        	//Fabric
+//		        	stockTable.addCell(configureCell("Състав", font, null));
+//		        	stockTable.addCell(configureCell(stock.getProductFabric(), font, 2));
+//		        	
+//		        	//Manufacturer
+//		        	stockTable.addCell(configureCell("Произв.", font, null));
+//		        	stockTable.addCell(configureCell("�?деа Шоу", font, null));
+//		        	
+//		        	//Distributer
+//		        	stockTable.addCell(configureCell("Вносител", font, null));
+//		        	stockTable.addCell(configureCell("Азаника ЕООД", font, null));
+//		        	
+//		        	//Origin
+//		        	stockTable.addCell(configureCell("Произход", font, null));
+//		        	stockTable.addCell(configureCell("Китай", font, null));
+//		        	
+//		        	//Price
+//		        	stockTable.addCell(configureCell("Цена", font, null));
+//		        	stockTable.addCell(configureCell(stock.getProductPrice() + "лв", font, null));
 		        	
 		        	if (!StringUtils.isEmpty(stock.getBarcode())) {
 			        	try {

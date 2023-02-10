@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.azard.model.PastPeriodSaleReport;
-import com.azard.model.PastPeriodTurnover;
 import com.azard.model.Sale;
 import com.azard.model.SaleItem;
 import com.azard.model.SaleReport;
@@ -20,12 +19,12 @@ public interface SaleService {
 	public List<SaleItem> getSaleItems(Integer saleId);
 
 	public SaleReport searchSaleItems(Long startDateMilliseconds, Long endDateMilliseconds, String storeIds,
-			String productCode, Integer deviceBrandId, Integer deviceModelId, Integer productTypeId);
+			Integer leatherId, Integer brandId, Integer modelId);
 
 	public TotalSumReport calculateTotalSum(TotalSumRequest totalSumRequest);
 
-	public SaleReport searchSalesByStores(Long startDateMilliseconds, Long endDateMilliseconds, String productCode,
-			Integer deviceBrandId, Integer deviceModelId, Integer productTypeId);
+	public SaleReport searchSalesByStores(Long startDateMilliseconds, Long endDateMilliseconds, Integer leatherId,
+			Integer brandId, Integer modelId);
 
 	public PastPeriodSaleReport searchSalesForPastPeriodsByStores(String month);
 
